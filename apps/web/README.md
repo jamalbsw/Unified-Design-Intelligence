@@ -6,7 +6,7 @@ research insights). It uses the public Nightingale Storybook as a design
 reference, linked from the "Nightingale Storybook" chip on Applied AI Design; it
 does not import or claim to render official Nightingale components.
 
-**GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/intelligent-workspace/)
+**GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/Unified-Design-Intelligence/)
 after the repository's Pages workflow completes successfully.
 
 ## Run locally

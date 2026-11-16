@@ -8,7 +8,7 @@ for centralizing what users tell us in research. It has two pages:
 - **Research Lab:** search and reuse research insights (UI shell only, not
   connected yet).
 
-**GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/intelligent-workspace/)
+**GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/Unified-Design-Intelligence/)
 
 The site will be available after the GitHub Pages workflow completes its first
 successful deployment. In the repository settings, set **Settings → Pages →
