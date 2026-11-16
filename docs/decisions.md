@@ -11,6 +11,8 @@ These block or shape the studio build. Until each is answered, the repo uses cle
 | D5 | OpenAI project key with a hard spend cap, billed through the OpenAI Platform. Set it as a GitHub secret yourself; never commit it. | Before the agent runner | None | Procurement | |
 | D6 | Date of the AI governance review (rules, data handling, approval flow). | Before day 1 of the pilot | None | Studio owner | |
 | D7 | Repo split: keep `studio/` inside this repo for now, or move to separate `studio-platform` and `studio-prototypes` repos so prototype PRs cannot edit platform workflows. | Before the agent runs on real briefs | Single repo with CODEOWNERS | Engineering partner | |
+| D8 | How the shared agent signs in to Codex. **Recommended: a dedicated OpenAI API key with a spending cap**, kept as a GitHub Actions secret, instead of a person's seat (the plan cites OpenAI's guidance for CI; confirm against OpenAI's current docs). | Before the agent runner | None; intake is a dry run and needs no key | Studio owner and procurement | Recommended, not yet confirmed |
+| D9 | How the front end starts a job. **Recommended: the GitHub issue form first** (no backend, no token in the browser), then a small backend or GitHub App when a smoother flow is worth building. | Before the web UI starts jobs | Issue form with dry-run intake (`.github/workflows/studio-brief.yml`) | Engineering partner | Recommended, in use |
 
 ## Why D7 matters
 

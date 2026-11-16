@@ -1,0 +1,44 @@
+# Dry run: validates briefs and applies run limits. The agent is not connected,
+# so this workflow never calls a model and needs no OpenAI key.
+name: Studio brief intake
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: studio-brief-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  intake:
+    # Only issues created from the brief form. The issue body is never placed in a command;
+    # the script reads it from the event file as data.
+    if: startsWith(github.event.issue.title, '[Brief]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: studio
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: studio/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate the brief and apply run limits
+        run: node scripts/studio-issue.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

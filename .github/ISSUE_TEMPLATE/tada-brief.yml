@@ -1,0 +1,49 @@
+name: Prototype brief (TADA)
+description: Describe the experience you want prototyped. A shared agent drafts a spec for you to approve.
+title: '[Brief] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use **fictional examples only**. Do not include patient, customer or confidential information.
+        Only organization members and collaborators can start a run.
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: A short name for the experience.
+    validations:
+      required: true
+  - type: textarea
+    id: assign
+    attributes:
+      label: Assign
+      description: Who is this for? Describe the user and the situation they are in.
+    validations:
+      required: true
+  - type: textarea
+    id: define
+    attributes:
+      label: Define
+      description: What should they be able to do, and what does success look like? Mention key states such as empty, loading, error and success.
+    validations:
+      required: true
+  - type: textarea
+    id: ask
+    attributes:
+      label: Ask
+      description: What do you want the studio to make or explore?
+    validations:
+      required: true
+  - type: input
+    id: figma
+    attributes:
+      label: Figma link (optional)
+      description: A figma.com link to a frame or file, if one exists.
+  - type: checkboxes
+    id: synthetic
+    attributes:
+      label: Synthetic data only
+      options:
+        - label: I confirm this brief contains no patient, customer or confidential information.
+          required: true

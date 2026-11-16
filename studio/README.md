@@ -62,6 +62,18 @@ npm run runs -- summary                      # month-to-date spend per designer
 
 Limits in `config/limits.json` are starting values to confirm with procurement (D5). Prices in `config/pricing.json` are empty until an owner adds approved models. A per-run cost cap is not implemented here; it belongs at agent invocation (token limits and timeouts) in the runner. Where the ledger lives in production (a repo file, a branch or an external store) and whether raw prompts are retained are open decisions for the runner and the governance review.
 
+## Brief intake (dry run)
+
+Designers start a job by opening an issue from the **Prototype brief (TADA)** form (`.github/ISSUE_TEMPLATE/tada-brief.yml`). The `Studio brief intake` workflow then, with no model call and no OpenAI key:
+
+1. ignores anything that is not a new `[Brief]` issue;
+2. rejects authors who are not the owner, a member or a collaborator (anyone can open an issue on a public repo);
+3. validates the brief (required fields, length limits, https figma.com link, synthetic-data confirmation);
+4. applies the run limits and kill switch from `config/limits.json`;
+5. replies on the issue with the outcome. An accepted brief is labelled a dry run, because no agent is connected yet.
+
+The issue body is untrusted: the script reads it from the event file as data and it is never placed in a shell command. Connecting Codex later means adding a job after step 4 that writes a spec, runs `npm run spec -- check`, and waits for an approval (see `skills/spec-a-screen`).
+
 ## Not built yet
 
-Design evals, the agent runner and per-PR preview hosting. These need the decisions in [docs/decisions.md](../docs/decisions.md).
+Design evals, the Codex agent step (spec, approval, build) and per-PR preview hosting. These need the decisions in [docs/decisions.md](../docs/decisions.md).
