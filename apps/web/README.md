@@ -39,6 +39,10 @@ in an untracked `.env.local` file in this directory.
   intentionally disabled.
 - Real authentication, shared team storage, and prototype versioning are not
   connected yet.
+- The **Research hub** page (`#research`) is a UI shell only. It is not connected
+  to a research platform or storage, shows no research data, and its search,
+  filters and "Attach insights" button are disabled. Do not enter participant
+  details; research data must never be stored in this public repository.
 - Use fictional examples only. Do not enter patient or confidential information.
 - Temporary previews must be identified as approximations until the official
   Nightingale package is approved and available.

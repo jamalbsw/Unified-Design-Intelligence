@@ -1,7 +1,11 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import './App.css'
+import ResearchHub from './ResearchHub'
 
 const pilotPassword = import.meta.env.VITE_PILOT_PASSWORD
+
+type View = 'studio' | 'research'
+const viewFromHash = (): View => (window.location.hash === '#research' ? 'research' : 'studio')
 
 const storybookUrl =
   'https://storybook.bswsites.com/?path=/docs/get-started-about-nightingale--page'
@@ -25,6 +29,24 @@ function App() {
   const [accessError, setAccessError] = useState('')
   const [request, setRequest] = useState('')
   const [viewport, setViewport] = useState<'desktop' | 'mobile'>('desktop')
+  const [view, setView] = useState<View>(viewFromHash)
+  const isFirstView = useRef(true)
+
+  useEffect(() => {
+    const onHashChange = () => setView(viewFromHash())
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  // Announce a page change by moving focus to the new page and updating the title.
+  useEffect(() => {
+    document.title = view === 'research' ? 'Research hub | AEL Prototype Studio' : 'AEL | Prototype Studio'
+    if (isFirstView.current) {
+      isFirstView.current = false
+      return
+    }
+    document.querySelector<HTMLElement>('main')?.focus()
+  }, [view])
 
   function handleUnlock(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -88,6 +110,10 @@ function App() {
             <span className="wordmark-subtitle">Prototype Studio</span>
           </span>
         </a>
+        <nav className="main-nav" aria-label="Main">
+          <a aria-current={view === 'studio' ? 'page' : undefined} href="#home">Prototype studio</a>
+          <a aria-current={view === 'research' ? 'page' : undefined} href="#research">Research hub</a>
+        </nav>
         <div className="topbar-actions">
           <span className="workspace-label">
             <span className="workspace-dot" aria-hidden="true" />
@@ -100,7 +126,10 @@ function App() {
         </div>
       </header>
 
-      <main id="home">
+      {view === 'research' ? (
+        <ResearchHub />
+      ) : (
+      <main id="home" tabIndex={-1}>
         <section className="intro">
           <div>
             <p className="eyebrow">IDEA TO INTERACTIVE PREVIEW</p>
@@ -170,6 +199,14 @@ function App() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div className="attach-research">
+              <button className="attach-button" disabled type="button">Attach insights</button>
+              <span>
+                Add relevant research findings to this brief. Available when the
+                research hub is connected.
+              </span>
             </div>
 
             <div className="form-footer">
@@ -294,6 +331,7 @@ function App() {
           </div>
         </section>
       </main>
+      )}
       <footer className="footer">
         <span>AEL Prototype Studio</span>
         <span>Reference mode · Not an official Nightingale implementation</span>

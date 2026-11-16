@@ -1,0 +1,248 @@
+.research-grid {
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 20px;
+}
+
+.research-card {
+  min-width: 0;
+  margin-bottom: 20px;
+  padding: 24px;
+  border: 1px solid var(--fi-glass-border);
+  border-radius: 16px;
+  background: var(--fi-glass);
+  box-shadow: var(--fi-glass-rim), var(--fi-glass-lift);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.research-grid .research-card {
+  margin-bottom: 0;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .research-card {
+    background: var(--fi-glass-solid);
+  }
+}
+
+.research-card form label {
+  display: block;
+  margin: 14px 0 8px;
+  color: var(--fi-white);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-row input {
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 12px;
+  flex: 1;
+  border: 1px dashed var(--fi-liquid-azure);
+  border-radius: 8px;
+  color: var(--fi-white);
+  background: var(--fi-deep-ocean);
+  font-size: 14px;
+}
+
+.search-row input::placeholder {
+  color: var(--fi-luminous-cyan);
+  opacity: 1;
+}
+
+/* Disabled controls stay legible: a dashed outline signals the state, not low opacity. */
+.research-button,
+.filter-chip {
+  border: 1px dashed var(--fi-liquid-azure);
+  color: var(--fi-pearl-mist);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.research-button {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.filter-group {
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+}
+
+.filter-group legend {
+  margin-bottom: 8px;
+  padding: 0;
+  color: var(--fi-pearl-mist);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.filter-chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+.research-disabled-reason {
+  margin: 14px 0 0;
+  color: var(--fi-pearl-mist);
+  font-size: 13px;
+}
+
+.insight-fields {
+  margin: 14px 0 0;
+  display: grid;
+  gap: 12px;
+}
+
+.insight-fields div {
+  padding-left: 12px;
+  border-left: 2px solid var(--fi-luminous-cyan);
+}
+
+.insight-fields dt {
+  color: var(--fi-white);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.insight-fields dd {
+  margin: 2px 0 0;
+  color: var(--fi-pearl-mist);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.results-empty {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.results-empty h2 {
+  margin-bottom: 6px;
+}
+
+.results-empty p {
+  margin: 0;
+  color: var(--fi-pearl-mist);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cell-small {
+  --cell-size: 56px;
+}
+
+.flow-list,
+.use-list {
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  list-style: none;
+}
+
+.flow-list {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.use-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.flow-list li,
+.use-list li {
+  padding: 14px;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  border: 1px solid var(--fi-liquid-azure);
+  border-radius: 10px;
+  background: var(--fi-deep-ocean);
+}
+
+.flow-list strong,
+.use-list strong {
+  color: var(--fi-white);
+  font-size: 14px;
+}
+
+.flow-list li > span:last-child,
+.use-list li > span {
+  color: var(--fi-pearl-mist);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.flow-number {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--fi-midnight-navy);
+  background: var(--fi-luminous-cyan);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* A caution, so it takes the warm tone. */
+.research-privacy {
+  margin: 0 0 38px;
+  padding: 12px 14px;
+  border: 1px solid var(--fi-warm-coral);
+  border-radius: 10px;
+  color: var(--fi-white);
+  background: var(--fi-deep-garnet);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+@media (max-width: 880px) {
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .use-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .research-card {
+    padding: 17px;
+  }
+
+  .flow-list {
+    grid-template-columns: 1fr;
+  }
+
+  .search-row {
+    flex-direction: column;
+  }
+
+  .results-empty {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

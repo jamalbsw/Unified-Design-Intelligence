@@ -813,6 +813,58 @@ h2 {
   font-size: 12px;
 }
 
+.main-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.main-nav a {
+  padding: 9px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--fi-white);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.main-nav a:hover {
+  border-color: var(--fi-liquid-azure);
+}
+
+.main-nav a[aria-current='page'] {
+  border-color: var(--fi-luminous-cyan);
+  color: var(--fi-midnight-navy);
+  background: var(--fi-luminous-cyan);
+  font-weight: 700;
+}
+
+main:focus {
+  outline: none;
+}
+
+.attach-research {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--fi-pearl-mist);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.attach-button {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border: 1px dashed var(--fi-liquid-azure);
+  border-radius: 8px;
+  color: var(--fi-pearl-mist);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: not-allowed;
+}
+
 @media (forced-colors: active) {
   .access-card,
   .request-card,
@@ -825,6 +877,17 @@ h2 {
 }
 
 @media (max-width: 880px) {
+  .topbar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .main-nav {
+    order: 3;
+    width: 100%;
+  }
+
   .workspace-grid {
     grid-template-columns: 1fr;
   }
@@ -843,6 +906,11 @@ h2 {
 }
 
 @media (max-width: 560px) {
+  .attach-research {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .topbar {
     min-height: 67px;
   }
