@@ -40,7 +40,7 @@ function App() {
 
   // Announce a page change by moving focus to the new page and updating the title.
   useEffect(() => {
-    document.title = view === 'research' ? 'Research hub | AEL Prototype Studio' : 'AEL | Prototype Studio'
+    document.title = view === 'research' ? 'Research hub | Unified Design Intelligence' : 'Unified Design Intelligence'
     if (isFirstView.current) {
       isFirstView.current = false
       return
@@ -69,7 +69,7 @@ function App() {
       <main className="access-gate">
         <form className="access-card" onSubmit={handleUnlock}>
           <span className="cell" aria-hidden="true" />
-          <p className="eyebrow">AEL PROTOTYPE STUDIO · PILOT</p>
+          <p className="eyebrow">UNIFIED DESIGN INTELLIGENCE · PILOT</p>
           <h1>Welcome to the pilot.</h1>
           <p className="access-description">Enter the demo password to continue.</p>
           <label className="access-label" htmlFor="pilot-password">
@@ -103,27 +103,14 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <a className="wordmark" href="#home" aria-label="AEL Prototype Studio home">
-          <span className="wordmark-icon" aria-hidden="true">A</span>
-          <span>
-            <strong>AEL</strong>
-            <span className="wordmark-subtitle">Prototype Studio</span>
-          </span>
+        <a className="wordmark" href="#home" aria-label="Unified Design Intelligence home">
+          <span className="wordmark-icon" aria-hidden="true">U</span>
+          <strong>Unified Design Intelligence</strong>
         </a>
         <nav className="main-nav" aria-label="Main">
           <a aria-current={view === 'studio' ? 'page' : undefined} href="#home">Prototype studio</a>
           <a aria-current={view === 'research' ? 'page' : undefined} href="#research">Research hub</a>
         </nav>
-        <div className="topbar-actions">
-          <span className="workspace-label">
-            <span className="workspace-dot" aria-hidden="true" />
-            Shared team workspace
-          </span>
-          <a className="text-link" href={storybookUrl} target="_blank" rel="noreferrer">
-            Nightingale Storybook
-            <span aria-hidden="true">↗</span>
-          </a>
-        </div>
       </header>
 
       {view === 'research' ? (
@@ -141,10 +128,12 @@ function App() {
           </div>
           <div className="intro-aside">
             <span className="cell" aria-hidden="true" />
-            <span className="mode-badge">
+            <a className="mode-badge" href={storybookUrl} target="_blank" rel="noreferrer">
               <span className="status-dot" aria-hidden="true" />
-              Storybook reference mode
-            </span>
+              Nightingale Storybook
+              <span aria-hidden="true">↗</span>
+              <span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
           </div>
         </section>
 
@@ -333,7 +322,7 @@ function App() {
       </main>
       )}
       <footer className="footer">
-        <span>AEL Prototype Studio</span>
+        <span>Unified Design Intelligence</span>
         <span>Reference mode · Not an official Nightingale implementation</span>
       </footer>
     </div>

@@ -1,4 +1,4 @@
-# AEL Prototype Studio
+# Unified Design Intelligence
 
 The first web workspace for collecting prototype requests and previewing the
 generation flow. It uses the public Nightingale Storybook as a design reference;

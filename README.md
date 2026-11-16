@@ -1,4 +1,4 @@
-# AEL Prototype Studio
+# Unified Design Intelligence
 
 A shared workspace starter for turning product requests into interactive
 prototypes, using the Nightingale Storybook as a temporary design reference.
