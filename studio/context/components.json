@@ -1,0 +1,25 @@
+{
+  "_note": "PLACEHOLDER catalog of temporary approximations behind the @studio/ui adapter, not official Nightingale components. Generate this from the official package (or an officially supported catalog) once approved; the agent may only use components listed here.",
+  "version": "0.0.0-placeholder",
+  "package": "@studio/ui",
+  "components": [
+    {
+      "name": "Button",
+      "import": "import { Button } from '@studio/ui'",
+      "props": { "variant": ["primary", "secondary"], "disabled": "boolean" },
+      "guide": "guides/button.md"
+    },
+    {
+      "name": "Card",
+      "import": "import { Card } from '@studio/ui'",
+      "props": { "aria-labelledby": "string" },
+      "guide": "guides/card.md"
+    },
+    {
+      "name": "Notice",
+      "import": "import { Notice } from '@studio/ui'",
+      "props": { "variant": ["info", "success", "error"] },
+      "guide": "guides/notice.md"
+    }
+  ]
+}

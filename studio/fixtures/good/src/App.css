@@ -1,0 +1,4 @@
+.page {
+  color: var(--ds-color-text-default);
+  padding: var(--ds-space-4);
+}

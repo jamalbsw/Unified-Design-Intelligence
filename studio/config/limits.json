@@ -1,0 +1,7 @@
+{
+  "_note": "Starting values for the pilot. Confirm the budget with procurement (docs/decisions.md, D5). The agent must never edit this file; it is protected in CODEOWNERS.",
+  "enabled": true,
+  "perDesignerPerDay": 10,
+  "totalPerDay": 40,
+  "monthlyBudgetUsd": 300
+}

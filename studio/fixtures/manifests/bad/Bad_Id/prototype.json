@@ -1,0 +1,10 @@
+{
+  "id": "Bad_Id",
+  "title": "Invalid fixture",
+  "owner": "example-designer",
+  "brief": { "title": "x", "assign": "x", "define": "x" },
+  "designSystem": { "name": "nightingale-reference", "version": "0.0.0" },
+  "status": "shipped",
+  "dataPolicy": "real-data",
+  "gates": { "build": { "status": "pass" } }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/studio/spec.schema.json",
+  "title": "Prototype spec",
+  "description": "The spec the agent writes before building. A designer approves it; the approval is bound to this file's SHA-256.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "screens", "openQuestions"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 64 },
+    "title": { "type": "string", "minLength": 1 },
+    "screens": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "states", "components"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "states": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+          "components": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "openQuestions": {
+      "type": "array",
+      "description": "Every place the agent had to guess. Empty only if nothing was guessed.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question", "assumption"],
+        "properties": {
+          "question": { "type": "string", "minLength": 1 },
+          "assumption": { "type": "string", "minLength": 1 },
+          "answer": { "type": "string" }
+        }
+      }
+    }
+  }
+}

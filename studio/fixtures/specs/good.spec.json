@@ -1,0 +1,18 @@
+{
+  "id": "demo-appointment-prep",
+  "title": "Appointment preparation (fixture)",
+  "screens": [
+    {
+      "id": "prepare",
+      "title": "Prepare for your appointment",
+      "states": ["default", "loading", "empty", "error", "success"],
+      "components": ["Button", "Card", "Notice"]
+    }
+  ],
+  "openQuestions": [
+    {
+      "question": "Should the patient be able to reschedule from this screen?",
+      "assumption": "No. Rescheduling is out of scope; the screen only offers 'Ask for help'."
+    }
+  ]
+}

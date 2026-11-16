@@ -1,0 +1,15 @@
+# Guardrails the agent must not be able to edit without human review.
+# Replace @jamalbsw with real teams (for example @org/studio-platform-owners)
+# when the org is confirmed (docs/decisions.md, D4).
+/.github/            @jamalbsw
+/AGENTS.md           @jamalbsw
+/studio/gates/       @jamalbsw
+/studio/schemas/     @jamalbsw
+/studio/context/     @jamalbsw
+/studio/config/      @jamalbsw
+/studio/skills/      @jamalbsw
+/studio/template/AGENTS.md      @jamalbsw
+/studio/template/src/gate/      @jamalbsw
+/studio/template/src/main.tsx   @jamalbsw
+/studio/template/src/ui/        @jamalbsw
+/studio/template/tests/         @jamalbsw

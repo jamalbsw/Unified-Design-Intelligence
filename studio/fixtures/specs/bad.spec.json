@@ -1,0 +1,19 @@
+{
+  "id": "demo-appointment-prep",
+  "title": "Invalid spec fixture",
+  "screens": [
+    {
+      "id": "prepare",
+      "title": "Prepare",
+      "states": ["loading", "mystery"],
+      "components": ["Button", "FancyCarousel"]
+    },
+    {
+      "id": "prepare",
+      "title": "Prepare again",
+      "states": ["default"],
+      "components": []
+    }
+  ],
+  "openQuestions": []
+}

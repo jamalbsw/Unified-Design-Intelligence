@@ -1,0 +1,4 @@
+{
+  "_note": "Add one entry per approved model, in US dollars per million tokens, copied from OpenAI's current pricing for our agreement. Left empty on purpose: a model with no price blocks the run instead of being counted as free.",
+  "rates": {}
+}

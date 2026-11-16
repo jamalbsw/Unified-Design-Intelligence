@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/studio/run.schema.json",
+  "title": "Run record",
+  "description": "One line of the run ledger: who asked for an agent run, what it used and what it cost. Stores a hash of the prompt, not the prompt.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["runId", "prototypeId", "requestedBy", "phase", "status", "startedAt", "costUsd"],
+  "properties": {
+    "runId": { "type": "string", "minLength": 1 },
+    "prototypeId": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "requestedBy": { "type": "string", "minLength": 1, "description": "GitHub username taken from the workflow event, never from user input." },
+    "phase": { "enum": ["spec", "build", "refine"] },
+    "status": { "enum": ["succeeded", "failed", "blocked"] },
+    "blockedReason": { "type": "string" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "finishedAt": { "type": "string", "format": "date-time" },
+    "model": { "type": "string" },
+    "contextPackVersion": { "type": "string" },
+    "promptSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputTokens", "outputTokens"],
+      "properties": {
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "costUsd": { "type": "number", "minimum": 0 },
+    "workflowRunUrl": { "type": "string", "format": "uri" }
+  },
+  "if": { "properties": { "status": { "const": "blocked" } }, "required": ["status"] },
+  "then": { "required": ["blockedReason"] }
+}

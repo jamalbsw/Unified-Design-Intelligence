@@ -1,0 +1,7 @@
+{
+  "_note": "@studio/ui is the adapter boundary (see AGENTS.md). It re-exports temporary approximations until the official Nightingale package is approved (docs/decisions.md, D2); then it re-exports the real components and this list stays the same.",
+  "scanExtensions": [".ts", ".tsx", ".js", ".jsx", ".css"],
+  "allowedPackages": ["react", "react-dom", "@studio/ui"],
+  "exemptPaths": ["ui/"],
+  "forbidInlineStyles": true
+}

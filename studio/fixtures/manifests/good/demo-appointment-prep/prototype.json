@@ -1,0 +1,21 @@
+{
+  "id": "demo-appointment-prep",
+  "title": "Appointment preparation (fixture)",
+  "owner": "example-designer",
+  "brief": {
+    "title": "Appointment preparation",
+    "assign": "Patient preparing for an upcoming visit",
+    "define": "Review what to bring, confirm visit details, ask for help",
+    "ask": "Create a three-screen flow with empty, error and success states"
+  },
+  "designSystem": { "name": "nightingale-reference", "version": "0.0.0" },
+  "components": ["Button"],
+  "status": "exploring",
+  "dataPolicy": "synthetic-only",
+  "gates": {
+    "build": { "status": "pass" },
+    "conformance": { "status": "pass" },
+    "a11y": { "status": "not-run" },
+    "content": { "status": "not-run" }
+  }
+}

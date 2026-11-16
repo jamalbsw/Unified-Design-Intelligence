@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  background: var(--ds-color-surface-subtle);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family);
+  line-height: 1.5;
+}
+.banner {
+  padding: var(--ds-space-2) var(--ds-space-4);
+  background: var(--ds-color-banner-bg);
+  color: var(--ds-color-banner-text);
+  font-size: 0.875rem;
+}
+.page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: var(--ds-space-6) var(--ds-space-4);
+  display: grid;
+  gap: var(--ds-space-4);
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/studio/prototype.schema.json",
+  "title": "Prototype manifest",
+  "description": "Metadata stored next to each prototype at prototypes/<id>/prototype.json. The library index is generated from these files.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "owner", "brief", "designSystem", "status", "dataPolicy", "gates"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 64 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "owner": { "type": "string", "minLength": 1, "description": "GitHub username of the accountable designer." },
+    "brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "assign", "define", "ask"],
+      "description": "TADA brief: Title, Assign, Define, Ask.",
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "assign": { "type": "string", "minLength": 1 },
+        "define": { "type": "string", "minLength": 1 },
+        "ask": { "type": "string", "minLength": 1 },
+        "figmaUrl": { "type": "string", "format": "uri" }
+      }
+    },
+    "designSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "components": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "status": { "enum": ["exploring", "tested", "handed-off", "archived"] },
+    "dataPolicy": { "const": "synthetic-only" },
+    "approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "specSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "SHA-256 of the approved spec file. Any edit to the spec invalidates the approval." },
+        "specApprovedBy": { "type": "string" },
+        "reviewedBy": { "type": "string" }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["build", "conformance", "a11y", "content"],
+      "properties": {
+        "build": { "$ref": "#/$defs/gateResult" },
+        "conformance": { "$ref": "#/$defs/gateResult" },
+        "a11y": { "$ref": "#/$defs/gateResult" },
+        "content": { "$ref": "#/$defs/gateResult" },
+        "evals": { "$ref": "#/$defs/gateResult" }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Provenance and cost of the agent run that produced this version.",
+      "properties": {
+        "model": { "type": "string" },
+        "contextPackVersion": { "type": "string" },
+        "promptHash": { "type": "string" },
+        "costUsd": { "type": "number", "minimum": 0 },
+        "workflowRunUrl": { "type": "string", "format": "uri" }
+      }
+    },
+    "testSessions": { "type": "array", "items": { "type": "string", "format": "uri" } }
+  },
+  "$defs": {
+    "gateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pass", "fail", "not-run"] },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

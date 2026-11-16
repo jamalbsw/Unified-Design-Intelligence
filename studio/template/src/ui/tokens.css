@@ -1,0 +1,27 @@
+/* Temporary placeholder tokens (not Nightingale's real values). Platform-owned: prototypes must use these variables, never raw values. */
+:root {
+  --ds-color-text-default: #1b1f24;
+  --ds-color-text-muted: #4a5360;
+  --ds-color-surface-default: #ffffff;
+  --ds-color-surface-subtle: #f3f5f8;
+  --ds-color-border-default: #8a94a3;
+  --ds-color-action-primary: #0b57d0;
+  --ds-color-action-primary-text: #ffffff;
+  --ds-color-focus: #1a1a1a;
+  --ds-color-notice-info-bg: #e8f0fe;
+  --ds-color-notice-info-text: #0b3b8c;
+  --ds-color-notice-success-bg: #e3f4e8;
+  --ds-color-notice-success-text: #0f5132;
+  --ds-color-notice-error-bg: #fde8e8;
+  --ds-color-notice-error-text: #7a1212;
+  --ds-color-banner-bg: #fff4ce;
+  --ds-color-banner-text: #4a3b00;
+
+  --ds-space-1: 0.25rem;
+  --ds-space-2: 0.5rem;
+  --ds-space-3: 0.75rem;
+  --ds-space-4: 1rem;
+  --ds-space-6: 1.5rem;
+  --ds-radius: 0.5rem;
+  --ds-font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}

@@ -1,0 +1,5 @@
+/* Platform-owned token definitions are exempt from the raw-color rule. */
+:root {
+  --ds-color-text-default: #1b1f24;
+  --ds-space-4: 1rem;
+}
