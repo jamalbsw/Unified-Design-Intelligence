@@ -613,6 +613,20 @@ h2 {
   line-height: 1.55;
 }
 
+.preview-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--fi-marine-blue);
+  font-size: 13px;
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.preview-link:hover,
+.preview-link:focus-visible {
+  color: var(--fi-midnight-navy);
+}
+
 .pipeline {
   display: flex;
   align-items: center;

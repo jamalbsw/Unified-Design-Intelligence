@@ -256,6 +256,16 @@ function App() {
                   Once generation is connected, you’ll be able to click through
                   screens and share a version with your team.
                 </p>
+                <a
+                  className="preview-link"
+                  href={`${import.meta.env.BASE_URL}template-preview/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Open the starter template preview
+                  <span aria-hidden="true"> ↗</span>
+                  <span className="visually-hidden"> (opens in a new tab)</span>
+                </a>
               </div>
             </div>
             <p className="preview-caption">
