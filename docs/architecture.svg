@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1070" width="1600" height="1070" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+<title id="t">Agentic Experience Studio architecture and flow</title>
+<desc id="d">Seven stages from brief to handoff, with human decisions at spec approval and review, supported by a context layer, a library and records, and controls across everything. Status badges show what is built.</desc>
+<defs>
+  <radialGradient id="bgA" cx="0.14" cy="0" r="0.62"><stop offset="0" stop-color="#4881aa" stop-opacity="0.32"/><stop offset="1" stop-color="#4881aa" stop-opacity="0"/></radialGradient>
+  <radialGradient id="bgB" cx="0.92" cy="1" r="0.5"><stop offset="0" stop-color="#a75f55" stop-opacity="0.16"/><stop offset="1" stop-color="#a75f55" stop-opacity="0"/></radialGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#133b5b" stop-opacity="0.66"/><stop offset="1" stop-color="#0a2139" stop-opacity="0.82"/></linearGradient>
+  <radialGradient id="orb" cx="0.5" cy="0.56" r="0.5"><stop offset="0" stop-color="#c7836f"/><stop offset="0.38" stop-color="#a75f55"/><stop offset="0.72" stop-color="#743f40" stop-opacity="0.9"/><stop offset="1" stop-color="#133b5b" stop-opacity="0.55"/></radialGradient>
+  <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="5"/></filter>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" fill="#81bfdf"/></marker>
+  <marker id="arrowSoft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" fill="#b9eaf5"/></marker>
+</defs>
+<rect width="1600" height="1070" fill="#030d1c"/><rect width="1600" height="1070" fill="url(#bgA)"/><rect width="1600" height="1070" fill="url(#bgB)"/>
+<circle cx="210" cy="160" r="1.6" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="520" cy="95" r="1.2" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="880" cy="150" r="1.5" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="1180" cy="480" r="1.4" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="90" cy="500" r="1.3" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="1450" cy="700" r="1.6" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="760" cy="1040" r="1.3" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="330" cy="905" r="1.2" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="1510" cy="880" r="1.4" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="1000" cy="505" r="1.1" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="60" cy="840" r="1.5" fill="#b9eaf5" opacity="0.38"/>
+<circle cx="1320" cy="160" r="1.2" fill="#b9eaf5" opacity="0.38"/>
+<text x="60" y="62" font-size="13" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">AGENTIC EXPERIENCE STUDIO</text>
+<text x="60" y="102" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">From a designer’s idea to a tested, handed-off prototype</text>
+<text x="60" y="130" font-size="15" font-weight="400" fill="#e0e8ea" text-anchor="start">Agents draft, humans decide. What the studio generates is Nightingale; the studio’s own look is Fluid Intelligence.</text>
+<rect x="1040" y="38" width="509" height="92" rx="14" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M1054 39H1535" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<rect x="1062" y="56" width="57" height="22" rx="11" fill="#81bfdf" stroke="#81bfdf"/><text x="1090.5" y="71" font-size="11" font-weight="700" fill="#030d1c" text-anchor="middle" letter-spacing="1">BUILT</text>
+<text x="1130" y="72" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">works today, tested</text>
+<rect x="1300" y="56" width="64" height="22" rx="11" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/><text x="1332" y="71" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">PARTLY</text>
+<text x="1376" y="72" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">some pieces built</text>
+<rect x="1062" y="92" width="50" height="22" rx="11" fill="none" stroke="#4881aa" stroke-width="1.5" stroke-dasharray="4 3"/><text x="1087" y="107" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">NEXT</text>
+<text x="1124" y="108" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">not built yet</text>
+<circle cx="1313" cy="103" r="17" fill="#c7836f" opacity="0.28" filter="url(#glow)"/><circle cx="1313" cy="103" r="11" fill="url(#orb)"/><circle cx="1313" cy="103" r="11" fill="none" stroke="#b9eaf5" stroke-opacity="0.7" stroke-width="1.2"/><ellipse cx="1309.15" cy="96.95" rx="4.18" ry="2.2" fill="#b9eaf5" opacity="0.6" transform="rotate(-24 1309.15 96.95)"/>
+<text x="1334" y="108" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">a human decides</text>
+<text x="51" y="186" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">MAKE</text>
+<path d="M51 197H677" stroke="#81bfdf" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+<text x="705" y="186" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">PROVE</text>
+<path d="M705 197H1113" stroke="#81bfdf" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+<text x="1141" y="186" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">LEARN</text>
+<path d="M1141 197H1331" stroke="#81bfdf" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+<text x="1359" y="186" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">SHIP</text>
+<path d="M1359 197H1549" stroke="#81bfdf" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+<rect x="51" y="212" width="190" height="180" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M69 213H223" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<circle cx="79" cy="244" r="14" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/>
+<text x="79" y="249" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+<text x="103" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Brief</text>
+<text x="69" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Designer fills a form</text>
+<text x="69" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">with who, what, why.</text>
+<text x="69" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Members only, limited.</text>
+<text x="69" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">needs D8 · D9</text>
+<rect x="69" y="368" width="131" height="22" rx="11" fill="#81bfdf" stroke="#81bfdf"/><text x="134.5" y="383" font-size="11" font-weight="700" fill="#030d1c" text-anchor="middle" letter-spacing="1">BUILT · DRY RUN</text>
+<path d="M243 302H266" stroke="#81bfdf" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="269" y="212" width="190" height="180" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M287 213H441" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<circle cx="297" cy="244" r="14" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/>
+<text x="297" y="249" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+<text x="321" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Spec</text>
+<circle cx="433" cy="244" r="18" fill="#c7836f" opacity="0.28" filter="url(#glow)"/><circle cx="433" cy="244" r="12" fill="url(#orb)"/><circle cx="433" cy="244" r="12" fill="none" stroke="#b9eaf5" stroke-opacity="0.7" stroke-width="1.2"/><ellipse cx="428.8" cy="237.4" rx="4.5600000000000005" ry="2.4000000000000004" fill="#b9eaf5" opacity="0.6" transform="rotate(-24 428.8 237.4)"/>
+<text x="287" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Agent drafts the plan</text>
+<text x="287" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">and lists its guesses.</text>
+<text x="287" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">A human approves it.</text>
+<text x="287" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">agent step needs D8</text>
+<rect x="287" y="368" width="64" height="22" rx="11" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/><text x="319" y="383" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">PARTLY</text>
+<path d="M461 302H484" stroke="#81bfdf" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="487" y="212" width="190" height="180" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M505 213H659" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<circle cx="515" cy="244" r="14" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/>
+<text x="515" y="249" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+<text x="539" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Build</text>
+<text x="505" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Codex builds screens</text>
+<text x="505" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">using only approved</text>
+<text x="505" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Nightingale parts.</text>
+<text x="505" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">needs D2 · D5 · D8</text>
+<rect x="505" y="368" width="50" height="22" rx="11" fill="none" stroke="#4881aa" stroke-width="1.5" stroke-dasharray="4 3"/><text x="530" y="383" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">NEXT</text>
+<path d="M679 302H702" stroke="#81bfdf" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="705" y="212" width="190" height="180" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M723 213H877" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<circle cx="733" cy="244" r="14" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/>
+<text x="733" y="249" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">4</text>
+<text x="757" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Quality gates</text>
+<text x="723" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Automatic checks:</text>
+<text x="723" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">colors, parts, WCAG,</text>
+<text x="723" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">keyboard, content.</text>
+<text x="723" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">evals + content: not yet</text>
+<rect x="723" y="368" width="64" height="22" rx="11" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/><text x="755" y="383" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">PARTLY</text>
+<path d="M897 302H920" stroke="#81bfdf" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="923" y="212" width="190" height="180" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M941 213H1095" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<circle cx="951" cy="244" r="14" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/>
+<text x="951" y="249" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">5</text>
+<text x="975" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Review</text>
+<circle cx="1087" cy="244" r="18" fill="#c7836f" opacity="0.28" filter="url(#glow)"/><circle cx="1087" cy="244" r="12" fill="url(#orb)"/><circle cx="1087" cy="244" r="12" fill="none" stroke="#b9eaf5" stroke-opacity="0.7" stroke-width="1.2"/><ellipse cx="1082.8" cy="237.4" rx="4.5600000000000005" ry="2.4000000000000004" fill="#b9eaf5" opacity="0.6" transform="rotate(-24 1082.8 237.4)"/>
+<text x="941" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">A person checks it,</text>
+<text x="941" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">then it is published</text>
+<text x="941" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">with a preview link.</text>
+<text x="941" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">private preview: D3</text>
+<rect x="941" y="368" width="64" height="22" rx="11" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/><text x="973" y="383" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">PARTLY</text>
+<path d="M1115 302H1138" stroke="#81bfdf" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1141" y="212" width="190" height="180" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M1159 213H1313" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<circle cx="1169" cy="244" r="14" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/>
+<text x="1169" y="249" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">6</text>
+<text x="1193" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Research</text>
+<text x="1159" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Real users try the</text>
+<text x="1159" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">prototype link; notes</text>
+<text x="1159" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">feed the next round.</text>
+<text x="1159" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">needs D3 + consent</text>
+<rect x="1159" y="368" width="50" height="22" rx="11" fill="none" stroke="#4881aa" stroke-width="1.5" stroke-dasharray="4 3"/><text x="1184" y="383" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">NEXT</text>
+<path d="M1333 302H1356" stroke="#81bfdf" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1359" y="212" width="190" height="180" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M1377 213H1531" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<circle cx="1387" cy="244" r="14" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/>
+<text x="1387" y="249" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">7</text>
+<text x="1411" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Handoff</text>
+<text x="1377" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Engineers review and</text>
+<text x="1377" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">pull approved code;</text>
+<text x="1377" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">the prototype is the spec.</text>
+<text x="1377" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">needs D2 · D7 · eng time</text>
+<rect x="1377" y="368" width="50" height="22" rx="11" fill="none" stroke="#4881aa" stroke-width="1.5" stroke-dasharray="4 3"/><text x="1402" y="383" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">NEXT</text>
+<path d="M800 392 C800 442, 582 442, 582 395" fill="none" stroke="#b9eaf5" stroke-opacity="0.85" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrowSoft)"/>
+<text x="691" y="446" font-size="12" font-weight="400" fill="#b9eaf5" text-anchor="middle">fails: the agent refines, with a loop cap</text>
+<path d="M1236 392 C1236 504, 146 504, 146 395" fill="none" stroke="#e2ac98" stroke-opacity="0.9" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrowSoft)"/>
+<text x="691" y="498" font-size="12" font-weight="400" fill="#e2ac98" text-anchor="middle">what research learns becomes the next brief or refinement</text>
+<path d="M1454 392 V545" fill="none" stroke="#e2ac98" stroke-opacity="0.9" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrowSoft)"/>
+<text x="1444" y="502" font-size="12" font-weight="400" fill="#e2ac98" text-anchor="end">proven patterns</text>
+<text x="1444" y="517" font-size="12" font-weight="400" fill="#e2ac98" text-anchor="end">return to Nightingale</text>
+<rect x="51" y="548" width="1498" height="150" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M69 549H1531" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<text x="75" y="578" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">CONTEXT</text>
+<text x="160" y="578" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">what the agent must build with · feeds Spec and Build</text>
+<rect x="75" y="596" width="460" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1"/>
+<text x="93" y="624" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Nightingale design system</text>
+<text x="93" y="648" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Approved parts behind the @studio/ui adapter.</text>
+<text x="93" y="668" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Official React package: waiting on D2.</text>
+<rect x="570" y="596" width="460" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1"/>
+<text x="588" y="624" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Rules and skills</text>
+<text x="588" y="648" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">AGENTS.md, spec-a-screen and a11y-pass skills.</text>
+<text x="588" y="668" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Protected files the agent cannot edit.</text>
+<rect x="1065" y="596" width="460" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1"/>
+<text x="1083" y="624" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Synthetic data and states</text>
+<text x="1083" y="648" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Fictional data only, five screen states:</text>
+<text x="1083" y="668" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">normal, loading, empty, error, success.</text>
+<rect x="51" y="726" width="1498" height="150" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M69 727H1531" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
+<text x="75" y="756" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">LIBRARY AND RECORDS</text>
+<text x="330" y="756" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">feeds Review, Research and Handoff</text>
+<rect x="75" y="774" width="345" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1"/>
+<text x="93" y="802" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Prototype manifest</text>
+<text x="93" y="826" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Owner, brief, versions, gate results,</text>
+<text x="93" y="846" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">test sessions, handoff status.</text>
+<rect x="443" y="774" width="345" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1"/>
+<text x="461" y="802" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Run ledger</text>
+<text x="461" y="826" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Who asked, model, cost per run.</text>
+<text x="461" y="846" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Limits and the kill switch read it.</text>
+<rect x="811" y="774" width="345" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1"/>
+<text x="829" y="802" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Gallery</text>
+<text x="829" y="826" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Fork and reuse proven prototypes,</text>
+<text x="829" y="846" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">built from the manifests.</text>
+<rect x="1179" y="774" width="345" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="1197" y="802" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Research and handoff log</text>
+<text x="1197" y="826" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Test notes, decisions, what</text>
+<text x="1197" y="846" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">engineering took. Not built yet.</text>
+<text x="51" y="910" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">CONTROLS ACROSS EVERYTHING</text>
+<rect x="51" y="926" width="238" height="46" rx="23" fill="#0a2139" fill-opacity="0.75" stroke="#81bfdf" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="170" y="954" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Sign-in and member-only access</text>
+<rect x="301" y="926" width="238" height="46" rx="23" fill="#0a2139" fill-opacity="0.75" stroke="#81bfdf" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="420" y="954" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Run limits and kill switch</text>
+<rect x="551" y="926" width="238" height="46" rx="23" fill="#0a2139" fill-opacity="0.75" stroke="#81bfdf" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="670" y="954" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Audit trail (run ledger)</text>
+<rect x="801" y="926" width="238" height="46" rx="23" fill="#0a2139" fill-opacity="0.75" stroke="#81bfdf" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="920" y="954" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Secrets only in GitHub</text>
+<rect x="1051" y="926" width="238" height="46" rx="23" fill="#0a2139" fill-opacity="0.75" stroke="#81bfdf" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="1170" y="954" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Synthetic data only</text>
+<rect x="1301" y="926" width="238" height="46" rx="23" fill="#0a2139" fill-opacity="0.75" stroke="#81bfdf" stroke-opacity="1" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="1420" y="954" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Private hosting for tests (D3)</text>
+<text x="51" y="1040" font-size="12" font-weight="400" fill="#e0e8ea" text-anchor="start">Status: 15 Nov 2026. Live: front door, template preview, brief intake (dry run), conformance and accessibility gates, run limits. Open decisions D1–D9: docs/decisions.md</text>
+</svg>
