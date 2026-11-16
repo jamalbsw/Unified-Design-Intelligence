@@ -45,6 +45,7 @@ The Pages deploy publishes the template at `/template-preview/` next to the fron
 - This is a deterrent, not security: it runs in the browser and can be bypassed, and a weak password can be guessed from the hash. The prompt says so. Real access control needs an authenticated host (decision D3).
 - With no hash set (local `npm run dev`, tests of the open build), the app opens directly.
 - Browser tests cover the prompt (`tests/gate.spec.ts`), including that the built bundle never contains the plaintext password.
+- `src/gate/` is a platform entry point styled with the Fluid Intelligence guide, not Nightingale, and is exempt from the prototype conformance rules like `src/ui/`. Generated prototype code is not exempt.
 - Per-PR previews are not hosted: Pages serves one site per repo. Run `npm run dev` locally, or download the CI build.
 
 ## Run records, limits and the kill switch

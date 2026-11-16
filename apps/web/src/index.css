@@ -1,21 +1,39 @@
+/*
+  Platform shell theme: Fluid Intelligence (Visual style guide, sections 01-05).
+  Applies to the studio's own entry points only. Prototypes the studio generates
+  are Nightingale and keep their own look inside the light preview canvas.
+*/
 :root {
-  font-family: Arial, Helvetica, sans-serif;
-  color: #242d32;
-  background: #f5f7f8;
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --nightingale-primary: #003da6;
-  --nightingale-blue: #007eb4;
-  --nightingale-gold: #ffb71b;
-  --nightingale-ink: #364248;
-  --nightingale-muted: #586f78;
-  --nightingale-border: #dddddd;
-  --nightingale-surface: #ffffff;
-  --nightingale-canvas: #f5f7f8;
-  --nightingale-focus: #007eb4;
+  /* 01 Color palette */
+  --fi-midnight-navy: #030d1c;
+  --fi-deep-ocean: #0a2139;
+  --fi-marine-blue: #133b5b;
+  --fi-liquid-azure: #4881aa;
+  --fi-luminous-cyan: #81bfdf;
+  --fi-ice-glow: #b9eaf5;
+  --fi-pearl-mist: #e0e8ea;
+  --fi-white: #ffffff;
+  --fi-deep-garnet: #743f40;
+  --fi-copper-rose: #a75f55;
+  --fi-warm-coral: #c7836f;
+  --fi-soft-peach: #e2ac98;
+
+  /* 02 Frosted interface panels: translucent navy, thin illuminated border, opaque text */
+  --fi-glass: linear-gradient(160deg, rgb(19 59 91 / 62%), rgb(10 33 57 / 78%));
+  --fi-glass-solid: #0d2a43;
+  --fi-glass-border: rgb(185 234 245 / 28%);
+  --fi-glass-rim: inset 0 1px 0 rgb(185 234 245 / 20%);
+  --fi-glass-lift: 0 10px 32px rgb(3 13 28 / 38%);
+
+  color: var(--fi-white);
+  background: var(--fi-midnight-navy);
 }
 
 * {
@@ -26,23 +44,31 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  background:
+    radial-gradient(ellipse at 14% -4%, rgb(72 129 170 / 30%), transparent 46%),
+    radial-gradient(ellipse at 92% 104%, rgb(167 95 85 / 14%), transparent 42%),
+    var(--fi-midnight-navy);
+  background-attachment: fixed;
 }
 
 button,
+input,
 textarea {
   font: inherit;
 }
 
 button,
 a,
+input,
 textarea {
   -webkit-tap-highlight-color: transparent;
 }
 
 button:focus-visible,
 a:focus-visible,
+input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--nightingale-focus);
+  outline: 3px solid var(--fi-ice-glow);
   outline-offset: 3px;
 }
 
@@ -51,6 +77,10 @@ a {
 }
 
 ::selection {
-  color: #fff;
-  background: var(--nightingale-primary);
+  color: var(--fi-midnight-navy);
+  background: var(--fi-ice-glow);
+}
+
+#root {
+  min-height: 100vh;
 }

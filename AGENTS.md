@@ -7,6 +7,12 @@
 - Do not add dependencies, credentials, or environment-specific configuration without a clear need. Never commit secrets.
 - Run the smallest relevant validation available and report what was run and any blockers.
 
+## Two visual languages
+
+- **Platform entry points** (the front door in `apps/web` and the preview password prompt in `studio/template/src/gate/`) follow the Fluid Intelligence visual style guide: midnight navy, frosted glass panels with thin ice-cyan edges, and warm copper/coral only for focal points such as human review and cautions. Keep text fully opaque and meet WCAG 2.2 AA contrast.
+- **Everything the studio generates** is Nightingale (reference mode, per the rules below). Do not apply the Fluid Intelligence theme to generated prototypes, and do not use Nightingale components for the platform chrome.
+- The platform palette lives as `--fi-*` CSS variables in `apps/web/src/index.css`, and scoped to `.gate` in the template gate. It must not leak into prototype code.
+
 ## UI framework and component library
 
 - React 19 is the intended target for new UI work.

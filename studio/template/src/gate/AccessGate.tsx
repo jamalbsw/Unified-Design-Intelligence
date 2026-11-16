@@ -1,5 +1,4 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
-import { Button, Notice } from '@studio/ui'
 import './gate.css'
 
 // Demo-only access prompt. The build embeds a SHA-256 hash (never the password), but a
@@ -35,6 +34,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
   return (
     <main className="gate">
       <form className="gate-card" onSubmit={handleSubmit}>
+        <span className="gate-cell" aria-hidden="true" />
         <h1>Enter the pilot password</h1>
         <p>This preview is for the pilot team. Use fictional examples only.</p>
         <label htmlFor="preview-password">Password</label>
@@ -45,8 +45,14 @@ export function AccessGate({ children }: { children: ReactNode }) {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        {error && <Notice variant="error">{error}</Notice>}
-        <Button type="submit">Continue</Button>
+        {error && (
+          <p className="gate-error" role="alert">
+            {error}
+          </p>
+        )}
+        <button type="submit" className="gate-button">
+          Continue
+        </button>
         <p className="gate-warning">
           Demo-only access: this browser-based password prompt can be bypassed. Do not enter patient or
           confidential information.

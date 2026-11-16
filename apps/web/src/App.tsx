@@ -46,6 +46,7 @@ function App() {
     return (
       <main className="access-gate">
         <form className="access-card" onSubmit={handleUnlock}>
+          <span className="cell" aria-hidden="true" />
           <p className="eyebrow">AEL PROTOTYPE STUDIO · PILOT</p>
           <h1>Welcome to the pilot.</h1>
           <p className="access-description">Enter the demo password to continue.</p>
@@ -109,10 +110,13 @@ function App() {
               into a prototype, review it, and build on it together.
             </p>
           </div>
-          <span className="mode-badge">
-            <span className="status-dot" aria-hidden="true" />
-            Storybook reference mode
-          </span>
+          <div className="intro-aside">
+            <span className="cell" aria-hidden="true" />
+            <span className="mode-badge">
+              <span className="status-dot" aria-hidden="true" />
+              Storybook reference mode
+            </span>
+          </div>
         </section>
 
         <div className="notice" role="note">
@@ -228,6 +232,9 @@ function App() {
                 </p>
               </div>
             </div>
+            <p className="preview-caption">
+              Generated prototypes use Nightingale. This studio’s own look is separate.
+            </p>
             <div className="pipeline" aria-label="Prototype workflow status">
               <div className="pipeline-item complete">
                 <span className="pipeline-marker" aria-hidden="true">1</span>
@@ -239,7 +246,7 @@ function App() {
                 <span>Generate</span>
               </div>
               <span className="pipeline-line" aria-hidden="true" />
-              <div className="pipeline-item">
+              <div className="pipeline-item human">
                 <span className="pipeline-marker" aria-hidden="true">3</span>
                 <span>Review &amp; save</span>
               </div>
