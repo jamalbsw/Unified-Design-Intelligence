@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import './App.css'
-import ResearchHub from './ResearchHub'
+import ResearchLab from './ResearchLab'
 
 const pilotPassword = import.meta.env.VITE_PILOT_PASSWORD
 
@@ -40,7 +40,7 @@ function App() {
 
   // Announce a page change by moving focus to the new page and updating the title.
   useEffect(() => {
-    document.title = view === 'research' ? 'Research hub | Unified Design Intelligence' : 'Unified Design Intelligence'
+    document.title = view === 'research' ? 'Research Lab | Unified Design Intelligence' : 'Unified Design Intelligence'
     if (isFirstView.current) {
       isFirstView.current = false
       return
@@ -104,17 +104,17 @@ function App() {
     <div className="app-shell">
       <header className="topbar">
         <a className="wordmark" href="#home" aria-label="Unified Design Intelligence home">
-          <span className="wordmark-icon" aria-hidden="true">U</span>
+          <span className="cell logo-cell" aria-hidden="true" />
           <strong>Unified Design Intelligence</strong>
         </a>
         <nav className="main-nav" aria-label="Main">
-          <a aria-current={view === 'studio' ? 'page' : undefined} href="#home">Prototype studio</a>
-          <a aria-current={view === 'research' ? 'page' : undefined} href="#research">Research hub</a>
+          <a aria-current={view === 'studio' ? 'page' : undefined} href="#home">Applied AI Design</a>
+          <a aria-current={view === 'research' ? 'page' : undefined} href="#research">Research Lab</a>
         </nav>
       </header>
 
       {view === 'research' ? (
-        <ResearchHub />
+        <ResearchLab />
       ) : (
       <main id="home" tabIndex={-1}>
         <section className="intro">
@@ -194,7 +194,7 @@ function App() {
               <button className="attach-button" disabled type="button">Attach insights</button>
               <span>
                 Add relevant research findings to this brief. Available when the
-                research hub is connected.
+                Research Lab is connected.
               </span>
             </div>
 
@@ -321,10 +321,6 @@ function App() {
         </section>
       </main>
       )}
-      <footer className="footer">
-        <span>Unified Design Intelligence</span>
-        <span>Reference mode · Not an official Nightingale implementation</span>
-      </footer>
     </div>
   )
 }

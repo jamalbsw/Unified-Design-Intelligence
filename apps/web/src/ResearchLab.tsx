@@ -1,6 +1,6 @@
-import './ResearchHub.css'
+import './ResearchLab.css'
 
-// UI shell only. The hub is not connected to a research platform or storage, so no research data is shown.
+// UI shell only. The Research Lab is not connected to a research platform or storage, so no research data is shown.
 const filters = ['Prototype', 'Theme', 'Study', 'Method', 'Date']
 
 const insightFields = [
@@ -25,12 +25,12 @@ const uses = [
   ['In handoff', 'The evidence travels with the prototype to engineering.'],
 ]
 
-function ResearchHub() {
+function ResearchLab() {
   return (
     <main id="research" tabIndex={-1}>
       <section className="intro">
         <div>
-          <p className="eyebrow">RESEARCH HUB</p>
+          <p className="eyebrow">RESEARCH LAB</p>
           <h1>Everything users tell us, in one place.</h1>
           <p className="intro-copy">
             Search what people said and did when they tested prototypes, then
@@ -49,7 +49,7 @@ function ResearchHub() {
       <div className="notice" role="note">
         <span className="notice-icon" aria-hidden="true">i</span>
         <p>
-          The research hub is not connected to a research platform or storage
+          The Research Lab is not connected to a research platform or storage
           yet, so nothing here is real research. Don’t enter participant
           details or confidential information.
         </p>
@@ -79,7 +79,7 @@ function ResearchHub() {
             </fieldset>
           </form>
           <p className="research-disabled-reason" id="research-disabled-reason">
-            Search and filters turn on when the hub is connected to a research
+            Search and filters turn on when the Research Lab is connected to a research
             platform and storage.
           </p>
         </section>
@@ -103,7 +103,7 @@ function ResearchHub() {
         <div>
           <h2 id="results-title">No insights yet</h2>
           <p>
-            Once the hub is connected, matching insights appear here with their
+            Once the Research Lab is connected, matching insights appear here with their
             source, themes and linked prototype.
           </p>
         </div>
@@ -138,11 +138,11 @@ function ResearchHub() {
 
       <p className="research-privacy" role="note">
         Planned default: raw recordings, transcripts and participant details stay
-        in the research platform. The hub keeps de-identified insights, each with
+        in the research platform. The Research Lab keeps de-identified insights, each with
         a link back to its source.
       </p>
     </main>
   )
 }
 
-export default ResearchHub
+export default ResearchLab

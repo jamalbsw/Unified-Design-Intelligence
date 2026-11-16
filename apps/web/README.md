@@ -4,7 +4,7 @@ The first web workspace for collecting prototype requests and previewing the
 generation flow. It uses the public Nightingale Storybook as a design reference;
 it does not import or claim to render official Nightingale components.
 
-**GitHub Pages:** [Open the prototype studio](https://jamalbsw.github.io/intelligent-workspace/)
+**GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/intelligent-workspace/)
 after the repository's Pages workflow completes successfully.
 
 ## Run locally
@@ -39,7 +39,7 @@ in an untracked `.env.local` file in this directory.
   intentionally disabled.
 - Real authentication, shared team storage, and prototype versioning are not
   connected yet.
-- The **Research hub** page (`#research`) is a UI shell only. It is not connected
+- The **Research Lab** page (`#research`) is a UI shell only. It is not connected
   to a research platform or storage, shows no research data, and its search,
   filters and "Attach insights" button are disabled. Do not enter participant
   details; research data must never be stored in this public repository.

@@ -3,7 +3,7 @@
 A shared workspace starter for turning product requests into interactive
 prototypes, using the Nightingale Storybook as a temporary design reference.
 
-**GitHub Pages:** [Open the prototype studio](https://jamalbsw.github.io/intelligent-workspace/)
+**GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/intelligent-workspace/)
 
 The site will be available after the GitHub Pages workflow completes its first
 successful deployment. In the repository settings, set **Settings → Pages →

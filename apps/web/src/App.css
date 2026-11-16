@@ -201,19 +201,9 @@
   text-decoration: none;
 }
 
-.wordmark-icon {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--fi-white);
-  background: radial-gradient(circle at 50% 50%, var(--fi-copper-rose) 0, var(--fi-deep-garnet) 38%, var(--fi-marine-blue) 72%);
-  box-shadow:
-    inset 0 0 0 1px rgb(185 234 245 / 60%),
-    0 0 18px rgb(129 191 223 / 28%);
-  font-size: 18px;
-  font-weight: 700;
+.logo-cell {
+  --cell-size: 44px;
+  animation: none;
 }
 
 .wordmark strong {
@@ -773,19 +763,6 @@ h2 {
   font-size: 13px;
 }
 
-.footer {
-  min-height: 52px;
-  padding: 12px clamp(20px, 5vw, 72px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  border-top: 1px solid var(--fi-glass-border);
-  color: var(--fi-pearl-mist);
-  background: var(--fi-deep-ocean);
-  font-size: 12px;
-}
-
 .main-nav {
   display: flex;
   gap: 6px;
@@ -929,10 +906,5 @@ main:focus {
   .pipeline-item {
     gap: 4px;
     font-size: 11px;
-  }
-
-  .footer {
-    align-items: flex-start;
-    flex-direction: column;
   }
 }
