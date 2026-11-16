@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Agentic Experience Studio foundation: manifest schema, context pack, quality gates.",
   "scripts": {
-    "test": "node --test test/",
+    "test": "node --test",
     "conformance": "node gates/conformance.mjs",
     "validate": "node scripts/validate-manifests.mjs",
     "build-index": "node scripts/build-index.mjs",
