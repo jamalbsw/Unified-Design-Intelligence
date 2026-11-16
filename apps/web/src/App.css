@@ -2,6 +2,98 @@
   min-height: 100vh;
 }
 
+.access-gate {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(ellipse at 12% 10%, rgb(0 126 180 / 9%), transparent 34%),
+    var(--nightingale-canvas);
+}
+
+.access-card {
+  width: min(440px, 100%);
+  padding: clamp(24px, 6vw, 36px);
+  border: 1px solid #e1e7e9;
+  border-radius: 10px;
+  background: var(--nightingale-surface);
+  box-shadow: 0 8px 28px rgb(36 45 50 / 8%);
+}
+
+.access-card h1 {
+  margin: 10px 0;
+  font-size: clamp(28px, 6vw, 36px);
+}
+
+.access-description {
+  margin-bottom: 23px;
+  color: #58656b;
+  font-size: 14px;
+}
+
+.access-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #29373d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.access-card input {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid #aeb9bd;
+  border-radius: 6px;
+  color: var(--nightingale-ink);
+  background: #fff;
+  font-size: 14px;
+}
+
+.access-button {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  background: var(--nightingale-primary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.access-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.access-error,
+.access-configuration {
+  margin: 9px 0 0;
+  color: #a4262c;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.access-configuration {
+  color: #58656b;
+}
+
+.access-warning {
+  margin: 17px 0 0;
+  padding: 10px 11px;
+  border: 1px solid #f1d991;
+  border-radius: 5px;
+  color: #5b480e;
+  background: #fff8e6;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
 .app-shell {
   min-height: 100vh;
 }

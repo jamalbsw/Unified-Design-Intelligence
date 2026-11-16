@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import './App.css'
+
+const pilotPassword = import.meta.env.VITE_PILOT_PASSWORD
 
 const storybookUrl =
   'https://storybook.bswsites.com/?path=/docs/get-started-about-nightingale--page'
@@ -18,8 +20,62 @@ const examples = [
 ]
 
 function App() {
+  const [isUnlocked, setIsUnlocked] = useState(false)
+  const [password, setPassword] = useState('')
+  const [accessError, setAccessError] = useState('')
   const [request, setRequest] = useState('')
   const [viewport, setViewport] = useState<'desktop' | 'mobile'>('desktop')
+
+  function handleUnlock(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (!pilotPassword) {
+      setAccessError('Pilot access has not been configured yet. Contact the pilot owner.')
+      return
+    }
+
+    if (password !== pilotPassword) {
+      setAccessError('That password did not match. Try again.')
+      return
+    }
+
+    setIsUnlocked(true)
+  }
+
+  if (!isUnlocked) {
+    return (
+      <main className="access-gate">
+        <form className="access-card" onSubmit={handleUnlock}>
+          <p className="eyebrow">AEL PROTOTYPE STUDIO · PILOT</p>
+          <h1>Welcome to the pilot.</h1>
+          <p className="access-description">Enter the demo password to continue.</p>
+          <label className="access-label" htmlFor="pilot-password">
+            Pilot password
+          </label>
+          <input
+            autoComplete="current-password"
+            id="pilot-password"
+            onChange={(event) => setPassword(event.target.value)}
+            type="password"
+            value={password}
+          />
+          {accessError && <p className="access-error" role="alert">{accessError}</p>}
+          {!pilotPassword && (
+            <p className="access-configuration" role="status">
+              Demo access is not configured. Ask the pilot owner to set it up.
+            </p>
+          )}
+          <button className="access-button" disabled={!pilotPassword} type="submit">
+            Continue to pilot
+          </button>
+          <p className="access-warning" role="note">
+            Demo-only access: this browser-based password prompt can be bypassed.
+            Do not enter patient or confidential information.
+          </p>
+        </form>
+      </main>
+    )
+  }
 
   return (
     <div className="app-shell">

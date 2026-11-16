@@ -22,11 +22,22 @@ npm run build
 npm run lint
 ```
 
+## Pilot access
+
+The pilot uses a browser-side password prompt for casual demos only; it is not
+real access control, and the password can be recovered from the deployed site.
+Never use it to protect sensitive information.
+
+For GitHub Pages, the workflow sets the demo password (`design123`) as
+`VITE_PILOT_PASSWORD` for the build. It is visible in this public repository, so
+treat it as a courtesy prompt only. For local development, set `VITE_PILOT_PASSWORD`
+in an untracked `.env.local` file in this directory.
+
 ## Current limitations
 
 - The AI generation service is not connected, so the Generate button is
   intentionally disabled.
-- Authentication, shared team storage, and prototype versioning are not
+- Real authentication, shared team storage, and prototype versioning are not
   connected yet.
 - Use fictional examples only. Do not enter patient or confidential information.
 - Temporary previews must be identified as approximations until the official
