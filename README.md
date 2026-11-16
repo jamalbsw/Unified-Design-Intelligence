@@ -1,7 +1,12 @@
 # Unified Design Intelligence
 
-A shared workspace starter for turning product requests into interactive
-prototypes, using the Nightingale Storybook as a temporary design reference.
+A shared workspace for turning product requests into interactive prototypes and
+for centralizing what users tell us in research. It has two pages:
+
+- **Applied AI Design:** describe an idea and preview the prototype. It uses the
+  Nightingale Storybook as a temporary design reference.
+- **Research Lab:** search and reuse research insights (UI shell only, not
+  connected yet).
 
 **GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/intelligent-workspace/)
 

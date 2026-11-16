@@ -1,8 +1,10 @@
 # Unified Design Intelligence
 
-The first web workspace for collecting prototype requests and previewing the
-generation flow. It uses the public Nightingale Storybook as a design reference;
-it does not import or claim to render official Nightingale components.
+The web front door for two areas: **Applied AI Design** (collect prototype
+requests and preview the generation flow) and **Research Lab** (find and reuse
+research insights). It uses the public Nightingale Storybook as a design
+reference, linked from the "Nightingale Storybook" chip on Applied AI Design; it
+does not import or claim to render official Nightingale components.
 
 **GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/intelligent-workspace/)
 after the repository's Pages workflow completes successfully.

@@ -2,9 +2,9 @@
 
 ![Studio architecture and flow](../docs/architecture.svg)
 
-The diagram above shows the full lifecycle (brief, spec, build, gates, review, research, handoff), the central Research Hub, the layers that support it and what is built. A 2x PNG for slides is at [docs/architecture.png](../docs/architecture.png).
+The diagram above shows the full lifecycle (brief, spec, build, gates, review, research, handoff), the central Research Lab, the layers that support it and what is built. A 2x PNG for slides is at [docs/architecture.png](../docs/architecture.png).
 
-The platform half of the Agentic Experience Studio: the pieces that make agent-generated prototypes safe, checkable and reusable. It does not call any AI service yet.
+The platform half of Unified Design Intelligence (the Agentic Experience Studio in the strategic plan): the pieces that make agent-generated prototypes safe, checkable and reusable. It does not call any AI service yet. In the app, this work lives on the **Applied AI Design** page; research lives on the **Research Lab** page.
 
 | Folder | Purpose |
 |---|---|

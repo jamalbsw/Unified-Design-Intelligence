@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1290" width="1600" height="1290" role="img" aria-labelledby="t d" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
-<title id="t">Agentic Experience Studio architecture and flow</title>
+<title id="t">Unified Design Intelligence architecture and flow</title>
 <desc id="d">Seven stages from brief to handoff, with human decisions at spec approval and review, supported by a context layer, a library and records, and controls across everything. Status badges show what is built.</desc>
 <defs>
   <radialGradient id="bgA" cx="0.14" cy="0" r="0.62"><stop offset="0" stop-color="#4881aa" stop-opacity="0.32"/><stop offset="1" stop-color="#4881aa" stop-opacity="0"/></radialGradient>
@@ -23,7 +23,7 @@
 <circle cx="1000" cy="505" r="1.1" fill="#b9eaf5" opacity="0.38"/>
 <circle cx="60" cy="840" r="1.5" fill="#b9eaf5" opacity="0.38"/>
 <circle cx="1320" cy="160" r="1.2" fill="#b9eaf5" opacity="0.38"/>
-<text x="60" y="62" font-size="13" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">AGENTIC EXPERIENCE STUDIO</text>
+<text x="60" y="62" font-size="13" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">UNIFIED DESIGN INTELLIGENCE</text>
 <text x="60" y="102" font-size="30" font-weight="700" fill="#ffffff" text-anchor="start">From a designer’s idea to a tested, handed-off prototype</text>
 <text x="60" y="130" font-size="15" font-weight="400" fill="#e0e8ea" text-anchor="start">Agents draft, humans decide. What the studio generates is Nightingale; the studio’s own look is Fluid Intelligence.</text>
 <rect x="1040" y="38" width="509" height="92" rx="14" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M1054 39H1535" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
@@ -101,7 +101,7 @@
 <text x="1193" y="250" font-size="17" font-weight="700" fill="#ffffff" text-anchor="start">Research</text>
 <text x="1159" y="288" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Users test on the</text>
 <text x="1159" y="309" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">research platform;</text>
-<text x="1159" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">insights flow to the hub.</text>
+<text x="1159" y="330" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">insights flow to the Lab.</text>
 <text x="1159" y="358" font-size="12" font-weight="400" fill="#81bfdf" text-anchor="start">needs D3 · D10 · D12</text>
 <rect x="1159" y="368" width="50" height="22" rx="11" fill="none" stroke="#4881aa" stroke-width="1.5" stroke-dasharray="4 3"/><text x="1184" y="383" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">NEXT</text>
 <path d="M1333 302H1356" stroke="#81bfdf" stroke-width="2" marker-end="url(#arrow)"/>
@@ -137,7 +137,7 @@
 <text x="1083" y="648" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Fictional data only, five screen states:</text>
 <text x="1083" y="668" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">normal, loading, empty, error, success.</text>
 <rect x="51" y="726" width="1498" height="196" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M69 727H1531" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
-<text x="75" y="756" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">RESEARCH HUB</text>
+<text x="75" y="756" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">RESEARCH LAB</text>
 <rect x="228" y="740" width="72" height="22" rx="11" fill="#0a2139" stroke="#81bfdf" stroke-width="1.5"/><text x="264" y="755" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">UI ONLY</text>
 <text x="318" y="756" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">one central place for what users tell us · pulled into Brief, Spec, Build and Handoff · front-end page built, not connected</text>
 <rect x="75" y="774" width="320" height="84" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1" stroke-dasharray="5 4"/>
@@ -159,11 +159,11 @@
 <text x="1221" y="802" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Search and pull</text>
 <text x="1221" y="824" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Read-only API with citations, for</text>
 <text x="1221" y="844" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">designers and for agents.</text>
-<text x="75" y="892" font-size="12.5" font-weight="400" fill="#e2ac98" text-anchor="start">Default: raw recordings, transcripts and participant details stay in the research platform. The hub keeps de-identified insights, quotes and tags,</text>
+<text x="75" y="892" font-size="12.5" font-weight="400" fill="#e2ac98" text-anchor="start">Default: raw recordings, transcripts and participant details stay in the research platform. The Research Lab keeps de-identified insights, quotes and tags,</text>
 <text x="75" y="910" font-size="12.5" font-weight="400" fill="#e2ac98" text-anchor="start">each with a link back to the source. Storing more needs privacy approval first (D12).</text>
 <rect x="51" y="944" width="1498" height="150" rx="18" fill="url(#glass)" stroke="#b9eaf5" stroke-opacity="0.3" stroke-width="1.2"/><path d="M69 945H1531" stroke="#b9eaf5" stroke-opacity="0.35" stroke-width="1"/>
 <text x="75" y="974" font-size="12" font-weight="700" fill="#81bfdf" text-anchor="start" letter-spacing="3">LIBRARY AND RECORDS</text>
-<text x="330" y="974" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">feeds Review and Handoff, and links to the evidence in the hub</text>
+<text x="330" y="974" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">feeds Review and Handoff, and links to the evidence in the Research Lab</text>
 <rect x="75" y="992" width="345" height="88" rx="12" fill="#0a2139" fill-opacity="0.7" stroke="#4881aa" stroke-width="1"/>
 <text x="93" y="1020" font-size="15" font-weight="700" fill="#ffffff" text-anchor="start">Prototype manifest</text>
 <text x="93" y="1044" font-size="13" font-weight="400" fill="#e0e8ea" text-anchor="start">Owner, brief, versions, gate results,</text>

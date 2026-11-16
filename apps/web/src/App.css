@@ -182,7 +182,8 @@
 
 .topbar {
   min-height: 76px;
-  padding: 0 clamp(20px, 5vw, 72px);
+  /* Match the page content column: centered, max 1200px, 24px minimum gutter. */
+  padding: 0 max(24px, calc((100% - 1200px) / 2));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -863,6 +864,8 @@ main:focus {
 
   .topbar {
     min-height: 67px;
+    padding-right: 14px;
+    padding-left: 14px;
   }
 
   main {
