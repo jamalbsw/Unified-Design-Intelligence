@@ -1,0 +1,271 @@
+{
+  "component": "Button",
+  "status": "draft",
+  "purpose": "Evidence for an independent React reference approximation, not an official component or studio screen spec.",
+  "scope": {
+    "platform": "web",
+    "theme": "light",
+    "variant": "primary",
+    "colorStyle": "default",
+    "size": "md",
+    "figmaSize": "Medium",
+    "icon": "none",
+    "referenceLabel": "Button text",
+    "states": ["rest", "hover", "pressed", "focus-visible", "disabled", "loading"],
+    "excluded": ["secondary", "inverse", "small", "icons", "native rendering", "dark theme", "router/link rendering", "full-width layout", "combined states"],
+    "completeness": "Selected pilot only; not all Button variants or all Nightingale components."
+  },
+  "sources": {
+    "local": {
+      "root": "User-supplied local Nightingale package root; not bundled in this repository.",
+      "packageVersion": "1.6.31",
+      "revision": "unknown",
+      "references": {
+        "publicExport": {"path": "src/index.ts", "line": 2},
+        "coreExport": {"path": "src/components/core/index.ts", "line": 5},
+        "buttonExport": {"path": "src/components/core/button/index.ts", "line": 2},
+        "props": {"path": "src/components/core/button/ButtonTypes.ts", "line": 13},
+        "component": {"path": "src/components/core/button/Button.tsx", "line": 287},
+        "stateColours": {"path": "src/components/core/button/Button.tsx", "line": 49},
+        "effectiveStyles": {"path": "src/components/core/button/Button.tsx", "line": 465},
+        "webStyles": {"path": "src/components/core/button/Button.tsx", "line": 545},
+        "baseStyles": {"path": "src/components/core/button/Button.tsx", "line": 656},
+        "tokens": {"path": "src/design-tokens/design-tokens.ts", "line": 6},
+        "colourAliases": {"path": "src/components/foundation/colors/GenericColorTheme.ts", "line": 11},
+        "lightColours": {"path": "src/components/foundation/colors/color.light.tokens.ts", "line": 108},
+        "lightTheme": {"path": "src/themes/appearance/light.ts", "line": 8},
+        "themeProvider": {"path": "src/themes/ThemeProvider.tsx", "line": 13},
+        "typography": {"path": "src/components/foundation/typography/TypographyStyles.ts", "line": 148},
+        "boldOverride": {"path": "src/components/foundation/typography/TypographyStyles.ts", "line": 241},
+        "localDesignMapping": {"path": "src/components/core/button/Button.figma.ts", "line": 1}
+      }
+    },
+    "figma": {
+      "fileKey": "lJVE7xrr04LIcoGLz0bthm",
+      "revision": "unknown",
+      "pageNode": "1456:4959",
+      "componentSetNode": "143:1793",
+      "codeConnect": {
+        "requestedLabel": "React Native",
+        "observedLabel": "React Native",
+        "hasTemplate": true,
+        "sourceLocation": "not supplied by server",
+        "version": "unknown",
+        "status": "Template confirms component/prop correspondence for rest and loading; React web API equivalence is not established."
+      }
+    },
+    "existingAdapter": {
+      "path": "../../studio/template/src/ui/Button.tsx",
+      "status": "Temporary approximation; current props only add primary/secondary variant to native button attributes.",
+      "tokens": "../../studio/template/src/ui/tokens.css",
+      "catalog": "../../studio/context/components.json",
+      "notModified": true
+    }
+  },
+  "tokenEvidence": [
+    {
+      "property": "height",
+      "semanticToken": null,
+      "primitiveToken": "ButtonPrimarySizeBaseHeight",
+      "value": 54,
+      "unit": "px",
+      "local": "tokens:6; src/components/core/button/Button.tsx:44; webStyles",
+      "figmaNode": "143:1792",
+      "status": "confirmed",
+      "note": "The web size map also supplies 54 directly for md; this is not exclusively token-driven."
+    },
+    {
+      "property": "border-radius",
+      "semanticToken": null,
+      "primitiveToken": "ButtonPrimarySizeBaseBorderRadius",
+      "value": 4,
+      "unit": "px",
+      "local": "tokens:7; baseStyles",
+      "figmaNode": "143:1792",
+      "status": "confirmed"
+    },
+    {
+      "property": "border-width",
+      "semanticToken": null,
+      "primitiveToken": "ButtonPrimarySizeBaseBorderWidth",
+      "value": 2,
+      "unit": "px",
+      "local": "tokens:8; baseStyles; webStyles",
+      "figmaNode": "143:1783",
+      "status": "conflicting",
+      "note": "Hover context emits a 2px solid border. Rest, pressed, and disabled generated context omit an explicit border, while local web styles always set one. Figma stroke and box geometry need direct reconciliation; omission alone does not prove a zero-width design stroke."
+    },
+    {
+      "property": "padding-inline",
+      "semanticToken": null,
+      "primitiveToken": "SpacingSizeBaseMedium",
+      "value": 24,
+      "unit": "px",
+      "local": "tokens:260; baseStyles; webStyles",
+      "figmaNode": "143:1792",
+      "status": "confirmed",
+      "note": "Declared values agree; rendered width still depends on border sizing and font metrics."
+    },
+    {
+      "property": "padding-block",
+      "semanticToken": null,
+      "primitiveToken": null,
+      "value": null,
+      "unit": "px",
+      "local": "webStyles",
+      "figmaNode": "143:1792",
+      "status": "conflicting",
+      "note": "Generated Figma context declares 16px; local web styles set height and centering but do not set vertical padding. Do not copy 16px into a fixed-height border box without measuring."
+    },
+    {
+      "property": "background-color at rest",
+      "semanticToken": "$color-primary-b2",
+      "aliases": ["ColorPrimaryB2Name", "colorsLight", "ColorBasePrimaryB2"],
+      "primitiveToken": "ColorBasePrimaryB2",
+      "value": "#ffc342",
+      "unit": null,
+      "local": "stateColours; colourAliases:15; lightColours:115; tokens:92",
+      "figmaNode": "143:1792",
+      "status": "confirmed",
+      "note": "Figma variable/style definitions and local light-theme value agree after hex-case normalization."
+    },
+    {
+      "property": "label-color",
+      "semanticToken": "$color-primary-a2",
+      "aliases": ["ColorPrimaryA2Name", "colorsLight", "ColorBasePrimaryA2"],
+      "primitiveToken": "ColorBasePrimaryA2",
+      "value": "#364248",
+      "unit": null,
+      "local": "stateColours; colourAliases:11; lightColours:111; tokens:87",
+      "figmaNode": "143:1792",
+      "status": "confirmed"
+    },
+    {
+      "property": "background-color on hover",
+      "semanticToken": "$color-secondary-b2",
+      "aliases": ["ColorSecondaryB2Name", "colorsLight", "ColorBaseSecondaryB2"],
+      "primitiveToken": "ColorBaseSecondaryB2",
+      "value": "#fff8e6",
+      "unit": null,
+      "local": "effectiveStyles; lightColours:127; tokens:103",
+      "figmaNode": "143:1783",
+      "status": "confirmed",
+      "note": "Effective hover override differs from merely reading the base state map."
+    },
+    {
+      "property": "pressed background and hover border",
+      "semanticToken": "$color-primary-b1",
+      "aliases": ["ColorPrimaryB1Name", "colorsLight", "ColorBasePrimaryB1"],
+      "primitiveToken": "ColorBasePrimaryB1",
+      "value": "#ffb71b",
+      "unit": null,
+      "local": "stateColours; effectiveStyles; lightColours:114; tokens:91",
+      "figmaNodes": ["3596:4206", "143:1783"],
+      "status": "confirmed"
+    },
+    {
+      "property": "disabled background",
+      "semanticToken": "$color-secondary-a5",
+      "primitiveToken": "ColorBaseSecondaryA5",
+      "value": "#eceded",
+      "unit": null,
+      "local": "stateColours; lightColours:122; tokens:98",
+      "figmaNode": "1895:4756",
+      "status": "confirmed"
+    },
+    {
+      "property": "disabled label",
+      "semanticToken": "$color-secondary-a3",
+      "primitiveToken": "ColorBaseSecondaryA3",
+      "value": "#c9c9c5",
+      "unit": null,
+      "local": "stateColours; lightColours:120; tokens:96",
+      "figmaNode": "1895:4756",
+      "status": "confirmed"
+    },
+    {
+      "property": "font-size",
+      "semanticToken": "body-02",
+      "primitiveToken": "TypographySizeBaseBody02",
+      "value": 14,
+      "unit": "px",
+      "local": "component renderChildren; typography:149; tokens:307",
+      "figmaNode": "143:1792",
+      "status": "confirmed"
+    },
+    {
+      "property": "line-height",
+      "semanticToken": "body-02",
+      "primitiveToken": "TypographyLineHeightBaseBody02",
+      "value": 1.6,
+      "unit": "unitless",
+      "computedPxAt14px": 22.4,
+      "local": "typography:152; tokens:289",
+      "figmaNode": "143:1792",
+      "status": "confirmed"
+    },
+    {
+      "property": "effective font-weight",
+      "semanticToken": "body-02 plus bold",
+      "primitiveToken": null,
+      "value": 700,
+      "unit": null,
+      "local": "component renderChildren; boldOverride:242",
+      "figmaNode": "143:1792",
+      "status": "confirmed",
+      "note": "The body-02 base weight token is 600, but Button applies the bold override. Font files have not been loaded or redistributed."
+    },
+    {
+      "property": "focus effect",
+      "semanticToken": "$shadow-focus",
+      "primitiveToken": "ShadowBaseFocusColor",
+      "value": "rgba(58, 151, 249, 1)",
+      "unit": null,
+      "local": "webStyles focusBoxShadow; tokens:238",
+      "figmaNode": "556:2922",
+      "status": "unresolved",
+      "note": "Colour and base blur/spread are evidenced. Local code adds a 2px white gap and increases spread; rendered focus geometry and the Figma effect asset have not been compared."
+    }
+  ],
+  "states": [
+    {"name": "rest", "figmaState": "Inactive", "node": "143:1792", "designContext": "read", "screenshot": "inspected", "codeEvidence": "enabled and neither hovered nor pressed", "renderedVerification": "not run"},
+    {"name": "hover", "figmaState": "Hover", "node": "143:1783", "designContext": "read", "screenshot": "inspected", "codeEvidence": "effective hover background/border override", "renderedVerification": "not run"},
+    {"name": "pressed", "figmaState": "Active", "node": "3596:4206", "designContext": "read", "screenshot": "inspected", "codeEvidence": "pressed and hovered web branch", "renderedVerification": "not run"},
+    {"name": "focus-visible", "figmaState": "Focus", "node": "556:2922", "designContext": "read", "screenshot": "inspected", "codeEvidence": "keyboard-visible focus shadow, suppressed while disabled/loading", "renderedVerification": "not run"},
+    {"name": "disabled", "figmaState": "Disabled", "node": "1895:4756", "designContext": "read", "screenshot": "inspected", "codeEvidence": "native web disabled attribute and disabled palette", "renderedVerification": "not run"},
+    {"name": "loading", "figmaState": "Loading", "node": "25763:32913", "designContext": "incomplete: server requested additional Code Connect setup; no mapping writes performed", "screenshot": "generated by server but not visually inspected or persisted", "codeEvidence": "spinner replaces label; loading disables native button; web background override uses primary-b2", "figmaMetadataDimensionsPx": {"width": 150, "height": 54}, "renderedVerification": "not run"}
+  ],
+  "coverage": {
+    "geometry": "partial: border and vertical padding require reconciliation",
+    "colour": "light-theme scoped states inspected except full loading context",
+    "typography": "token size, line-height, and bold override inspected; font availability and rendered metrics pending",
+    "focus": "source and design evidence read; rendered geometry pending",
+    "responsive": "excluded from this pilot",
+    "motion": "spinner internals and reduced-motion behavior not inspected",
+    "documentation": "local props, implementation, exports, and local mapping read; linked Storybook usage page and spinner docs not read",
+    "accessibility": "source inspection only; keyboard, contrast, announcements, and assistive-technology checks not run"
+  },
+  "openQuestions": [
+    {"id": "geometry", "question": "Should the reference prioritize measured Figma geometry or the local web box model where generated padding/border declarations differ?", "assumption": "Neither source silently overrides the other; measure and approve a resolution before implementation."},
+    {"id": "loading", "question": "Should loading preserve the resting width or use the Figma loading node's 150px width, and which palette/motion details are authoritative?", "assumption": "Loading context is incomplete. Returned loading variables include primary-a3 and primary-b1, which alone do not prove a background colour conflict. Inspect spinner and full node context first."},
+    {"id": "font", "question": "Is the documented Sharp Sans font available and authorized for the reference preview?", "assumption": "No font is copied. A fallback would be explicitly labelled and prevents a claim of exact typography fidelity."},
+    {"id": "acceptance", "question": "Approve the pilot scope and geometry/capture tolerances after resolving the evidence gaps.", "assumption": "Exact resolved colours and typography values are proposed; no geometry or screenshot threshold is approved yet."}
+  ],
+  "verification": {
+    "phase": "source-and-design extraction",
+    "mcpReads": "metadata, five state design contexts/screenshots, variable definitions, and labelled Code Connect mappings returned successfully",
+    "customAgentRuntime": "not tested in a fresh custom-agent session",
+    "implementation": "not started",
+    "visualFidelity": "not run",
+    "interactionTests": "not run",
+    "accessibilityTests": "not run",
+    "acceptanceCriteria": [
+      "Approve exact variant/state scope and reconcile recorded conflicts before implementation.",
+      "Keep all implemented visual properties tied to approved token mappings or explicitly documented literals.",
+      "Measure height, padding, border, radius, typography, and focus geometry against approved values and numeric tolerances.",
+      "Capture all scoped states with matched browser, viewport, pixel ratio, theme, font, and text.",
+      "Test Tab focus and Enter/Space activation; verify disabled/loading suppress activation and have appropriate accessible names and announcements.",
+      "Report each excluded or untested state explicitly; do not describe source extraction as a visual pass."
+    ]
+  }
+}

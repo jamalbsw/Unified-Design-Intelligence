@@ -29,3 +29,13 @@ Generated previews are temporary approximations, not official Nightingale
 components. AI generation, real authentication, and shared storage are not
 connected yet. The password prompt is a demo-only browser gate, not security.
 Use fictional examples only; do not enter patient or confidential information.
+
+## Design-system and Figma tooling
+
+See the [Nightingale setup guide](./Nightingale/README.md) for the workspace Figma
+MCP connection, the VS Code Copilot agent, and project skills for reading local
+component code, design references, token evidence, and component specifications.
+The agent also reads the Baylee A2UI Figma library for chat/task patterns and
+connected prototype-flow specifications alongside Nightingale.
+Official component import is deferred; the first Button pilot is a draft
+reference specification, not an implemented component.
