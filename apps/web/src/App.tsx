@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import './App.css'
 import ResearchLab from './ResearchLab'
+import TemplatePreview from './prototype/TemplatePreview'
+import { matchTemplate, type TemplateOptions } from './prototype/templates'
 
 const pilotPassword = import.meta.env.VITE_PILOT_PASSWORD
 
@@ -12,14 +14,16 @@ const storybookUrl =
 
 const examples = [
   {
-    label: 'Appointment preparation',
-    prompt:
-      'Create an appointment preparation flow that helps a patient review what to bring, confirm visit details, and ask for help.',
+    label: 'Simple homepage',
+    prompt: 'Create a home page.',
   },
   {
-    label: 'Care team dashboard',
-    prompt:
-      'Create a care team dashboard for reviewing assigned follow-ups, filtering by status, and opening a task for more detail.',
+    label: 'Task-focused homepage',
+    prompt: 'Create a task-focused home page.',
+  },
+  {
+    label: 'Communication summary',
+    prompt: 'Create a home page with a communication summary.',
   },
 ]
 
@@ -30,6 +34,8 @@ function App() {
   const [request, setRequest] = useState('')
   const [viewport, setViewport] = useState<'desktop' | 'mobile'>('desktop')
   const [view, setView] = useState<View>(viewFromHash)
+  const [preview, setPreview] = useState<{ options: TemplateOptions; request: string; revision: number } | null>(null)
+  const [requestError, setRequestError] = useState('')
   const isFirstView = useRef(true)
 
   useEffect(() => {
@@ -62,6 +68,16 @@ function App() {
     }
 
     setIsUnlocked(true)
+  }
+
+  function buildPreview() {
+    const result = matchTemplate(request)
+    if (!result.ok) {
+      setRequestError(`${result.message}${preview ? ' The previous preview is unchanged.' : ''}`)
+      return
+    }
+    setRequestError('')
+    setPreview(previous => ({ options: result.options, request, revision: (previous?.revision ?? 0) + 1 }))
   }
 
   if (!isUnlocked) {
@@ -140,9 +156,9 @@ function App() {
         <div className="notice" role="note">
           <span className="notice-icon" aria-hidden="true">i</span>
           <p>
-            This starter workspace is not connected to an AI service or shared
-            storage yet. Use fictional examples only; don’t enter patient or
-            confidential information.
+            Template-based demo, not AI generation. Requests select predefined
+            layouts locally; no AI or Figma calls are made. Use fictional examples
+            only. Nothing is saved or shared.
           </p>
         </div>
 
@@ -156,21 +172,26 @@ function App() {
               <span className="heading-icon" aria-hidden="true">✦</span>
             </div>
             <p className="card-description">
-              Share the user, their goal, and what they should be able to do.
-              You can start with one sentence.
+              Try a homepage, a task-focused homepage, or a homepage with a
+              communication summary. This demo matches keywords, not intent.
             </p>
 
             <label htmlFor="prototype-request">What would you like to prototype?</label>
             <textarea
               id="prototype-request"
               value={request}
-              onChange={(event) => setRequest(event.target.value)}
-              placeholder="For example: Help a patient prepare for an upcoming appointment..."
+              onChange={(event) => {
+                setRequest(event.target.value)
+                setRequestError('')
+              }}
+              aria-describedby={`request-help${requestError ? ' request-error' : ''}`}
+              aria-invalid={!!requestError}
+              placeholder="Create a home page."
               rows={6}
               maxLength={1200}
             />
             <div className="textarea-meta">
-              <span>Be specific about the actions users should take.</span>
+              <span id="request-help">Recognizes home, task, and communication/message keywords. Other details are not interpreted. Do not enter personal or confidential data.</span>
               <span>{request.length}/1200</span>
             </div>
 
@@ -181,7 +202,10 @@ function App() {
                   <button
                     className="example-button"
                     key={example.label}
-                    onClick={() => setRequest(example.prompt)}
+                    onClick={() => {
+                      setRequest(example.prompt)
+                      setRequestError('')
+                    }}
                     type="button"
                   >
                     {example.label}
@@ -220,16 +244,17 @@ function App() {
               </fieldset>
               <button
                 className="generate-button"
-                disabled
-                title="Generation will be enabled after an approved AI service is connected."
+                disabled={!request.trim()}
+                onClick={buildPreview}
                 type="button"
               >
-                Generate prototype
+                Build template preview
                 <span aria-hidden="true">→</span>
               </button>
             </div>
-            <p className="disabled-reason">
-              Generation is paused until an approved AI service is connected.
+            {requestError && <p className="access-error" id="request-error" role="alert">{requestError}</p>}
+            <p className="demo-description">
+              Predefined layouts only. No AI, live Figma reading, or saved versions.
             </p>
           </section>
 
@@ -242,9 +267,12 @@ function App() {
                 <p className="step-label">STEP 2</p>
                 <h2 id="preview-title">Your prototype preview</h2>
               </div>
-              <span className="preview-status">Not connected</span>
+              <span className="preview-status">Template demo</span>
             </div>
             <div className="preview-canvas">
+              {preview ? (
+                <TemplatePreview key={preview.revision} options={preview.options} />
+              ) : (
               <div className="preview-empty">
                 <div className="preview-symbol" aria-hidden="true">
                   <span />
@@ -253,8 +281,8 @@ function App() {
                 </div>
                 <h3>Your preview will appear here</h3>
                 <p>
-                  Once generation is connected, you’ll be able to click through
-                  screens and share a version with your team.
+                  Choose an example and build a template to explore a homepage
+                  and a sample detail screen. This is not AI generation.
                 </p>
                 <a
                   className="preview-link"
@@ -267,9 +295,16 @@ function App() {
                   <span className="visually-hidden"> (opens in a new tab)</span>
                 </a>
               </div>
+              )}
             </div>
+            <p className="preview-caption" role="status">
+              {preview
+                ? `Preview ${preview.revision}: ${preview.options.layout === 'tasks' ? 'task-focused homepage' : 'homepage'}${preview.options.communication ? ' with communication summary' : ''}.${preview.request !== request ? ' Request edited. Build again to update the preview.' : ' Only these matched features are included.'}`
+                : 'No template built yet.'}
+            </p>
             <p className="preview-caption">
-              Generated prototypes use Nightingale. This studio’s own look is separate.
+              Nightingale-inspired approximations, not official components.
+              System fonts are substituted; visual fidelity is not verified.
             </p>
             <div className="pipeline" aria-label="Prototype workflow status">
               <div className="pipeline-item complete">
@@ -277,14 +312,14 @@ function App() {
                 <span>Describe</span>
               </div>
               <span className="pipeline-line" aria-hidden="true" />
-              <div className="pipeline-item">
+              <div className={`pipeline-item${preview ? ' complete' : ''}`}>
                 <span className="pipeline-marker" aria-hidden="true">2</span>
-                <span>Generate</span>
+                <span>Build template</span>
               </div>
               <span className="pipeline-line" aria-hidden="true" />
               <div className="pipeline-item human">
                 <span className="pipeline-marker" aria-hidden="true">3</span>
-                <span>Review &amp; save</span>
+                <span>Review locally</span>
               </div>
             </div>
           </section>

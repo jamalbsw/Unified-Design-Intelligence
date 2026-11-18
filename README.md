@@ -30,6 +30,11 @@ components. AI generation, real authentication, and shared storage are not
 connected yet. The password prompt is a demo-only browser gate, not security.
 Use fictional examples only; do not enter patient or confidential information.
 
+The local web app includes an explicitly labelled **template-based demo**, not
+AI generation: build a homepage, a task-focused variant, or a communication
+summary and click through sample actions. See the
+[web pilot instructions](./apps/web/README.md#template-based-browser-pilot).
+
 ## Design-system and Figma tooling
 
 See the [Nightingale setup guide](./Nightingale/README.md) for the workspace Figma
