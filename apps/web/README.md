@@ -66,6 +66,18 @@ saved to browser storage, or shared; there are no AI, MCP, or backend calls.
 This tests the browser interaction loop, not whether an AI understands a query.
 A2UI chat generation and unrestricted page generation are not implemented.
 
+## Clickable portal and chat prototype
+
+Applied AI Design, **Step 2: Your prototype preview**, links to a standalone,
+clickable prototype of a patient portal with a chat assistant beside the page:
+`public/prototypes/portal-chat/index.html`, served at `/prototypes/portal-chat/`.
+It is a single self-contained HTML file with fictional data and no network calls.
+Payments, messages, and appointments are demo-only, and chat replies are scripted,
+not AI-generated. It uses Nightingale-inspired approximations (not official
+components) built from values read in the Nightingale Storybook; Sharp Sans is not
+bundled. Open the page with the link in Step 2, or run `npm run dev` and visit
+`/prototypes/portal-chat/`.
+
 ## Pilot access
 
 The pilot uses a browser-side password prompt for casual demos only; it is not
