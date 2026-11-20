@@ -532,7 +532,6 @@
     <style>
       /* ---------- Baylee chat, aligned to the Baylee Web 12-2 spec ---------- */
       :root { --shadow-regular: 2px 8px 10px 0 rgba(58, 68, 85, 0.15); --drawer-full: clamp(380px, 36vw, 480px); }
-      body.chat-wide { --drawer-full: clamp(520px, 50vw, 800px); }
 
       /* The Baylee icon: conic gradient from the Baylee Color token, in a four-point star */
       .baylee-icon {
@@ -621,7 +620,6 @@
       .msg { animation-delay: var(--md, 0ms); }
       .msg.bot.continued { margin-top: -14px; }
 
-      @media (max-width: 1100px) { .expand-only { display: none; } }
       @media (max-width: 760px) {
         .drawer { background: var(--color-secondary-a6); }
         .drawer-inner { inset: 0; width: 100%; }
@@ -979,17 +977,10 @@
       <aside class="drawer" id="drawer" aria-labelledby="drawer-title" inert>
         <div class="drawer-inner">
           <header class="drawer-head">
-            <button class="icon-plain mobile-only" id="drawer-back" type="button" aria-label="Back to the page. Your conversation is kept.">
-              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
-            </button>
             <h2 id="drawer-title">Chat with Baylee</h2>
             <span class="ntg-badge ntg-badge--dark ai-pill">AI assistant</span>
             <div class="controls">
-              <button class="icon-plain desktop-only expand-only" id="drawer-expand" type="button" aria-pressed="false" aria-label="Make the chat wider" title="Make the chat wider">
-                <svg class="icon-expand" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"></path></svg>
-                <svg class="icon-contract" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M20 10h-6V4M4 14h6v6M14 10l7-7M10 14l-7 7"></path></svg>
-              </button>
-              <button class="icon-plain desktop-only" id="drawer-close" type="button" aria-label="Close chat. Your conversation is kept." title="Close (your conversation is kept)">
+              <button class="icon-plain" id="drawer-close" type="button" aria-label="Close chat. Your conversation is kept." title="Close (your conversation is kept)">
                 <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
               </button>
             </div>
@@ -1456,17 +1447,6 @@
       }
 
       $("#drawer-close").addEventListener("click", closeDrawer);
-      $("#drawer-back").addEventListener("click", closeDrawer);
-      $("#drawer-expand").addEventListener("click", () => {
-        const wide = body.classList.toggle("chat-wide");
-        const button = $("#drawer-expand");
-        button.setAttribute("aria-pressed", String(wide));
-        const label = wide ? "Make the chat narrower" : "Make the chat wider";
-        button.setAttribute("aria-label", label);
-        button.setAttribute("title", label);
-        $(".icon-expand", button).hidden = wide;
-        $(".icon-contract", button).hidden = !wide;
-      });
       dom.headerAsk.addEventListener("click", () => (state.open ? closeDrawer() : openDrawer({ opener: dom.headerAsk })));
 
       function goToItem() {
