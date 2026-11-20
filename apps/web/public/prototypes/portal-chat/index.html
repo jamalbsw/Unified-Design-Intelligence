@@ -36,6 +36,7 @@
         --color-secondary-b2: #fff8e6;
         --color-secondary-c1: #e5f5fb;
         --color-secondary-c2: #f5feff;
+        --color-system-a1: #3f9f90;
         --color-system-a2: #ddf5f2;
         --color-system-a3: #158570;
         --color-system-b1: #b12943;
@@ -640,6 +641,32 @@
       .menu-item[role="menuitemradio"][aria-checked="false"]::before { content: ""; display: inline-block; width: 18px; }
       .tile--priority { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
       .tile--priority .tile-icon { background: var(--color-secondary-b1); }
+
+      /* One rounded input shape, shared by the home bar and the chat */
+      .ask-bar, .chat-composer { min-height: 64px; align-items: center; gap: 12px; padding: 12px 12px 12px 20px; border: 1px solid var(--color-secondary-a5); border-radius: 32px; background: var(--color-primary-c1); box-shadow: var(--shadow-soft); }
+      .ask-bar { max-width: 640px; }
+      .ask-bar:focus-within, .chat-composer:focus-within { border-color: var(--color-secondary-a5); box-shadow: var(--shadow-soft), 0 0 0 3px #3a97f9; }
+      .ask-bar input { height: 40px; padding: 0; font-size: 14px; line-height: 1.6; }
+      .ask-bar input::placeholder { color: var(--color-secondary-a2); opacity: 1; }
+      .ask-bar:has(input:placeholder-shown) .send-circle { color: var(--color-secondary-a4); background: transparent; cursor: default; }
+
+      /* Prioritized briefing */
+      .brief { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+      .brief-item { display: grid; gap: 2px; padding: 12px 14px 12px 16px; border: 1px solid var(--color-secondary-a4); border-left-width: 4px; border-radius: 8px; background: var(--color-primary-c1); }
+      .brief-tag { width: fit-content; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; line-height: 1.6; text-transform: uppercase; }
+      .brief-title { color: var(--color-primary-a2); font-size: 14px; line-height: 1.4; }
+      .brief-detail { color: var(--color-secondary-a2); font-size: 13px; line-height: 1.5; }
+      .brief-action { width: fit-content; margin-top: 6px; padding: 0; border: 0; border-radius: 2px; color: var(--color-primary-a3); background: none; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+      .brief-action:hover { text-decoration: underline; }
+      .brief-action:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .brief--priority { border-left-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .brief--priority .brief-tag { color: var(--color-primary-a2); background: var(--color-secondary-b1); }
+      .brief--good { border-left-color: var(--color-system-a1); }
+      .brief--good .brief-tag { color: var(--color-system-a3); background: var(--color-system-a2); }
+      .brief--info { border-left-color: var(--color-primary-a3); }
+      .brief--info .brief-tag { color: var(--color-primary-a4); background: var(--color-secondary-c1); }
+      .brief--muted { border-left-color: var(--color-secondary-a3); background: var(--color-secondary-a6); }
+      .brief--muted .brief-tag { color: var(--color-secondary-a2); background: var(--color-secondary-a5); }
     </style>
   </head>
   <body>
@@ -692,13 +719,13 @@
             <p class="eyebrow">Your care at a glance</p>
             <h1>Welcome back</h1>
             <p class="lede">Here is what's ready for you today. Take your time. Nothing here needs to be done all at once.</p>
-            <form class="ask-bar" id="home-ask" role="search" aria-label="Ask Baylee">
+            <form class="ask-bar" id="home-ask" role="search" aria-label="Talk with Baylee, an AI assistant">
               <span class="baylee-icon" aria-hidden="true"></span>
-              <label class="visually-hidden" for="home-ask-input">Ask Baylee, an AI assistant</label>
-              <input id="home-ask-input" type="text" autocomplete="off" placeholder="Ask Baylee, our AI assistant, about your portal">
-              <button class="ntg-btn ntg-btn--sm" type="submit">Ask</button>
+              <label class="visually-hidden" for="home-ask-input">Message to Baylee, an AI assistant</label>
+              <input id="home-ask-input" type="text" autocomplete="off" placeholder="What's on your mind today?">
+              <button class="ntg-circle send-circle" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
             </form>
-            <div class="chips hero-chips" id="home-chips" aria-label="Suggested questions"></div>
+            <div class="chips hero-chips" id="home-chips" aria-label="Ideas to start with"></div>
           </div>
           <div class="grid tiles">
             <button class="ntg-card ntg-card--action tile tile--priority" type="button" data-page="appointments">
@@ -1030,7 +1057,7 @@
             <p class="composer-hint" id="composer-hint"></p>
             <div class="chat-composer">
               <label class="visually-hidden" for="composer-input">Message to Baylee</label>
-              <textarea id="composer-input" rows="1" placeholder="Ask a question"></textarea>
+              <textarea id="composer-input" rows="1" placeholder="What's on your mind?"></textarea>
               <button class="ntg-circle send-circle" type="submit" aria-label="Send message">
                 <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
               </button>
@@ -1076,34 +1103,56 @@
         bill: {
           title: "Billing", label: "This bill", page: "billing", target: "bill-card", back: "Back to this bill",
           uses: "Baylee will look at: your amount due and due date, the charges, insurance payments and adjustments, and the service summary.",
-          insight: ["You have $182.40 due in 14 days.", "Insurance already covered $300.00 of the $540.00, so this is just your portion. I can explain it, or help you split it up."],
-          chips: [{ label: "Explain my bill", fill: "Explain my bill" }, { label: "Why do I owe this?", fill: "Why do I owe this?" }, { label: "See payment plans", run: () => { navigate("billing"); DEMOS.plan(); } }]
+          lead: "Here's your bill at a glance.",
+          items: [
+            { tone: "priority", tag: "Due soon", title: "$182.40 due in 14 days", detail: "Insurance already covered $300.00 of the $540.00, so this is your portion.", action: { label: "Pay bill", run: () => DEMOS.pay() } },
+            { tone: "info", tag: "Option", title: "Split it into smaller payments", detail: "A plan can spread this over 3 or 6 months.", action: { label: "See payment plans", run: () => DEMOS.plan() } }
+          ],
+          chips: [{ label: "Walk me through this bill", fill: "Walk me through this bill" }, { label: "Why do I owe this?", fill: "Why do I owe this?" }, { label: "Who can I talk to?", fill: "Who can I talk to about this?" }]
         },
         results: {
           title: "Test Results", label: "These test results", page: "results", target: "results-list", back: "Back to these results",
           uses: "Baylee will look at: the result names, your values and the typical ranges shown, and whether a result is still a preview.",
-          insight: ["Your results are back, and there's good news: Panels A and C are in range.", "One marker in Panel B is a little outside its range. That's worth a look, and your care team can explain it. Panel D isn't ready yet."],
-          chips: [{ label: "Show me Panel B", run: () => showOnPage("results", "panel-b") }, { label: "Questions for my care team", fill: "Questions for my care team" }, { label: "Explain my results", fill: "Explain my results" }]
+          lead: "Here's what came back, good news first.",
+          items: [
+            { tone: "good", tag: "Good news", title: "Panels A and C are in range", detail: "Both came back within the typical range shown." },
+            { tone: "info", tag: "Worth a look", title: "One marker in Panel B is a little outside its range", detail: "Your care team can explain what it means for you.", action: { label: "Show me Panel B", run: () => showOnPage("results", "panel-b") } },
+            { tone: "muted", tag: "Still waiting", title: "Panel D isn't ready yet", detail: "It will show up here when it is." }
+          ],
+          chips: [{ label: "What does Panel B mean?", fill: "What does Panel B mean?" }, { label: "What should I ask my care team?", fill: "What should I ask my care team?" }, { label: "What's a typical range?", fill: "What does typical range mean?" }]
         },
         visit: {
           title: "Visit Summaries", label: "This visit summary", page: "visits", target: "visit-summary", back: "Back to the full summary",
           uses: "Baylee will look at: the key takeaways, the follow-up steps, and the contact guidance in your summary.",
-          insight: ["From your last visit, one thing has a timeframe: lab work in about 2 weeks.", "Everything else is routine. Want a quick summary, or a look at your follow-ups?"],
-          chips: [{ label: "Quick summary", fill: "Key takeaways" }, { label: "Show my follow-ups", run: () => showOnPage("visits", "visit-steps") }, { label: "When to call my care team", fill: "When to call my care team" }]
+          lead: "From your last visit, one thing has a timeframe.",
+          items: [
+            { tone: "priority", tag: "Coming up", title: "Lab work in about 2 weeks", detail: "It's the one follow-up with a timeframe.", action: { label: "Show my follow-ups", run: () => showOnPage("visits", "visit-steps") } },
+            { tone: "good", tag: "Good to know", title: "The rest is routine", detail: "Nothing else in your summary is marked urgent." }
+          ],
+          chips: [{ label: "Give me a quick summary", fill: "Give me a quick summary" }, { label: "What are my next steps?", fill: "What are my next steps?" }, { label: "When should I call my care team?", fill: "When should I call my care team?" }]
         },
         home: {
           title: "Home", label: "Home page", page: "home", uses: "Baylee will look at: the headings and text on the Home page.",
-          insight: ["Your main priority is your upcoming visit. There's an estimate to review and sign, and a payment to complete. I can help with both.", "Your test results also came back, with one marker worth a look."],
-          chips: [{ label: "Review my estimate", run: () => showOnPage("appointments", "estimate-card") }, { label: "See my results", run: () => navigate("results") }, { label: "What should I do first?", fill: "What should I do first?" }]
+          lead: "Here's what matters most right now, in order.",
+          items: [
+            { tone: "priority", tag: "Do first", title: "Your upcoming visit", detail: "Review and sign your estimate, then complete your $95.00 payment.", action: { label: "Open my estimate", run: () => showOnPage("appointments", "estimate-card") } },
+            { tone: "good", tag: "Good news", title: "Your test results are back", detail: "Panels A and C are in range. One marker in Panel B is worth a look with your care team.", action: { label: "See my results", run: () => navigate("results") } },
+            { tone: "info", tag: "Coming up", title: "$182.40 due in 14 days", detail: "That's your bill after insurance.", action: { label: "Open my bill", run: () => navigate("billing") } }
+          ],
+          chips: [{ label: "Walk me through my estimate", fill: "Walk me through my estimate" }, { label: "What do my results mean?", fill: "What do my results mean?" }, { label: "Do I have to pay now?", fill: "Do I have to pay now?" }]
         },
         appointments: {
           title: "Appointments", label: "Appointments page", page: "appointments", target: "estimate-card", back: "Back to my estimate", uses: "Baylee will look at: your upcoming visit and the estimate and payment steps on this page.",
-          insight: ["Your visit with Sample Provider is coming up, and two things are waiting.", "First, review and sign your estimate. Then complete your payment. I can walk you through either one."],
-          chips: [{ label: "Explain my estimate", fill: "Explain my estimate" }, { label: "How do I pay?", fill: "How do I pay?" }, { label: "Show me the estimate", run: () => showOnPage("appointments", "estimate-card") }]
+          lead: "Two things to finish before your visit with Sample Provider.",
+          items: [
+            { tone: "priority", tag: "Do first", title: "Review and sign your estimate", detail: "About $95.00 after insurance. It's an estimate, not a final bill.", action: { label: "Review and sign", run: () => DEMOS.sign() } },
+            { tone: "priority", tag: "Then", title: "Complete your payment", detail: "You'll review it first. Nothing happens until you confirm.", action: { label: "Start payment", run: () => DEMOS.estimatepay() } }
+          ],
+          chips: [{ label: "Walk me through the estimate", fill: "Walk me through the estimate" }, { label: "What's included?", fill: "What's included in the estimate?" }, { label: "Do I have to pay now?", fill: "Do I have to pay now?" }]
         },
-        communications: { title: "Communications", label: "Communications page", page: "communications", uses: "Baylee will look at: the headings and text on the Communications page.", insight: ["You have one new message from Sample Care Team.", "Want a quick summary, or help writing back?"], chips: [{ label: "Summarize my message", fill: "Summarize my message" }, { label: "Help me reply", fill: "Help me reply" }] },
+        communications: { title: "Communications", label: "Communications page", page: "communications", uses: "Baylee will look at: the headings and text on the Communications page.", insight: ["You have one new message from Sample Care Team.", "Want a quick summary, or help writing back?"], chips: [{ label: "What does it say?", fill: "What does my message say?" }, { label: "Help me write back", fill: "Help me write back" }] },
         help: { title: "Help Topics", label: "Help Topics page", page: "help", uses: "Baylee will look at: the questions and answers listed on the Help Topics page.", insight: ["Most people come here for help with a bill or their results.", "Which one can I help with?"], chips: [{ label: "My bill", run: () => navigate("billing") }, { label: "My results", run: () => navigate("results") }] },
-        contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", insight: ["Not sure who to contact?", "Billing support is best for bill questions. Your care team is best for health questions."], chips: [{ label: "Reach billing support", fill: "Reach billing support" }, { label: "Reach my care team", fill: "Reach my care team" }] },
+        contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", insight: ["Not sure who to contact?", "Billing support is best for bill questions. Your care team is best for health questions."], chips: [{ label: "I have a bill question", fill: "How do I reach billing support?" }, { label: "I have a health question", fill: "How do I reach my care team?" }] },
         resources: { title: "Find Local Resources", label: "Local resources page", page: "resources", uses: "Baylee will look at: the sample listings on this page.", insight: ["These are sample local resources near you.", "Want me to tell you what's listed?"], chips: [{ label: "What's listed here?", fill: "What's listed here?" }] },
         feedback: { title: "Provide Feedback", label: "Feedback page", page: "feedback", uses: "Baylee will look at: the headings and text on this page. It can't see what you type into the form.", insight: ["Thanks for sharing feedback.", "I can't see what you type, so it stays between you and the form."], chips: [{ label: "Where does my feedback go?", fill: "Where does my feedback go?" }] },
         account: { title: "Account Settings", label: "Account Settings page", page: "account", uses: "Baylee will look at: the headings and text on the Account Settings page.", insight: ["Want to change how we reach you?", "Your notification choices are right here."], chips: [{ label: "Change my notifications", fill: "Change my notifications" }] },
@@ -1244,10 +1293,30 @@
         return row;
       }
 
+      /* A prioritized briefing: each item says how important it is, what it is, and what to do about it. */
+      function briefList(items) {
+        const list = make("ol", "brief");
+        list.setAttribute("aria-label", "What matters most, in order");
+        items.forEach((item) => {
+          const li = make("li", `brief-item brief--${item.tone}`);
+          li.append(make("span", "brief-tag", item.tag), make("strong", "brief-title", item.title), make("p", "brief-detail", item.detail));
+          if (item.action) {
+            const button = make("button", "brief-action", item.action.label);
+            button.type = "button";
+            button.append(make("span", "", " ›"));
+            button.lastChild.setAttribute("aria-hidden", "true");
+            button.addEventListener("click", item.action.run);
+            li.append(button);
+          }
+          list.append(li);
+        });
+        return list;
+      }
+
       /* A Baylee message: the 24px Baylee icon, then body text with 16px between blocks.
          `continued` messages follow the previous one without repeating the icon. */
       function addBot(options) {
-        const { paras = [], quote, actions = [], chips = [], source = "", feedback = false, continued = false, delay = 0 } = options;
+        const { paras = [], quote, items = [], actions = [], chips = [], source = "", feedback = false, continued = false, delay = 0 } = options;
         /* Natural pacing: a reply with several short thoughts arrives as a few quick messages, not one block. */
         if (paras.length > 1) {
           addBot({ paras: [paras[0]], continued, delay });
@@ -1264,6 +1333,7 @@
         paras.forEach((text) => { const p = make("p"); revealInto(p, text, counter, start); message.append(p); });
         if (quote) { const q = make("p", "quote"); revealInto(q, quote, counter, start); message.append(q); }
         const after = [];
+        if (items.length) after.push(briefList(items));
         if (actions.length) after.push(actionsRow(actions));
         if (chips.length) after.push(chipsRow(chips));
         if (source) after.push(make("span", "source", source));
@@ -1310,8 +1380,8 @@
         dom.ctxBack.textContent = showBack ? `← ${ctx.back}` : "";
         const selected = state.follow ? "follow" : state.context;
         $$('input[name="ctx"]').forEach((radio) => { radio.checked = radio.value === selected; });
-        const askText = { bill: "Ask about this bill", results: "Ask about these results", visit: "Ask about this visit", none: "Ask a question" };
-        dom.input.placeholder = askText[state.context] || "Ask about this page";
+        const askText = { bill: "What's confusing about it?", results: "What are you wondering about?", visit: "What would you like to talk through?", appointments: "What's on your mind about your visit?" };
+        dom.input.placeholder = askText[state.context] || "What's on your mind?";
         if (flash) { dom.ctxCard.classList.remove("updated"); void dom.ctxCard.offsetWidth; dom.ctxCard.classList.add("updated"); }
       }
 
@@ -1326,15 +1396,15 @@
         state.suggested = null;
         renderContextCard({ flash: hadConversation });
         const ctx = CONTEXTS[id];
+        /* Like a companion: say what matters on this page, in order of importance, then offer the next step. */
+        const opening = (greet) => addBot({ paras: [...(greet ? ["Hi, I'm Baylee, your AI assistant."] : []), ...(ctx.items ? [ctx.lead] : ctx.insight)], items: ctx.items || [], chips: ctx.chips });
         if (id === "none") {
-          if (hadConversation) addDivider("Stopped reading");
-          addBot({ paras: hadConversation ? ["Okay, I've stopped reading. What would you like to ask?"] : ["Hi, I'm Baylee, your AI assistant.", ...ctx.insight], chips: ctx.chips });
-        } else if (!hadConversation) {
-          /* Like a companion: say what matters on this page first, then offer the next step. */
-          addBot({ paras: ["Hi, I'm Baylee, your AI assistant.", ...ctx.insight], chips: ctx.chips });
-        } else {
+          if (hadConversation) { addDivider("Stopped reading"); addBot({ paras: ["Okay, I've stopped reading. What would you like to ask?"], chips: ctx.chips }); }
+          else opening(true);
+        } else if (!hadConversation) opening(true);
+        else {
           addDivider(moved ? `You moved to ${ctx.title}` : `Now talking about: ${ctx.label}`);
-          addBot({ paras: ctx.insight, chips: ctx.chips });
+          opening(false);
         }
       }
 
@@ -1479,9 +1549,9 @@
       const planAction = { label: "See payment plans", run: () => { navigate("billing"); DEMOS.plan(); } };
 
       const FOLLOW_UPS = {
-        bill: [{ label: "Payment options", fill: "Payment options" }, { label: "Talk to someone", fill: "Who can I talk to?" }],
-        results: [{ label: "Questions for my care team", fill: "Questions for my care team" }, { label: "What's a typical range?", fill: "What's a typical range?" }],
-        visit: [{ label: "My follow-up steps", fill: "My follow-up steps" }, { label: "When to call my care team", fill: "When to call my care team" }]
+        bill: [{ label: "Can I split it up?", fill: "Can I split it up?" }, { label: "Who can I talk to?", fill: "Who can I talk to about this?" }],
+        results: [{ label: "What should I ask my care team?", fill: "What should I ask my care team?" }, { label: "What's a typical range?", fill: "What does typical range mean?" }],
+        visit: [{ label: "What are my next steps?", fill: "What are my next steps?" }, { label: "When should I call my care team?", fill: "When should I call my care team?" }]
       };
 
       function notMeant() {
@@ -1497,7 +1567,8 @@
           if (/bill|billing|pay/.test(t)) return { paras: ["You have a bill due in 14 days, and a payment to complete before your visit."], actions: [go("Open Billing", "billing")] };
           if (/result|test|lab/.test(t)) return { paras: ["They're back. Panels A and C are in range, and one marker in Panel B is worth a look."], actions: [go("See my results", "results")] };
         }
-        if (ctx === "appointments" && /estimate|sign|explain|walk/.test(t)) return { paras: ["It's what you'd likely owe for this visit, about $95.00.", "It's an estimate, not a final bill. Signing confirms you've reviewed it."], actions: [{ label: "Review and sign", run: () => DEMOS.sign() }] };
+        if (ctx === "appointments" && /\bnow\b|later|have to|deadline|due|when/.test(t)) return { paras: ["I don't see a due date for this payment, and I'd rather not guess.", "Your clinic can tell you when it's needed."], actions: [go("Contact Us", "contact")] };
+        if (ctx === "appointments" && /estimate|sign|explain|walk|included/.test(t)) return { paras: ["It's what you'd likely owe for this visit, about $95.00.", "It's an estimate, not a final bill. Signing confirms you've reviewed it."], actions: [{ label: "Review and sign", run: () => DEMOS.sign() }] };
         if (ctx === "appointments" && /pay|payment|complete/.test(t)) return { paras: ["Complete payment is the second step on this page.", "I can't pay for you. You'll review everything first, and nothing happens until you confirm."], actions: [{ label: "Complete payment", run: () => DEMOS.estimatepay() }] };
         if (ctx === "appointments" && /reschedul|change|cancel/.test(t)) return { paras: ["Choose Reschedule on this page.", "Nothing changes until you confirm."] };
         if (ctx === "appointments" && /bring|need|before|prepare/.test(t)) return { paras: ["Before the visit: sign your estimate and complete your payment.", "Your clinic can tell you what else to bring."], actions: [go("Contact Us", "contact")] };
@@ -1515,7 +1586,7 @@
       function answer(ctx, text) {
         const t = text.toLowerCase();
         if (ctx === "bill") {
-          if (/\bplans?\b|\bpay|payment|afford|installment|assistance|can.?t pay|struggl|hard to/.test(t)) return { paras: ["You can pay in full, or split it into a plan.", "You'll review everything before anything happens. And if money is tight, billing support can talk through options."], actions: [planAction, billingSupport] };
+          if (/\bplans?\b|\bsplit|spread|\bpay|payment|afford|installment|assistance|can.?t pay|struggl|hard to/.test(t)) return { paras: ["You can pay in full, or split it into a plan.", "You'll review everything before anything happens. And if money is tight, billing support can talk through options."], actions: [planAction, billingSupport] };
           if (/due|deadline|when|late/.test(t)) return { paras: ["The due date is at the top of your bill.", "Need more time? Billing support can help."], actions: [billingSupport] };
           if (/who|talk|speak|call|person|support/.test(t)) return { paras: ["Billing support can look at your actual account, which I can't."], actions: [billingSupport] };
           if (/walk|go through|line|item|each|break/.test(t)) return { paras: ["There are two services: your office visit and your lab services.", "Insurance paid part of each, so what's left is yours."] };
@@ -1525,6 +1596,7 @@
         if (ctx === "results") {
           if (/worr|scared|afraid|serious|cancer|diagnos|danger|urgent|emergency|symptom|bad|sick/.test(t)) return { paras: ["That sounds stressful, and I'm sorry.", "I can't say what results mean for your health, but your care team can.", "If you feel unwell, call your clinic, or 911 in an emergency."], actions: [careTeam] };
           if (/question|care team|doctor|provider|write|draft|ask them/.test(t)) return { paras: ["Here's a draft you can edit:"], quote: `“${DRAFT}”`, actions: [{ label: "Copy draft", button: true, run: () => { navigator.clipboard?.writeText(DRAFT); toast("Copied. Nothing was sent."); } }, careTeam] };
+          if (/panel b/.test(t)) return { paras: ["Panel B has three markers. Two are in range, and one is a little outside it.", "Your care team can explain what that means for you."], actions: [{ label: "Show me Panel B", run: () => showOnPage("results", "panel-b") }, careTeam] };
           if (/typical range|reference|range mean|what does|what's a/.test(t) && /range/.test(t)) return { paras: ["It's where most people's values land.", "A guide, not a verdict. Your care team can say what yours means."] };
           if (/outside|abnormal|high|low|flag|normal|anything/.test(t)) return { paras: ["One marker in Panel B is a little outside its range.", "That alone doesn't say much. Your care team looks at the whole picture."], chips: [{ label: "Questions for my care team", fill: "Questions for my care team" }] };
           if (/preview|pending|waiting|missing|not ready|panel d/.test(t)) return { paras: ["Panel D is still a preview, so I can't explain it yet.", "It'll show up when it's ready."] };
@@ -1665,7 +1737,7 @@
       }
 
       /* ---------- Home: ask Baylee ---------- */
-      ["What should I do first?", "Explain my estimate", "Explain my new results"].forEach((label) => {
+      ["What should I do first?", "Walk me through my estimate", "What do my results mean?"].forEach((label) => {
         const pill = make("button", "ntg-pill", label);
         pill.type = "button";
         pill.addEventListener("click", () => { const input = $("#home-ask-input"); input.value = label; input.focus(); input.setSelectionRange(label.length, label.length); });
@@ -1678,7 +1750,7 @@
         const text = input.value.trim();
         if (!text) { input.focus(); return; }
         input.value = "";
-        openDrawer({ opener: $("#home-ask .ntg-btn") });
+        openDrawer({ opener: $("#home-ask .send-circle") });
         setInput(text);
         window.setTimeout(() => $("#composer").requestSubmit(), 120);
       });
