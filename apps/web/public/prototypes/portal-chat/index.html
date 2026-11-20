@@ -629,6 +629,20 @@
         .context-card { margin: 0; padding: 8px 16px; }
         .thread { padding: 12px 16px; }
       }
+
+      /* Chat settings menu and priority tile */
+      .context-actions { position: relative; margin-left: auto; gap: 0; }
+      .icon-small { width: 32px; height: 32px; }
+      .icon-small:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .menu { position: absolute; top: calc(100% + 4px); right: 0; z-index: 20; min-width: 224px; padding: 8px 0; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: #fff; box-shadow: 0 2px 8px rgba(54, 66, 72, 0.15); }
+      .menu-item { display: block; width: 100%; padding: 10px 16px; border: 0; color: var(--color-primary-a2); background: transparent; font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+      .menu-item:hover { background: var(--color-secondary-b2); }
+      .menu-item:focus-visible { outline: none; box-shadow: inset var(--shadow-focus); }
+      .menu-item[disabled] { color: var(--color-secondary-a3); cursor: default; background: transparent; }
+      .menu-item[aria-checked="true"]::before { content: "✓"; margin-right: 8px; color: var(--color-primary-a3); font-weight: 700; }
+      .menu-item[role="menuitemradio"][aria-checked="false"]::before { content: ""; display: inline-block; width: 18px; }
+      .tile--priority { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .tile--priority .tile-icon { background: var(--color-secondary-b1); }
     </style>
   </head>
   <body>
@@ -690,22 +704,28 @@
             <div class="chips hero-chips" id="home-chips" aria-label="Suggested questions"></div>
           </div>
           <div class="grid tiles">
-            <button class="ntg-card ntg-card--action tile" type="button" data-page="billing">
-              <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg></span>
-              <span class="tile-title">Billing</span>
-              <span class="tile-text">You have a bill ready to review.</span>
+            <button class="ntg-card ntg-card--action tile tile--priority" type="button" data-page="appointments">
+              <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></span>
+              <span class="tile-title">Upcoming visit</span>
+              <span class="tile-text">Review and sign your estimate, then complete your payment.</span>
               <span class="tile-go" aria-hidden="true">›</span>
             </button>
             <button class="ntg-card ntg-card--action tile" type="button" data-page="results">
               <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4h8M9 4v5l-4.5 8A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-3L15 9V4"></path><path d="M7.5 15h9"></path></svg></span>
               <span class="tile-title">Test Results</span>
-              <span class="tile-text">Sample results are available. One is still a preview.</span>
+              <span class="tile-text">Your results are back, with one marker worth a look.</span>
+              <span class="tile-go" aria-hidden="true">›</span>
+            </button>
+            <button class="ntg-card ntg-card--action tile" type="button" data-page="billing">
+              <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg></span>
+              <span class="tile-title">Billing</span>
+              <span class="tile-text">A bill is due in 14 days.</span>
               <span class="tile-go" aria-hidden="true">›</span>
             </button>
             <button class="ntg-card ntg-card--action tile" type="button" data-page="visits">
               <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3.5h9l4 4v13H6z"></path><path d="M14.5 3.5v5h5M9 13h7M9 16.5h7"></path></svg></span>
               <span class="tile-title">Visit Summaries</span>
-              <span class="tile-text">Your most recent visit summary is ready.</span>
+              <span class="tile-text">Lab work is due in about 2 weeks.</span>
               <span class="tile-go" aria-hidden="true">›</span>
             </button>
           </div>
@@ -722,6 +742,14 @@
             <p>Test Clinic · Sample date and time</p>
             <button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-demo="reschedule">Reschedule</button>
           </article>
+          <section class="ntg-card" id="estimate-card" tabindex="-1" aria-labelledby="estimate-title">
+            <div class="result-head"><h2 id="estimate-title" style="font-size:18px;margin:0">Before your visit</h2><span class="ntg-badge">2 things to do</span></div>
+            <p class="meta" style="margin:4px 0 16px">Estimated cost of this visit: $95.00 (sample). It's an estimate, not a final bill.</p>
+            <ol class="steps">
+              <li><span class="step-dot" aria-hidden="true"></span><div><strong>Review and sign your estimate</strong><span class="meta">Needs your review</span><div style="margin-top:8px"><button class="ntg-btn ntg-btn--sm" type="button" data-demo="sign">Review and sign</button></div></div></li>
+              <li><span class="step-dot" aria-hidden="true"></span><div><strong>Complete your payment</strong><span class="meta">$95.00 estimated</span><div style="margin-top:8px"><button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-demo="estimatepay">Complete payment</button></div></div></li>
+            </ol>
+          </section>
         </section>
 
         <!-- COMMUNICATIONS -->
@@ -850,7 +878,7 @@
                 <div class="body"><div class="markers" data-panel="a" role="list" aria-label="Markers in Sample Panel A"></div></div>
               </details>
             </article>
-            <article class="ntg-card result-row" data-name="sample panel b">
+            <article class="ntg-card result-row" id="panel-b" tabindex="-1" data-name="sample panel b">
               <div class="result-head"><h3>Sample Panel B</h3><span class="ntg-badge">ⓘ A little outside the typical range</span></div>
               <p class="meta">Sample date · 3 markers</p>
               <p>One marker is a little outside the range printed beside it. Your care team can talk through it with you.</p>
@@ -890,7 +918,7 @@
               <li>A few follow-up steps are listed below.</li>
             </ul>
             <h3>Follow-up steps</h3>
-            <ol class="steps">
+            <ol class="steps" id="visit-steps" tabindex="-1">
               <li><span class="step-dot" aria-hidden="true"></span><div><strong>Lab work</strong><span class="meta">In about 2 weeks</span></div></li>
               <li><span class="step-dot" aria-hidden="true"></span><div><strong>Keep taking Sample Medication X as listed in your summary</strong><span class="meta">Ongoing</span></div></li>
               <li><span class="step-dot" aria-hidden="true"></span><div><strong>Schedule a routine visit</strong><span class="meta">In about 6 months</span></div></li>
@@ -972,8 +1000,16 @@
               <span class="label" id="context-heading">Currently reading:</span>
               <strong id="context-name">Nothing selected yet</strong>
               <div class="context-actions">
-                <button class="ntg-link" id="context-change" type="button" aria-expanded="false" aria-controls="context-options">Change</button>
-                <button class="ntg-link" id="context-clear" type="button">Stop reading</button>
+                <button class="icon-plain icon-small" id="context-menu-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="context-menu" aria-label="Chat settings" title="Chat settings">
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+                </button>
+                <div class="menu" id="context-menu" role="menu" aria-label="Chat settings" hidden>
+                  <button class="menu-item" role="menuitemradio" aria-checked="true" type="button" data-menu="follow">Read the page I'm on</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="choose">Choose what to read</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="stop">Stop reading</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="see">What Baylee can see</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="new">Start a new chat</button>
+                </div>
               </div>
             </div>
             <fieldset class="ntg-radio-list" id="context-options" hidden>
@@ -1041,7 +1077,7 @@
       const dom = {
         main: $("#main"), drawer: $("#drawer"), thread: $("#thread"), input: $("#composer-input"), hint: $("#composer-hint"),
         ctxCard: $("#context-card"), ctxLabel: $("#context-heading"), ctxName: $("#context-name"), ctxUses: $("#context-uses-detail"), ctxFollow: $("#context-follow"),
-        ctxBack: $("#context-back"), ctxOptions: $("#context-options"), ctxChange: $("#context-change"), ctxClear: $("#context-clear"),
+        ctxBack: $("#context-back"), ctxOptions: $("#context-options"), gear: $("#context-menu-button"), menu: $("#context-menu"),
         dialog: $("#demo-dialog"), toast: $("#toast"), sidebar: $("#sidebar"), menuButton: $("#menu-button"), headerAsk: $("#header-ask")
       };
 
@@ -1050,30 +1086,38 @@
         bill: {
           title: "Billing", label: "This bill", page: "billing", target: "bill-card", back: "Back to this bill",
           uses: "Baylee will look at: your amount due and due date, the charges, insurance payments and adjustments, and the service summary.",
-          peek: "your bill from Sample Medical Group",
-          suggestions: ["Explain my bill", "Why do I owe this?", "Payment options"]
+          insight: ["You have $182.40 due in 14 days.", "Insurance already covered $300.00 of the $540.00, so this is just your portion. I can explain it, or help you split it up."],
+          chips: [{ label: "Explain my bill", fill: "Explain my bill" }, { label: "Why do I owe this?", fill: "Why do I owe this?" }, { label: "See payment plans", run: () => { navigate("billing"); DEMOS.plan(); } }]
         },
         results: {
           title: "Test Results", label: "These test results", page: "results", target: "results-list", back: "Back to these results",
           uses: "Baylee will look at: the result names, your values and the typical ranges shown, and whether a result is still a preview.",
-          peek: "your 4 results, one still a preview",
-          suggestions: ["Explain my results", "Anything outside the range?", "Questions for my care team"]
+          insight: ["Your results are back, and there's good news: Panels A and C are in range.", "One marker in Panel B is a little outside its range. That's worth a look, and your care team can explain it. Panel D isn't ready yet."],
+          chips: [{ label: "Show me Panel B", run: () => showOnPage("results", "panel-b") }, { label: "Questions for my care team", fill: "Questions for my care team" }, { label: "Explain my results", fill: "Explain my results" }]
         },
         visit: {
           title: "Visit Summaries", label: "This visit summary", page: "visits", target: "visit-summary", back: "Back to the full summary",
           uses: "Baylee will look at: the key takeaways, the follow-up steps, and the contact guidance in your summary.",
-          peek: "your visit summary and its 3 follow-up steps",
-          suggestions: ["Key takeaways", "My follow-up steps", "When to call my care team"]
+          insight: ["From your last visit, one thing has a timeframe: lab work in about 2 weeks.", "Everything else is routine. Want a quick summary, or a look at your follow-ups?"],
+          chips: [{ label: "Quick summary", fill: "Key takeaways" }, { label: "Show my follow-ups", run: () => showOnPage("visits", "visit-steps") }, { label: "When to call my care team", fill: "When to call my care team" }]
         },
-        home: { title: "Home", label: "Home page", page: "home", uses: "Baylee will look at: the headings and text on the Home page.", peek: "your home page", suggestions: ["What can I do here?", "Where's my bill?", "Where are my results?"] },
-        appointments: { title: "Appointments", label: "Appointments page", page: "appointments", uses: "Baylee will look at: the headings and text on the Appointments page.", peek: "your upcoming visit", suggestions: ["How do I reschedule?", "What should I bring?"] },
-        communications: { title: "Communications", label: "Communications page", page: "communications", uses: "Baylee will look at: the headings and text on the Communications page.", peek: "your messages", suggestions: ["How do I write to my care team?"] },
-        help: { title: "Help Topics", label: "Help Topics page", page: "help", uses: "Baylee will look at: the questions and answers listed on the Help Topics page.", peek: "the help topics", suggestions: ["How do I read my results?", "How do I pay a bill?"] },
-        contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", peek: "the ways to reach a person", suggestions: ["Reach billing support", "Reach my care team"] },
-        resources: { title: "Find Local Resources", label: "Local resources page", page: "resources", uses: "Baylee will look at: the sample listings on this page.", peek: "two sample listings", suggestions: ["What's listed here?"] },
-        feedback: { title: "Provide Feedback", label: "Feedback page", page: "feedback", uses: "Baylee will look at: the headings and text on this page. It can't see what you type into the form.", peek: "the feedback form (not what you type)", suggestions: ["Where does my feedback go?"] },
-        account: { title: "Account Settings", label: "Account Settings page", page: "account", uses: "Baylee will look at: the headings and text on the Account Settings page.", peek: "your notification choices", suggestions: ["Change my notifications"] },
-        none: { title: "", label: "Nothing selected yet", page: null, target: null, back: "", uses: "Baylee can't see your portal pages, bill, results, or visit summaries unless you choose something.", peek: "", suggestions: ["Reach billing support", "Find my visit summaries"] }
+        home: {
+          title: "Home", label: "Home page", page: "home", uses: "Baylee will look at: the headings and text on the Home page.",
+          insight: ["Your main priority is your upcoming visit. There's an estimate to review and sign, and a payment to complete. I can help with both.", "Your test results also came back, with one marker worth a look."],
+          chips: [{ label: "Review my estimate", run: () => showOnPage("appointments", "estimate-card") }, { label: "See my results", run: () => navigate("results") }, { label: "What should I do first?", fill: "What should I do first?" }]
+        },
+        appointments: {
+          title: "Appointments", label: "Appointments page", page: "appointments", target: "estimate-card", back: "Back to my estimate", uses: "Baylee will look at: your upcoming visit and the estimate and payment steps on this page.",
+          insight: ["Your visit with Sample Provider is coming up, and two things are waiting.", "First, review and sign your estimate. Then complete your payment. I can walk you through either one."],
+          chips: [{ label: "Explain my estimate", fill: "Explain my estimate" }, { label: "How do I pay?", fill: "How do I pay?" }, { label: "Show me the estimate", run: () => showOnPage("appointments", "estimate-card") }]
+        },
+        communications: { title: "Communications", label: "Communications page", page: "communications", uses: "Baylee will look at: the headings and text on the Communications page.", insight: ["You have one new message from Sample Care Team.", "Want a quick summary, or help writing back?"], chips: [{ label: "Summarize my message", fill: "Summarize my message" }, { label: "Help me reply", fill: "Help me reply" }] },
+        help: { title: "Help Topics", label: "Help Topics page", page: "help", uses: "Baylee will look at: the questions and answers listed on the Help Topics page.", insight: ["Most people come here for help with a bill or their results.", "Which one can I help with?"], chips: [{ label: "My bill", run: () => navigate("billing") }, { label: "My results", run: () => navigate("results") }] },
+        contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", insight: ["Not sure who to contact?", "Billing support is best for bill questions. Your care team is best for health questions."], chips: [{ label: "Reach billing support", fill: "Reach billing support" }, { label: "Reach my care team", fill: "Reach my care team" }] },
+        resources: { title: "Find Local Resources", label: "Local resources page", page: "resources", uses: "Baylee will look at: the sample listings on this page.", insight: ["These are sample local resources near you.", "Want me to tell you what's listed?"], chips: [{ label: "What's listed here?", fill: "What's listed here?" }] },
+        feedback: { title: "Provide Feedback", label: "Feedback page", page: "feedback", uses: "Baylee will look at: the headings and text on this page. It can't see what you type into the form.", insight: ["Thanks for sharing feedback.", "I can't see what you type, so it stays between you and the form."], chips: [{ label: "Where does my feedback go?", fill: "Where does my feedback go?" }] },
+        account: { title: "Account Settings", label: "Account Settings page", page: "account", uses: "Baylee will look at: the headings and text on the Account Settings page.", insight: ["Want to change how we reach you?", "Your notification choices are right here."], chips: [{ label: "Change my notifications", fill: "Change my notifications" }] },
+        none: { title: "", label: "Nothing selected yet", page: null, target: null, back: "", uses: "Baylee can't see your portal pages, bill, results, or visit summaries unless you choose something.", insight: ["I'm not looking at anything right now. What would you like to ask?"], chips: [{ label: "Choose something to read", run: () => showContextOptions() }, { label: "Reach billing support", fill: "Reach billing support" }, { label: "Find my visit summaries", fill: "Find my visit summaries" }] }
       };
 
       const pageToCtx = (page) => ({ billing: "bill", results: "results", visits: "visit" }[page] || page);
@@ -1143,6 +1187,8 @@
         pay: () => openDemo({ title: "Review your payment", html: '<p>You\'re looking at a sample payment of <strong>$182.40</strong> to Sample Medical Group.</p><p>No payment will be processed. Nothing is sent anywhere.</p>', confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: no payment was processed.") }),
         plan: () => openDemo({ title: "Choose a payment plan", html: '<p>Splitting $182.40 into smaller payments. Nothing is created in this prototype.</p><label class="radio-row"><input type="radio" name="plan" checked> 3 monthly payments of $60.80</label><label class="radio-row"><input type="radio" name="plan"> 6 monthly payments of $30.40</label>', confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: no payment plan was created.") }),
         reschedule: () => openDemo({ title: "Reschedule this visit?", html: "<p>No appointment will be changed in this prototype.</p>", confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: your appointment wasn't changed.") }),
+        sign: () => openDemo({ title: "Review your estimate", html: '<p>Estimated cost of your visit with Sample Provider: <strong>$95.00</strong>.</p><p>This is an estimate, not a final bill. Signing means you have reviewed it.</p>', confirmLabel: "Sign (demo)", onConfirm: () => toast("Demo only: nothing was signed.") }),
+        estimatepay: () => openDemo({ title: "Complete your payment", html: '<p>You\'re looking at a sample payment of <strong>$95.00</strong> for your visit.</p><p>No payment will be processed. Nothing is sent anywhere.</p>', confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: no payment was processed.") }),
         newmessage: () => openDemo({ title: "Write a message", html: "<p>Messages aren't sent from this prototype.</p>", confirmLabel: "Send (demo)", onConfirm: () => toast("Demo only: no message was sent.") })
       };
 
@@ -1267,8 +1313,8 @@
         dom.ctxName.textContent = reading ? ctx.title : ctx.label;
         dom.ctxUses.textContent = ctx.uses;
         dom.ctxFollow.hidden = !reading;
-        dom.ctxClear.disabled = state.context === "none";
-        dom.ctxClear.textContent = reading ? "Stop reading" : "Clear";
+        $('[data-menu="stop"]', dom.menu).disabled = state.context === "none";
+        $('[data-menu="follow"]', dom.menu).setAttribute("aria-checked", String(state.follow));
         const showBack = Boolean(ctx.back) && currentPage !== ctx.page;
         dom.ctxBack.hidden = !showBack;
         dom.ctxBack.textContent = showBack ? `← ${ctx.back}` : "";
@@ -1290,22 +1336,15 @@
         state.suggested = null;
         renderContextCard({ flash: hadConversation });
         const ctx = CONTEXTS[id];
-        const chips = ctx.suggestions.map((label) => ({ label, fill: label }));
-        const peek = ctx.peek ? ctx.peek.charAt(0).toUpperCase() + ctx.peek.slice(1) : "";
         if (id === "none") {
           if (hadConversation) addDivider("Stopped reading");
-          chips.unshift({ label: "Choose something to read", run: showContextOptions });
-          if (hadConversation) addBot({ paras: ["Okay, I've stopped reading. What would you like to ask?"], chips });
-          else {
-            addBot({ paras: ["Hi, I'm Baylee, an AI assistant."] });
-            addBot({ paras: ["I'm not looking at anything right now. What would you like to ask?"], chips, continued: true, delay: 700 });
-          }
+          addBot({ paras: hadConversation ? ["Okay, I've stopped reading. What would you like to ask?"] : ["Hi, I'm Baylee, your AI assistant.", ...ctx.insight], chips: ctx.chips });
         } else if (!hadConversation) {
-          addBot({ paras: ["Hi, I'm Baylee, an AI assistant."] });
-          addBot({ paras: [`I can see ${ctx.peek}. What would you like to know?`], chips, continued: true, delay: 700 });
+          /* Like a companion: say what matters on this page first, then offer the next step. */
+          addBot({ paras: ["Hi, I'm Baylee, your AI assistant.", ...ctx.insight], chips: ctx.chips });
         } else {
           addDivider(moved ? `You moved to ${ctx.title}` : `Now talking about: ${ctx.label}`);
-          addBot({ paras: [`${peek}. What would you like to know?`], chips });
+          addBot({ paras: ctx.insight, chips: ctx.chips });
         }
       }
 
@@ -1322,16 +1361,64 @@
         else if (state.context !== null) renderContextCard();
       }
 
-      function showContextOptions() { dom.ctxOptions.hidden = false; dom.ctxChange.setAttribute("aria-expanded", "true"); $('input[name="ctx"]:checked', dom.ctxOptions)?.focus(); }
-      function hideContextOptions() { dom.ctxOptions.hidden = true; dom.ctxChange.setAttribute("aria-expanded", "false"); }
+      function showContextOptions() { dom.ctxOptions.hidden = false; $('input[name="ctx"]:checked', dom.ctxOptions)?.focus(); }
+      function hideContextOptions() { dom.ctxOptions.hidden = true; }
 
-      dom.ctxChange.addEventListener("click", () => (dom.ctxOptions.hidden ? showContextOptions() : hideContextOptions()));
-      dom.ctxClear.addEventListener("click", () => { hideContextOptions(); state.follow = false; setContext("none"); });
       $$('input[name="ctx"]').forEach((radio) => radio.addEventListener("change", () => {
         hideContextOptions();
         if (radio.value === "follow") { state.follow = true; setContext(pageToCtx(currentPage), { moved: false }); renderContextCard({ flash: true }); }
         else { state.follow = false; setContext(radio.value); }
       }));
+
+      /* ---------- Chat settings menu ---------- */
+      function closeMenu({ restoreFocus = true } = {}) {
+        if (dom.menu.hidden) return;
+        dom.menu.hidden = true;
+        dom.gear.setAttribute("aria-expanded", "false");
+        if (restoreFocus) dom.gear.focus();
+      }
+
+      function openMenu() {
+        dom.menu.hidden = false;
+        dom.gear.setAttribute("aria-expanded", "true");
+        $$(".menu-item:not([disabled])", dom.menu)[0]?.focus();
+      }
+
+      function resetChat() {
+        dom.thread.innerHTML = "";
+        state.context = null;
+        state.clarified = {};
+        state.suggested = null;
+        state.follow = true;
+        setInput("");
+        dom.hint.textContent = "";
+        hideContextOptions();
+        syncToPage({ announce: false });
+      }
+
+      dom.gear.addEventListener("click", () => (dom.menu.hidden ? openMenu() : closeMenu()));
+      dom.menu.addEventListener("click", (event) => {
+        const item = event.target.closest("[data-menu]");
+        if (!item || item.disabled) return;
+        const action = item.dataset.menu;
+        closeMenu({ restoreFocus: action !== "choose" && action !== "see" });
+        if (action === "follow") { hideContextOptions(); state.follow = true; setContext(pageToCtx(currentPage), { moved: true }); renderContextCard({ flash: true }); }
+        else if (action === "choose") showContextOptions();
+        else if (action === "stop") { hideContextOptions(); state.follow = false; setContext("none"); }
+        else if (action === "see") { const details = $(".how-used", dom.ctxCard); details.open = true; $("summary", details).focus(); }
+        else if (action === "new") resetChat();
+      });
+      dom.menu.addEventListener("keydown", (event) => {
+        const items = $$(".menu-item:not([disabled])", dom.menu);
+        const index = items.indexOf(document.activeElement);
+        if (event.key === "ArrowDown") { event.preventDefault(); items[(index + 1) % items.length].focus(); }
+        else if (event.key === "ArrowUp") { event.preventDefault(); items[(index - 1 + items.length) % items.length].focus(); }
+        else if (event.key === "Home") { event.preventDefault(); items[0].focus(); }
+        else if (event.key === "End") { event.preventDefault(); items[items.length - 1].focus(); }
+        else if (event.key === "Escape") { event.stopPropagation(); closeMenu(); }
+        else if (event.key === "Tab") closeMenu({ restoreFocus: false });
+      });
+      document.addEventListener("click", (event) => { if (!dom.menu.hidden && !event.target.closest(".context-actions")) closeMenu({ restoreFocus: false }); });
 
       /* ---------- Open / close the drawer ---------- */
       const phoneMedia = window.matchMedia("(max-width: 760px)");
@@ -1385,11 +1472,19 @@
       function goToItem() {
         const ctx = CONTEXTS[state.context];
         if (!ctx.page) return;
-        navigate(ctx.page, { focus: false });
+        showOnPage(ctx.page, ctx.target || `page-${ctx.page}`);
+      }
+
+      /* Take the person to the exact thing being discussed, and point at it. */
+      function showOnPage(page, id) {
+        navigate(page, { focus: false });
         if (phoneMedia.matches) closeDrawer();
-        const target = ctx.target ? document.getElementById(ctx.target) : $(`#page-${ctx.page}`);
+        const target = document.getElementById(id);
         window.setTimeout(() => {
-          target.scrollIntoView({ block: "start" });
+          if (target.tagName === "DETAILS") target.open = true;
+          const details = $("details", target);
+          if (details && target.dataset.name) details.open = true;
+          target.scrollIntoView({ block: "center" });
           target.focus({ preventScroll: true });
           target.classList.remove("is-pointed");
           void target.offsetWidth;
@@ -1411,20 +1506,24 @@
       };
 
       function notMeant() {
-        return { label: "That's not what I meant", quiet: true, run: () => addBot({ paras: ["Thanks for telling me. What should I focus on?"], chips: CONTEXTS[state.context].suggestions.map((label) => ({ label, fill: label })) }) };
+        return { label: "That's not what I meant", quiet: true, run: () => addBot({ paras: ["Thanks for telling me. What should I focus on?"], chips: CONTEXTS[state.context].chips }) };
       }
 
       const DRAFT = "One marker on my recent results was a little outside the typical range. What does that mean for me, and should I do anything?";
 
       function pageAnswer(ctx, t) {
         if (ctx === "home") {
-          if (/bill|billing|pay/.test(t)) return { paras: ["It's in Billing, in the menu."], actions: [go("Open Billing", "billing")] };
-          if (/result|test|lab/.test(t)) return { paras: ["They're in Test Results, in the menu."], actions: [go("Open Test Results", "results")] };
-          if (/visit|summar/.test(t)) return { paras: ["They're in Visit Summaries, in the menu."], actions: [go("Open Visit Summaries", "visits")] };
+          if (/first|priorit|attention|focus|start/.test(t)) return { paras: ["Start with your upcoming visit.", "Review and sign the estimate, then complete the payment. After that, your results are worth a look."], actions: [{ label: "Open my estimate", run: () => showOnPage("appointments", "estimate-card") }] };
+          if (/estimate|sign|visit|appointment/.test(t)) return { paras: ["Your estimate is on the Appointments page.", "I can't sign for you, but I can walk you through it."], actions: [{ label: "Open my estimate", run: () => showOnPage("appointments", "estimate-card") }] };
+          if (/bill|billing|pay/.test(t)) return { paras: ["You have a bill due in 14 days, and a payment to complete before your visit."], actions: [go("Open Billing", "billing")] };
+          if (/result|test|lab/.test(t)) return { paras: ["They're back. Panels A and C are in range, and one marker in Panel B is worth a look."], actions: [go("See my results", "results")] };
         }
+        if (ctx === "appointments" && /estimate|sign|explain|walk/.test(t)) return { paras: ["It's what you'd likely owe for this visit, about $95.00.", "It's an estimate, not a final bill. Signing confirms you've reviewed it."], actions: [{ label: "Review and sign", run: () => DEMOS.sign() }] };
+        if (ctx === "appointments" && /pay|payment|complete/.test(t)) return { paras: ["Complete payment is the second step on this page.", "I can't pay for you. You'll review everything first, and nothing happens until you confirm."], actions: [{ label: "Complete payment", run: () => DEMOS.estimatepay() }] };
         if (ctx === "appointments" && /reschedul|change|cancel/.test(t)) return { paras: ["Choose Reschedule on this page.", "Nothing changes until you confirm."] };
-        if (ctx === "appointments" && /bring|need|before|prepare/.test(t)) return { paras: ["I don't see preparation steps for this visit, and I'd rather not guess.", "Your clinic can tell you what to bring."], actions: [go("Contact Us", "contact")] };
-        if (ctx === "communications" && /write|send|care team|reach/.test(t)) return { paras: ["Choose Write a message on this page.", "I can't send anything for you."] };
+        if (ctx === "appointments" && /bring|need|before|prepare/.test(t)) return { paras: ["Before the visit: sign your estimate and complete your payment.", "Your clinic can tell you what else to bring."], actions: [go("Contact Us", "contact")] };
+        if (ctx === "communications" && /summar|about|say/.test(t)) return { paras: ["Sample Care Team thanked you for your question.", "It's a fictional example, so there's nothing to act on."] };
+        if (ctx === "communications" && /repl|write|send|care team|reach/.test(t)) return { paras: ["Here's a starting point you can edit:"], quote: "“Thank you for getting back to me. I'll follow the plan and reach out if anything changes.”", actions: [go("Write a message", "communications")] };
         if (ctx === "help" && /result/.test(t)) return { paras: ["Each result shows your value next to a typical range.", "Your care team can explain what yours mean."] };
         if (ctx === "help" && /pay|bill/.test(t)) return { paras: ["Go to Billing and choose Pay bill or Set up payment plan."], actions: [go("Open Billing", "billing")] };
         if (ctx === "contact" && /care team|clinic|doctor/.test(t)) return { paras: ["You can message them from Communications, or call your clinic."], actions: [careTeam] };
@@ -1587,7 +1686,7 @@
       }
 
       /* ---------- Home: ask Baylee ---------- */
-      ["Where is my bill?", "Where are my test results?", "What is in my visit summary?"].forEach((label) => {
+      ["What should I do first?", "Explain my estimate", "Explain my new results"].forEach((label) => {
         const pill = make("button", "ntg-pill", label);
         pill.type = "button";
         pill.addEventListener("click", () => { const input = $("#home-ask-input"); input.value = label; input.focus(); input.setSelectionRange(label.length, label.length); });
