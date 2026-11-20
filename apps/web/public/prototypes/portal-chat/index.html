@@ -1617,8 +1617,8 @@
       }
       phoneMedia.addEventListener("change", syncBackground);
 
-      /* Baylee greets you once, 10 seconds after you land. Any choice you make first cancels it. */
-      const AUTO_OPEN_MS = 10000;
+      /* Baylee greets you once, right after the page paints. Any choice you make first cancels it. */
+      const AUTO_OPEN_MS = 600;
       let autoOpenTimer = null;
       const cancelAutoOpen = () => { window.clearTimeout(autoOpenTimer); autoOpenTimer = null; };
 

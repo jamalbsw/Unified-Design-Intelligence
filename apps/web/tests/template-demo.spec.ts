@@ -31,8 +31,9 @@ test.describe('template browser demo', () => {
     const [prototype] = await Promise.all([context.waitForEvent('page'), link.click()])
     await prototype.waitForLoadState()
     await expect(prototype.getByRole('heading', { name: /how can I help/ })).toBeVisible()
-    await prototype.getByRole('button', { name: /Open chat/ }).click()
-    await expect(prototype.getByRole('heading', { name: /Baylee/ })).toBeVisible()
+    // Baylee opens by itself right after the page loads
+    await expect(prototype.getByRole('heading', { name: /Chat with Baylee/ })).toBeVisible()
+    await expect(prototype.getByRole('button', { name: /Open chat/ })).toHaveAttribute('aria-expanded', 'true')
   })
 
   test('builds a labelled homepage and preserves task progress and focus on return', async ({ page }) => {
