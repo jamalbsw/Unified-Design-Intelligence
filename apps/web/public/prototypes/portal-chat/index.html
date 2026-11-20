@@ -1,0 +1,2055 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Get Care | BSWHealth patient portal prototype</title>
+    <style>
+      /*
+        PROTOTYPE NOTES
+        - All data is fictional. Payments, messages, and appointments are demo-only.
+        - Tokens and component styles below were read from the Nightingale Storybook
+          (colors, spacing, shadows, typography scale, Button, Card, Pill, Link, Menu Navigation,
+          Text Input, List, Notifier, Drawer guidance). The real Nightingale components are not imported
+          here (this is a standalone HTML file), so each building block is a PROVISIONAL
+          stand-in named .ntg-* that mirrors the documented values.
+        - Sharp Sans is not bundled (font license). It is listed first so it is used where installed.
+        - Documented deviation: Nightingale drawers use a dark scrim and dismiss on outside click. This
+          prototype keeps the page visible and usable beside Baylee, as requested in the UX brief.
+      */
+      :root {
+        color-scheme: light;
+        /* Nightingale color tokens */
+        --color-primary-a1: #003da6;
+        --color-primary-a2: #364248;
+        --color-primary-a3: #007eb4;
+        --color-primary-a4: #016a99;
+        --color-primary-b1: #ffb71b;
+        --color-primary-b2: #ffc342;
+        --color-primary-c1: #ffffff;
+        --color-secondary-a2: #586f78;
+        --color-secondary-a3: #c9c9c5;
+        --color-secondary-a4: #dddddd;
+        --color-secondary-a5: #eceded;
+        --color-secondary-a6: #f8f8f8;
+        --color-secondary-b1: #fee9bc;
+        --color-secondary-b2: #fff8e6;
+        --color-secondary-c1: #e5f5fb;
+        --color-secondary-c2: #f5feff;
+        --color-system-a1: #3f9f90;
+        --color-system-a2: #ddf5f2;
+        --color-system-a3: #158570;
+        --color-system-b1: #b12943;
+        --page-bg: #f7f9fa;
+        /* Elevation, spacing, radius */
+        --shadow-focus: 0 0 3px 3px #3a97f9;
+        --shadow-soft: 0 2px 8px 0 rgba(54, 66, 72, 0.15);
+        --space-xs: 8px;
+        --space-s: 16px;
+        --space-m: 24px;
+        --space-l: 32px;
+        --space-xl: 40px;
+        --radius-medium: 4px;
+        --radius-large: 8px;
+        --radius-full: 999px;
+        /* Layout */
+        --nav-w: 280px;
+        --drawer-w: 0px;
+        --drawer-full: clamp(340px, 34vw, 420px);
+        --topbar-h: 64px;
+        --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+        font-family: "Sharp Sans", "SharpSans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        color: var(--color-secondary-a2);
+        background: var(--page-bg);
+      }
+
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+
+      body { min-width: 320px; margin: 0; overflow: hidden; font-size: 14px; line-height: 1.6; }
+
+      button, input, textarea { font: inherit; color: inherit; }
+      button { cursor: pointer; }
+      h1, h2, h3, p, ul { margin-top: 0; }
+      strong { color: var(--color-primary-a2); }
+
+      /* Nightingale focus treatment */
+      :focus { outline: none; }
+      :focus-visible { box-shadow: var(--shadow-focus); }
+      .ntg-card:focus-visible, details:focus-visible { box-shadow: var(--shadow-focus); }
+
+      .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+      .skip-link { position: absolute; z-index: 20; top: -56px; left: 12px; padding: 12px 16px; border-radius: var(--radius-medium); color: var(--color-primary-c1); background: var(--color-primary-a2); }
+      .skip-link:focus { top: 8px; }
+
+      /* ---------- Typography (Nightingale scale) ---------- */
+      h1 { margin-bottom: var(--space-xs); color: var(--color-primary-a2); font-size: 30px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.3; }
+      h2 { color: var(--color-primary-a2); font-size: 20px; font-weight: 700; line-height: 1.3; }
+      h3 { color: var(--color-primary-a2); font-size: 16px; font-weight: 700; line-height: 1.4; }
+      .lede { margin-bottom: var(--space-m); font-size: 16px; line-height: 1.5; }
+      .meta { color: var(--color-secondary-a2); font-size: 13px; line-height: 1.4; }
+      .eyebrow { margin-bottom: 4px; color: var(--color-secondary-a2); font-size: 13px; font-weight: 700; letter-spacing: 0.02em; }
+      .section-title { margin: var(--space-m) 0 var(--space-xs); }
+
+      /* ---------- Provisional Nightingale components ---------- */
+      .ntg-btn {
+        position: relative;
+        display: inline-flex;
+        height: 54px;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 24px;
+        border: 2px solid transparent;
+        border-radius: var(--radius-medium);
+        color: var(--color-primary-a2);
+        background: var(--color-primary-b2);
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-align: center;
+        transition: background-color 150ms ease, border-color 150ms ease;
+      }
+
+      .ntg-btn:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .ntg-btn:active { background: var(--color-primary-b1); }
+      .ntg-btn--secondary { background: var(--color-secondary-b1); }
+      .ntg-btn--sm { height: 44px; padding: 0 20px; font-size: 14px; }
+      .ntg-btn--fluid { width: 100%; }
+      .ntg-btn[disabled] { border-color: transparent; color: var(--color-secondary-a3); background: var(--color-secondary-a5); cursor: not-allowed; }
+
+      .ntg-circle {
+        display: inline-grid;
+        width: 40px;
+        height: 40px;
+        flex: 0 0 auto;
+        place-items: center;
+        border: 1px solid var(--color-secondary-a4);
+        border-radius: 50%;
+        color: var(--color-primary-a2);
+        background: var(--color-primary-c1);
+        transition: background-color 150ms ease, border-color 150ms ease;
+      }
+
+      .ntg-circle:hover, .ntg-circle:active { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .ntg-circle--float { border-color: transparent; background: transparent; }
+
+      .ntg-link {
+        padding: 4px 0;
+        border: 0;
+        color: var(--color-primary-a3);
+        background: none;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.6;
+        text-align: left;
+        text-decoration: none;
+        transition: color 350ms ease-in-out;
+      }
+
+      .ntg-link:hover { text-decoration: underline; }
+      .ntg-link .arrow { display: inline-block; margin-left: 6px; }
+
+      .ntg-card {
+        margin-bottom: var(--space-s);
+        padding: var(--space-m);
+        border: 1px solid var(--color-secondary-a4);
+        border-radius: var(--radius-medium);
+        background: var(--color-primary-c1);
+      }
+
+      .ntg-card--info { background: var(--color-secondary-c2); }
+      .ntg-card.is-pointed { animation: pointed 2.2s ease both; }
+
+      @keyframes pointed {
+        0%, 70% { border-color: var(--color-primary-a3); background: var(--color-secondary-c2); }
+        100% { border-color: var(--color-secondary-a4); background: var(--color-primary-c1); }
+      }
+
+      .ntg-badge {
+        display: inline-flex;
+        min-height: 21px;
+        align-items: center;
+        gap: 6px;
+        padding: 0 8px;
+        border-radius: 10px;
+        color: var(--color-primary-a2);
+        background: var(--color-secondary-c1);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.4;
+        white-space: nowrap;
+      }
+
+      .ntg-badge--ok { color: #0e5c4c; background: var(--color-system-a2); }
+      .ntg-badge--neutral { background: var(--color-secondary-a5); }
+      .ntg-badge--dark { color: var(--color-primary-c1); background: var(--color-secondary-a2); font-size: 11px; }
+
+      .ntg-pill {
+        min-height: 40px;
+        max-width: 100%;
+        padding: 8px 16px;
+        border: 1px solid var(--color-secondary-a3);
+        border-radius: 20px;
+        color: var(--color-secondary-a2);
+        background: var(--color-primary-c1);
+        font-size: 14px;
+        line-height: 1.4;
+        text-align: left;
+        transition: background-color 150ms ease, border-color 150ms ease;
+      }
+
+      .ntg-pill:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b1); }
+      .ntg-pill--quiet { border-color: transparent; background: transparent; text-decoration: underline; }
+      .ntg-pill--quiet:hover { border-color: transparent; background: var(--color-secondary-a5); }
+
+      .ntg-notifier {
+        display: flex;
+        gap: 12px;
+        margin-bottom: var(--space-s);
+        padding: 12px 16px;
+        border-radius: var(--radius-medium);
+        color: var(--color-primary-a2);
+        background: var(--color-secondary-c1);
+      }
+
+      .ntg-notifier svg { flex: 0 0 auto; margin-top: 2px; color: var(--color-primary-a3); }
+      .ntg-notifier p { margin: 0; }
+
+      .ntg-field { display: block; padding: 8px 16px 8px; border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-medium); background: var(--color-primary-c1); }
+      .ntg-field:focus-within { border-color: var(--color-primary-a2); }
+      .ntg-field > span { display: block; color: var(--color-secondary-a2); font-size: 13px; line-height: 1.4; }
+      .ntg-field input, .ntg-field textarea { width: 100%; padding: 2px 0; border: 0; color: var(--color-primary-a2); background: transparent; font-size: 16px; box-shadow: none; resize: none; }
+
+      .ntg-list { display: grid; gap: 8px; margin: 0 0 var(--space-s); padding: 0; list-style: none; }
+      .ntg-list li { position: relative; padding-left: 24px; }
+      .ntg-list li::before { position: absolute; top: 0.62em; left: 6px; width: 8px; height: 8px; background: var(--color-primary-b1); clip-path: polygon(0 0, 100% 0, 0 100%); content: ""; }
+
+      .ntg-accordion { margin-bottom: var(--space-s); border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-medium); background: var(--color-primary-c1); }
+      .ntg-accordion > summary { position: relative; padding: 16px 48px 16px 24px; border-radius: var(--radius-medium); color: var(--color-primary-a2); font-size: 16px; font-weight: 700; list-style: none; cursor: pointer; }
+      .ntg-accordion > summary::-webkit-details-marker { display: none; }
+      .ntg-accordion > summary::after { position: absolute; top: 50%; right: 20px; width: 8px; height: 8px; border-right: 2px solid var(--color-secondary-a2); border-bottom: 2px solid var(--color-secondary-a2); transform: translateY(-70%) rotate(45deg); transition: transform 200ms var(--ease); content: ""; }
+      .ntg-accordion[open] > summary::after { transform: translateY(-30%) rotate(-135deg); }
+      .ntg-accordion[open] > summary { border-bottom: 1px solid var(--color-secondary-a4); border-radius: var(--radius-medium) var(--radius-medium) 0 0; }
+      .ntg-accordion .body { padding: var(--space-s) var(--space-m) var(--space-m); }
+
+      .ntg-radio-list { margin: 8px 0 0; padding: 0; border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-medium); background: var(--color-primary-c1); }
+      .ntg-radio-list legend { padding: 0; margin-bottom: 6px; color: var(--color-primary-a2); font-size: 13px; font-weight: 700; }
+      .ntg-radio-list label { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 16px; cursor: pointer; }
+      .ntg-radio-list label + label { border-top: 1px solid var(--color-secondary-a4); }
+      .ntg-radio-list label:hover { background: var(--color-secondary-b2); }
+      .ntg-radio-list input { width: 18px; height: 18px; margin: 0; accent-color: var(--color-primary-a3); }
+
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { padding: 12px 0; border-bottom: 1px solid var(--color-secondary-a4); text-align: left; }
+      td:last-child, th:last-child { text-align: right; }
+      th { color: var(--color-primary-a2); }
+      tr.total td, tr.total th { border-bottom: 0; color: var(--color-primary-a2); font-weight: 700; }
+
+      /* ---------- Top bar ---------- */
+      .topbar { position: relative; z-index: 5; display: flex; height: var(--topbar-h); align-items: center; gap: 12px; padding: 0 24px; border-bottom: 1px solid var(--color-secondary-a4); background: var(--color-primary-c1); }
+      .menu-button { display: none; }
+      .brand-logo { display: block; width: auto; height: 32px; }
+      .brand { display: flex; align-items: center; gap: 12px; color: var(--color-primary-a1); font-size: 16px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .topbar-spacer { flex: 1; }
+      .spark { width: 18px; height: 18px; flex: 0 0 auto; }
+
+      /* ---------- Layout ---------- */
+      .app { display: grid; height: calc(100vh - var(--topbar-h)); grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--drawer-w); transition: grid-template-columns 400ms var(--ease); }
+      body.drawer-open { --drawer-w: var(--drawer-full); }
+
+      /* Side (accordion) navigation */
+      .sidebar { padding: 8px 0 24px; overflow: auto; border-right: 1px solid var(--color-secondary-a4); background: var(--color-primary-c1); }
+      .nav-list { margin: 0; padding: 0 16px; list-style: none; }
+      .nav-list > li { border-bottom: 1px solid var(--color-secondary-a4); }
+      .nav-list > li:last-child { border-bottom: 0; }
+
+      .nav-item {
+        position: relative;
+        display: flex;
+        width: 100%;
+        min-height: 56px;
+        align-items: center;
+        gap: 16px;
+        padding: 0 8px;
+        border: 0;
+        color: var(--color-secondary-a2);
+        background: transparent;
+        font-size: 16px;
+        text-align: left;
+        transition: background-color 150ms ease, color 150ms ease;
+      }
+
+      .nav-item:hover { background: var(--color-secondary-b2); }
+      .nav-item[aria-current="page"] { color: var(--color-primary-a2); background: var(--color-secondary-c2); font-weight: 700; }
+      .nav-item[aria-current="page"]::before { position: absolute; top: 0; bottom: 0; left: -16px; width: 4px; background: var(--color-primary-a3); content: ""; }
+      .nav-chevron { margin-left: auto; transition: transform 200ms var(--ease); }
+      .nav-item[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+      .subnav { margin: 0 0 8px 36px; padding: 0; list-style: none; }
+      .subnav .nav-item { min-height: 48px; font-size: 15px; }
+      .subnav li + li { border-top: 1px solid var(--color-secondary-a4); }
+
+      .main { min-width: 0; padding: 32px clamp(16px, 3vw, 48px) 48px; overflow: auto; scroll-behavior: smooth; }
+      .page { max-width: 960px; }
+      .page:focus { box-shadow: none; }
+
+      .bill-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 24px; }
+      .bill-service { display: grid; gap: 2px; font-size: 14px; }
+      .amount { margin: 4px 0 0; color: var(--color-primary-a2); font-size: 44px; font-weight: 700; letter-spacing: -1px; line-height: 1.2; }
+      .bill-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: var(--space-m); }
+      .baylee-offer { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: var(--space-m); padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-medium); background: var(--color-secondary-c2); }
+      .baylee-offer p { flex: 1 1 260px; margin: 0; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-s); }
+      .grid .ntg-card { margin: 0; }
+
+      .toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: var(--space-s); }
+      .toolbar .ntg-field { flex: 1 1 280px; max-width: 440px; }
+      .result-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+      .result-head h3 { margin: 0; }
+      .result-row p { margin: 8px 0 0; }
+      .footnote { margin-top: var(--space-l); font-size: 12px; }
+      .field-label { display: grid; gap: 8px; margin-bottom: var(--space-s); color: var(--color-primary-a2); font-weight: 700; }
+      .check-row { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+      .check-row input { width: 18px; height: 18px; accent-color: var(--color-primary-a3); }
+
+      /* ---------- Baylee drawer ---------- */
+      .drawer { position: relative; min-width: 0; overflow: hidden; background: var(--color-primary-c1); }
+      body.drawer-open .drawer { border-left: 1px solid var(--color-secondary-a4); }
+
+      .drawer-inner { position: absolute; top: 0; right: 0; bottom: 0; display: flex; width: var(--drawer-full); flex-direction: column; opacity: 0; visibility: hidden; transform: translateX(22px); transition: opacity 220ms ease, transform 320ms var(--ease), visibility 0s linear 320ms; }
+      body.drawer-open .drawer-inner { opacity: 1; visibility: visible; transform: none; transition: opacity 300ms ease 100ms, transform 400ms var(--ease) 60ms, visibility 0s; }
+
+      .drawer-head { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--color-secondary-a4); }
+      .drawer-head .grow { flex: 1; min-width: 0; }
+      .drawer-head h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; font-size: 16px; line-height: 1.3; }
+      .drawer-sub { margin: 2px 0 0; font-size: 12px; line-height: 1.3; }
+      .mobile-only { display: none; }
+
+      .context-card { padding: 16px; border-bottom: 1px solid var(--color-secondary-a4); background: var(--color-secondary-c2); }
+      .context-card.updated { animation: ctxFlash 1.6s ease both; }
+      @keyframes ctxFlash { 0%, 55% { background: var(--color-secondary-c1); } 100% { background: var(--color-secondary-c2); } }
+      .context-row { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+      .context-row .label { font-size: 13px; }
+      .context-row strong { font-size: 16px; }
+      .context-actions { display: flex; gap: 16px; margin-left: auto; }
+      .context-actions .ntg-link { padding: 0; font-size: 13px; }
+      .context-actions .ntg-link[disabled] { color: var(--color-secondary-a3); cursor: default; text-decoration: none; }
+      .context-uses { margin: 4px 0 0; font-size: 13px; line-height: 1.5; }
+      .context-follow { margin: 4px 0 0; font-size: 12px; }
+      details.how-used { margin-top: 8px; font-size: 13px; }
+      details.how-used summary { color: var(--color-primary-a3); font-weight: 700; cursor: pointer; }
+      details.how-used ul { margin: 8px 0 0; padding-left: 18px; }
+      details.how-used li { margin-bottom: 4px; }
+
+      .thread { display: flex; min-height: 0; flex: 1; flex-direction: column; gap: 16px; padding: 16px; overflow: auto; scroll-behavior: smooth; }
+      .divider { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 700; }
+      .divider::before, .divider::after { height: 1px; flex: 1; background: var(--color-secondary-a4); content: ""; }
+
+      .msg { max-width: 100%; animation: msgIn 360ms var(--ease) both; }
+      @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+      .msg.user { max-width: 90%; align-self: flex-end; padding: 12px 16px; border-radius: 16px 16px 4px 16px; color: var(--color-primary-a2); background: var(--color-secondary-a5); white-space: pre-wrap; }
+      .msg.bot { display: grid; gap: 12px; color: var(--color-primary-a2); }
+      .msg.bot p { margin: 0; }
+      .msg-meta { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+      .quote { padding: 12px 16px; border-left: 4px solid var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .reply-actions, .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+      .reply-actions { align-items: center; gap: 8px 20px; }
+
+      .typing { display: inline-flex; gap: 4px; padding: 6px 0; }
+      .typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--color-secondary-a3); animation: dot 1s ease-in-out infinite; }
+      .typing i:nth-child(2) { animation-delay: 0.15s; }
+      .typing i:nth-child(3) { animation-delay: 0.3s; }
+      @keyframes dot { 0%, 100% { opacity: 0.4; transform: none; } 50% { opacity: 1; transform: translateY(-3px); } }
+
+      .composer { display: grid; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--color-secondary-a4); background: var(--color-primary-c1); }
+      .composer-hint { min-height: 20px; margin: 0; font-size: 13px; line-height: 1.4; }
+      .composer-caption { margin: 0; font-size: 12px; line-height: 1.4; }
+
+      /* ---------- Modal + toast ---------- */
+      dialog { width: min(480px, calc(100vw - 32px)); padding: 0; border: 0; border-radius: var(--radius-large); color: var(--color-secondary-a2); box-shadow: 0 8px 32px rgba(20, 40, 50, 0.3); }
+      dialog::backdrop { background: rgba(54, 66, 72, 0.6); }
+      .dialog-body { padding: var(--space-m); }
+      .dialog-body h2 { margin: 12px 0 8px; }
+      .dialog-foot { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; padding: 0 var(--space-m) var(--space-m); }
+      .radio-row { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+      .radio-row input { width: 18px; height: 18px; accent-color: var(--color-primary-a3); }
+
+      .toast { position: fixed; z-index: 30; bottom: 24px; left: 50%; max-width: min(92vw, 480px); padding: 12px 24px; border-radius: var(--radius-medium); color: var(--color-primary-c1); background: var(--color-primary-a2); font-size: 14px; opacity: 0; pointer-events: none; transform: translate(-50%, 12px); transition: opacity 200ms ease, transform 260ms var(--ease); box-shadow: var(--shadow-soft); }
+      .toast.show { opacity: 1; transform: translate(-50%, 0); }
+      .scrim { display: none; }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 1024px) {
+        .menu-button { display: inline-grid; }
+        .app { grid-template-columns: minmax(0, 1fr) var(--drawer-w); }
+        .sidebar { position: fixed; z-index: 8; top: var(--topbar-h); bottom: 0; left: 0; width: 300px; max-width: 88vw; padding-top: 8px; box-shadow: var(--shadow-soft); transform: translateX(-105%); visibility: hidden; transition: transform 320ms var(--ease), visibility 0s linear 320ms; }
+        body.nav-open .sidebar { transform: none; visibility: visible; transition: transform 320ms var(--ease), visibility 0s; }
+        body.nav-open .scrim { position: fixed; z-index: 7; inset: var(--topbar-h) 0 0 0; display: block; background: rgba(54, 66, 72, 0.6); }
+      }
+
+      @media (max-width: 760px) {
+        :root { --topbar-h: 60px; }
+        .topbar { gap: 8px; padding: 0 12px; }
+        .app { display: block; }
+        .main { height: calc(100vh - var(--topbar-h)); padding: 24px 16px 48px; }
+        .drawer { position: fixed; z-index: 10; inset: 0; border: 0 !important; visibility: hidden; transform: translateX(100%); transition: transform 360ms var(--ease), visibility 0s linear 360ms; }
+        body.drawer-open .drawer { visibility: visible; transform: none; transition: transform 360ms var(--ease), visibility 0s; }
+        .drawer-inner { width: 100%; opacity: 1; visibility: visible; transform: none; }
+        .mobile-only { display: inline-grid; }
+        .desktop-only { display: none; }
+        .amount { font-size: 38px; }
+        .ntg-btn { padding: 0 20px; }
+        .bill-actions .ntg-btn { flex: 1 1 100%; }
+        .ask-label-long { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+      }
+    </style>
+    <style>
+      /* ---------- Modernization layer: same Nightingale tokens and components, more polish ---------- */
+      :root { --shadow-lift: 0 8px 24px rgba(54, 66, 72, 0.16); }
+
+      .topbar { background: rgba(255, 255, 255, 0.82); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3); }
+      .main { background: linear-gradient(180deg, var(--color-secondary-c1) 0, var(--page-bg) 360px) no-repeat; }
+
+      /* Elevated cards, as documented for Nightingale cards */
+      .ntg-card, .ntg-accordion { box-shadow: var(--shadow-soft); }
+      .ntg-btn { transition: background-color 150ms ease, border-color 150ms ease, transform 150ms var(--ease); }
+      .ntg-btn:active { transform: scale(0.98); }
+      .ntg-pill { transition: background-color 150ms ease, border-color 150ms ease, transform 150ms var(--ease); }
+      .ntg-pill:hover { transform: translateY(-1px); }
+      .ntg-circle--sm { width: 36px; height: 36px; }
+      .ntg-circle[aria-pressed="true"] { border-color: var(--color-primary-a3); background: var(--color-secondary-c1); }
+
+      /* Page entrance */
+      .page.enter > * { animation: rise 460ms var(--ease) both; }
+      .page.enter > :nth-child(2) { animation-delay: 60ms; }
+      .page.enter > :nth-child(3) { animation-delay: 120ms; }
+      .page.enter > :nth-child(4) { animation-delay: 180ms; }
+      .page.enter > :nth-child(5) { animation-delay: 240ms; }
+      .page.enter > :nth-child(6) { animation-delay: 300ms; }
+      .page.enter > :nth-child(n + 7) { animation-delay: 360ms; }
+      .page.enter > .ntg-card.is-pointed { animation: pointed 2.2s ease both; }
+      @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+      .nav-item[aria-current="page"]::before { animation: barIn 320ms var(--ease) both; transform-origin: center; }
+      @keyframes barIn { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+      /* Home */
+      .hero { position: relative; margin-bottom: var(--space-m); padding: 32px; overflow: hidden; border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-large); background: linear-gradient(135deg, var(--color-secondary-c1) 0%, var(--color-secondary-c2) 55%, var(--color-secondary-b2) 100%); }
+      .hero::after { position: absolute; top: -70px; right: -50px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 195, 66, 0.4), transparent 66%); pointer-events: none; content: ""; }
+      .hero > * { position: relative; z-index: 1; }
+      .hero .lede { max-width: 560px; }
+      .ask-bar { display: flex; max-width: 640px; align-items: center; gap: 12px; padding: 5px 5px 5px 16px; border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-medium); background: var(--color-primary-c1); box-shadow: var(--shadow-soft); transition: box-shadow 150ms ease, border-color 150ms ease; }
+      .ask-bar:focus-within { border-color: var(--color-primary-a2); box-shadow: var(--shadow-focus); }
+      .ask-bar input { height: 44px; min-width: 0; flex: 1; border: 0; color: var(--color-primary-a2); background: transparent; font-size: 16px; box-shadow: none; }
+
+      .ntg-card--action { display: grid; width: 100%; grid-template-areas: "icon title go" "icon text go"; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 16px; text-align: left; cursor: pointer; transition: background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms var(--ease); }
+      .ntg-card--action:hover { transform: translateY(-2px); border-color: var(--color-primary-b1); background: var(--color-secondary-b2); box-shadow: var(--shadow-lift); }
+      .ntg-card--action:active { background: var(--color-secondary-b1); }
+      .tile-icon { display: grid; width: 44px; height: 44px; grid-area: icon; place-items: center; border-radius: 50%; color: var(--color-primary-a3); background: var(--color-secondary-c1); }
+      .tile-title { grid-area: title; color: var(--color-primary-a2); font-size: 18px; font-weight: 700; line-height: 1.3; }
+      .tile-text { grid-area: text; color: var(--color-secondary-a2); font-size: 14px; line-height: 1.5; }
+      .tile-go { grid-area: go; color: var(--color-primary-a3); font-size: 28px; line-height: 1; transition: transform 200ms var(--ease); }
+      .ntg-card--action:hover .tile-go { transform: translateX(4px); }
+
+      /* Billing: where the charges went */
+      .split { display: flex; height: 16px; gap: 2px; overflow: hidden; border-radius: var(--radius-full); background: var(--color-secondary-a5); }
+      .split-seg { height: 100%; flex: 0 0 var(--w); transform-origin: left; animation: grow 900ms var(--ease) both; }
+      .split-ins { background: var(--color-system-a1); }
+      .split-adj { background: var(--color-secondary-a3); }
+      .split-you { background: var(--color-primary-b2); }
+      @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+      .split-legend { display: grid; gap: 8px; margin: var(--space-s) 0 0; padding: 0; list-style: none; }
+      .split-legend li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; }
+      .dot { width: 12px; height: 12px; border-radius: 50%; }
+
+      /* Test results: calm range gauge */
+      .markers { display: grid; }
+      .marker { display: grid; grid-template-columns: minmax(130px, 1fr) minmax(120px, 1.4fr) 56px; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--color-secondary-a4); }
+      .marker:last-child { border-bottom: 0; }
+      .marker-name { display: grid; }
+      .marker-value { text-align: right; font-size: 16px; }
+      .gauge { position: relative; height: 8px; border-radius: var(--radius-full); background: var(--color-secondary-a5); }
+      .gauge-zone { position: absolute; top: 0; bottom: 0; border-radius: var(--radius-full); background: var(--color-system-a2); box-shadow: inset 0 0 0 1px #9fd8cf; }
+      .gauge-dot { position: absolute; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border: 3px solid var(--color-primary-c1); border-radius: 50%; background: var(--color-primary-a3); box-shadow: 0 1px 4px rgba(54, 66, 72, 0.35); animation: dotIn 700ms var(--ease) both; }
+      .gauge-dot.is-outside { box-shadow: 0 0 0 5px rgba(0, 126, 180, 0.18), 0 1px 4px rgba(54, 66, 72, 0.35); }
+      @keyframes dotIn { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: none; } }
+
+      /* Visit summary: follow-up timeline */
+      .steps { position: relative; margin: 8px 0 var(--space-m); padding: 0; list-style: none; }
+      .steps li { position: relative; display: flex; gap: 16px; padding-bottom: 20px; }
+      .steps li:last-child { padding-bottom: 0; }
+      .steps li::before { position: absolute; top: 24px; bottom: -2px; left: 9px; width: 2px; background: var(--color-secondary-a4); content: ""; }
+      .steps li:last-child::before { display: none; }
+      .step-dot { position: relative; z-index: 1; width: 20px; height: 20px; flex: 0 0 20px; margin-top: 2px; border: 2px solid var(--color-primary-a3); border-radius: 50%; background: var(--color-primary-c1); }
+      .steps strong { display: block; }
+
+      /* Baylee chat */
+      .drawer-head { background: linear-gradient(180deg, var(--color-secondary-c1), var(--color-primary-c1)); }
+      .context-card { padding: 12px 16px; }
+      .thread { background: linear-gradient(180deg, var(--color-primary-c1), var(--color-secondary-a6)); }
+      .msg.user { background: var(--color-secondary-c1); }
+      .w { animation: wordIn 320ms ease both; animation-delay: var(--d, 0ms); }
+      @keyframes wordIn { from { opacity: 0; filter: blur(3px); } to { opacity: 1; filter: none; } }
+      .after-text { animation: rise 420ms var(--ease) both; animation-delay: var(--ad, 0ms); }
+      .source { display: inline-flex; width: fit-content; align-items: center; gap: 8px; padding: 2px 12px; border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-full); color: var(--color-secondary-a2); background: var(--color-primary-c1); font-size: 12px; }
+      .source::before { width: 6px; height: 6px; border-radius: 50%; background: var(--color-system-a1); content: ""; }
+      .feedback { display: flex; align-items: center; gap: 4px; }
+      .feedback .meta { margin-right: 4px; }
+      .thinking { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+      .thinking .spark { animation: twirl 1.6s var(--ease) infinite; }
+      @keyframes twirl { 0% { transform: rotate(0) scale(0.9); } 50% { transform: rotate(90deg) scale(1.15); } 100% { transform: rotate(180deg) scale(0.9); } }
+      .shimmer { color: transparent; background: linear-gradient(90deg, var(--color-secondary-a2) 0%, var(--color-primary-a3) 50%, var(--color-secondary-a2) 100%) 0 0 / 200% 100%; -webkit-background-clip: text; background-clip: text; animation: shimmer 1.4s linear infinite; }
+      @keyframes shimmer { to { background-position: -200% 0; } }
+
+      /* Chat entry: a single sparkle in the header, no label */
+      .ntg-circle--accent { width: 44px; height: 44px; border: 0; background: var(--color-primary-b2); }
+      .ntg-circle--accent:hover, .ntg-circle--accent:active { border: 0; background: var(--color-primary-b1); }
+      .chat-entry { position: relative; transition: transform 200ms var(--ease), background-color 150ms ease, box-shadow 200ms ease; }
+      .chat-entry::before { position: absolute; inset: -5px; border-radius: 50%; border: 2px solid var(--color-primary-b2); opacity: 0; transform: scale(0.85); content: ""; pointer-events: none; }
+      .chat-entry:hover { transform: scale(1.06); box-shadow: 0 4px 14px rgba(255, 183, 27, 0.5); }
+      .chat-entry:hover::before { animation: ringOut 1.2s var(--ease) infinite; }
+      .chat-entry:hover .spark, .chat-entry:focus-visible .spark { animation: twirl 1.6s var(--ease) infinite; }
+      .chat-entry[aria-expanded="true"] { background: var(--color-primary-c1); box-shadow: inset 0 0 0 2px var(--color-primary-a3); }
+      .chat-entry[aria-expanded="true"] .spark path { fill: var(--color-primary-b1); }
+      .chat-entry::after { position: absolute; top: calc(100% + 10px); right: 0; padding: 6px 12px; border-radius: var(--radius-medium); color: var(--color-primary-c1); background: var(--color-primary-a2); font-size: 12px; line-height: 1.3; white-space: nowrap; opacity: 0; pointer-events: none; transform: translateY(-4px); transition: opacity 150ms ease, transform 200ms var(--ease); content: attr(data-tip) "  ·  press /"; }
+      .chat-entry:hover::after, .chat-entry:focus-visible::after { opacity: 1; transform: none; }
+      .chat-entry[aria-expanded="true"]::after { display: none; }
+      @keyframes ringOut { 0% { opacity: 0.8; transform: scale(0.85); } 100% { opacity: 0; transform: scale(1.35); } }
+
+      @media (max-width: 760px) {
+        .hero { padding: 24px 16px; }
+        .chat-entry::after { display: none; }
+        .marker { grid-template-columns: 1fr auto; gap: 8px 16px; }
+        .marker .gauge { grid-column: 1 / -1; order: 3; }
+      }
+    </style>
+    <style>
+      /* ---------- Baylee chat, aligned to the Baylee Web 12-2 spec ---------- */
+      :root { --shadow-regular: 2px 8px 10px 0 rgba(58, 68, 85, 0.15); --drawer-full: clamp(380px, 36vw, 480px); }
+
+      /* The Baylee icon: conic gradient from the Baylee Color token, in a four-point star */
+      .baylee-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        background: conic-gradient(from -0.1deg at 50% 49.62%, #ffb71b 0deg, #ff9527 88.27deg, #d5647a 159.23deg, #8f659c 199.04deg, #007eb4 259.62deg, #3f9f90 294.23deg, #ffb71b 360deg);
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1c.7 5.4 2.9 9.3 11 11-8.1 1.7-10.3 5.6-11 11-.7-5.4-2.9-9.3-11-11C9.1 10.3 11.3 6.4 12 1z'/%3E%3C/svg%3E") center / contain no-repeat;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1c.7 5.4 2.9 9.3 11 11-8.1 1.7-10.3 5.6-11 11-.7-5.4-2.9-9.3-11-11C9.1 10.3 11.3 6.4 12 1z'/%3E%3C/svg%3E") center / contain no-repeat;
+      }
+
+      .chat-entry { width: 44px; height: 44px; border: 1px solid var(--color-secondary-a4); background: var(--color-primary-c1); }
+      .chat-entry:hover, .chat-entry:active { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); box-shadow: 0 4px 14px rgba(255, 183, 27, 0.4); }
+      .chat-entry:hover .baylee-icon, .chat-entry:focus-visible .baylee-icon { animation: twirl 1.6s var(--ease) infinite; }
+      .chat-entry[aria-expanded="true"] { background: var(--color-primary-c1); box-shadow: inset 0 0 0 2px var(--color-primary-a3); }
+      .thinking .baylee-icon { animation: twirl 1.6s var(--ease) infinite; }
+      .ask-bar .baylee-icon, .baylee-offer .baylee-icon { width: 28px; height: 28px; }
+
+      /* Panel: #F8F8F8, 32px radius, shadow-regular */
+      .drawer { background: transparent; }
+      body.drawer-open .drawer { border-left: 0; }
+      .drawer-inner { top: 16px; right: 16px; bottom: 16px; width: calc(var(--drawer-full) - 16px); overflow: hidden; border-radius: 32px; background: var(--color-secondary-a6); box-shadow: var(--shadow-regular); }
+
+      /* Header: 24px padding, 8px gap, Heading/01 bold title, plain 24px icon controls */
+      .drawer-head { min-height: 72px; gap: 8px; padding: 24px 24px 12px; border-bottom: 0; background: transparent; }
+      .drawer-head h2 { margin: 0; color: var(--color-primary-a2); font-size: 16px; font-weight: 700; line-height: 1.1; }
+      .ai-pill { height: 21px; padding: 0 8px; border-radius: 10px; background: var(--color-secondary-a2); }
+      .controls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+      .icon-plain { display: inline-grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border: 0; border-radius: 50%; color: var(--color-primary-a2); background: transparent; transition: background-color 150ms ease; }
+      .icon-plain:hover { background: var(--color-secondary-a5); }
+      .drawer-head .grow, .drawer-sub { display: none; }
+
+      /* Reading context: a quiet white strip */
+      .context-card { margin: 0 24px 4px; padding: 10px 16px; border: 1px solid var(--color-secondary-a5); border-radius: 16px; background: var(--color-primary-c1); }
+
+      /* Conversation: 24px side padding, starts at the top, compact spacing */
+      .thread { gap: 16px; padding: 4px 24px 16px; background: transparent; }
+      .msg.bot { gap: 12px; font-size: 14px; line-height: 1.6; }
+      .msg.bot > .baylee-icon { filter: drop-shadow(0 0.4px 0.8px rgba(0, 0, 0, 0.05)) drop-shadow(0 0.8px 1.6px rgba(0, 0, 0, 0.1)); }
+      .msg.user { padding: 12px 20px; border-radius: 22px 22px 6px 22px; color: var(--color-primary-a2); background: var(--color-secondary-a5); }
+      .quote { border-left-color: var(--color-primary-b1); border-radius: 0 16px 16px 0; background: var(--color-primary-c1); }
+
+      /* Baylee button: white, 1.5px #ddd border, fully rounded, 44px tall, stacked */
+      .reply-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+      .baylee-button { min-height: 40px; max-width: 100%; padding: 6px 20px; border: 1.5px solid var(--color-secondary-a4); border-radius: 31px; color: var(--color-primary-a2); background: var(--color-primary-c1); font-size: 14px; font-weight: 700; line-height: 1.6; text-align: center; transition: background-color 150ms ease, border-color 150ms ease, transform 150ms var(--ease); }
+      .baylee-button:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); transform: translateY(-1px); }
+      .baylee-button:active { background: var(--color-secondary-b1); }
+      .baylee-button--quiet { min-height: 36px; padding: 4px 12px; border-color: transparent; color: var(--color-secondary-a2); background: transparent; font-weight: 600; text-decoration: underline; }
+      .baylee-button--quiet:hover { border-color: transparent; background: var(--color-secondary-a5); }
+
+      /* Rating: two 40px circle buttons, 4px apart */
+      .rating { display: flex; align-items: center; gap: 4px; }
+      .rating .ntg-circle { border-color: transparent; background: transparent; }
+      .rating .ntg-circle:hover { background: var(--color-secondary-a5); }
+      .rating .ntg-circle[aria-pressed="true"] { background: var(--color-secondary-c1); }
+      .source { padding: 0; border: 0; background: none; color: var(--color-secondary-a2); font-size: 11px; line-height: 1.4; }
+
+      /* Composer: 16px padding, 32px radius white field with shadow-soft, 40px circle send */
+      .composer { gap: 12px; padding: 8px 16px 16px; border-top: 0; background: transparent; }
+      .composer-hint { min-height: 0; padding: 0 8px; color: var(--color-secondary-a2); font-size: 11px; }
+      .composer-hint:empty { display: none; }
+      .chat-composer { display: flex; align-items: center; gap: 16px; padding: 16px 16px 16px 24px; border: 1px solid var(--color-secondary-a5); border-radius: 32px; background: var(--color-primary-c1); box-shadow: var(--shadow-soft); transition: box-shadow 150ms ease; }
+      .chat-composer:focus-within { box-shadow: var(--shadow-soft), 0 0 0 3px #3a97f9; }
+      .chat-composer textarea { min-height: 22px; max-height: 120px; flex: 1; padding: 0; border: 0; color: var(--color-primary-a2); background: transparent; font-size: 14px; line-height: 1.6; box-shadow: none; resize: none; overflow-y: auto; }
+      .chat-composer textarea::placeholder { color: var(--color-secondary-a2); opacity: 1; }
+      .send-circle { border: 0; color: var(--color-primary-a2); background: var(--color-primary-b2); transition: background-color 150ms ease, color 150ms ease; }
+      .send-circle:hover, .send-circle:active { background: var(--color-primary-b1); }
+      .chat-composer:has(textarea:placeholder-shown) .send-circle { color: var(--color-secondary-a4); background: transparent; cursor: default; }
+      .composer-caption { text-align: center; color: var(--color-secondary-a2); font-size: 11px; line-height: 1.4; }
+
+      /* Docked drawer: full height, flush to the edge, no floating gap around the panel */
+      .drawer { background: var(--color-secondary-a6); box-shadow: -8px 0 24px rgba(54, 66, 72, 0.06); }
+      body.drawer-open .drawer { border-left: 1px solid var(--color-secondary-a4); }
+      .drawer-inner { top: 0; right: 0; bottom: 0; width: var(--drawer-full); border-radius: 0; box-shadow: none; background: transparent; }
+      .drawer-head { min-height: 64px; padding: 16px 16px 12px 20px; }
+      .context-card { margin: 0; padding: 8px 20px; border: 0; border-top: 1px solid var(--color-secondary-a5); border-bottom: 1px solid var(--color-secondary-a5); border-radius: 0; background: var(--color-primary-c1); }
+      .thread { padding: 16px 20px; }
+      .composer { padding: 8px 16px 12px; gap: 8px; }
+      .chat-composer { padding: 12px 12px 12px 20px; }
+      .context-row strong { font-size: 14px; }
+      .context-card .how-used { margin-top: 2px; }
+
+      /* Short messages that follow each other sit close together */
+      .msg { animation-delay: var(--md, 0ms); }
+      .msg.bot.continued { margin-top: -8px; }
+
+      @media (max-width: 760px) {
+        .drawer { background: var(--color-secondary-a6); }
+        .drawer-inner { inset: 0; width: 100%; }
+        .drawer-head { padding: 12px 12px 8px 16px; }
+        .context-card { margin: 0; padding: 8px 16px; }
+        .thread { padding: 12px 16px; }
+      }
+
+      /* Chat settings menu and priority tile */
+      .context-actions { position: relative; margin-left: auto; gap: 0; }
+      .icon-small { width: 32px; height: 32px; }
+      .icon-small:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .menu { position: absolute; top: calc(100% + 4px); right: 0; z-index: 20; min-width: 224px; padding: 8px 0; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: #fff; box-shadow: 0 2px 8px rgba(54, 66, 72, 0.15); }
+      .menu-item { display: block; width: 100%; padding: 10px 16px; border: 0; color: var(--color-primary-a2); background: transparent; font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+      .menu-item:hover { background: var(--color-secondary-b2); }
+      .menu-item:focus-visible { outline: none; box-shadow: inset var(--shadow-focus); }
+      .menu-item[disabled] { color: var(--color-secondary-a3); cursor: default; background: transparent; }
+      .menu-item[aria-checked="true"]::before { content: "✓"; margin-right: 8px; color: var(--color-primary-a3); font-weight: 700; }
+      .menu-item[role="menuitemradio"][aria-checked="false"]::before { content: ""; display: inline-block; width: 18px; }
+      .tile--priority { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .tile--priority .tile-icon { background: var(--color-secondary-b1); }
+
+      /* One rounded input shape, shared by the home bar and the chat */
+      .ask-bar, .chat-composer { min-height: 64px; align-items: center; gap: 12px; padding: 12px 12px 12px 20px; border: 1px solid var(--color-secondary-a5); border-radius: 32px; background: var(--color-primary-c1); box-shadow: var(--shadow-soft); }
+      .ask-bar { max-width: 640px; }
+      .ask-bar:focus-within, .chat-composer:focus-within { border-color: var(--color-secondary-a5); box-shadow: var(--shadow-soft), 0 0 0 3px #3a97f9; }
+      .ask-bar input { height: 40px; padding: 0; font-size: 14px; line-height: 1.6; }
+      .ask-bar input::placeholder { color: var(--color-secondary-a2); opacity: 1; }
+      .ask-bar:has(input:placeholder-shown) .send-circle { color: var(--color-secondary-a4); background: transparent; cursor: default; }
+
+      /* Guided steps */
+      .step-label { color: var(--color-secondary-a2); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+
+      /* Get Care page */
+      .user-chip { height: 40px; padding: 0 16px; border: 1px solid var(--color-secondary-a4); border-radius: 999px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+      .user-chip:hover { background: var(--color-secondary-a5); }
+      .mail-button { position: relative; }
+      .mail-badge { position: absolute; top: 2px; right: 0; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; color: #fff; background: var(--color-system-b1); font-size: 10px; font-weight: 700; line-height: 16px; }
+      /* Header container, from the Get Care spec */
+      .care-hero { display: flex; flex-direction: column; align-items: center; gap: 40px; margin-bottom: 24px; padding: 32px 16px; border-bottom: 1px solid var(--color-secondary-a4); background: var(--color-secondary-c2); }
+      .care-hero-top { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+      .ai-preview { display: inline-flex; height: 21px; align-items: center; justify-content: center; gap: 4px; padding: 0 8px; border-radius: 10px; color: var(--color-primary-c1); background: var(--color-secondary-a2); font-size: 13px; font-weight: 600; line-height: 21px; }
+      .care-hero h1 { margin: 0; color: var(--color-primary-a2); font-size: 20px; font-weight: 600; line-height: 1.1; text-align: center; }
+      .care-hero .ask-bar { width: min(600px, 100%); max-width: none; min-height: 62px; gap: 8px; padding: 16px 24px; border: 1px solid var(--color-secondary-a4); border-radius: 31px; background: var(--color-primary-c1); box-shadow: none; }
+      .care-hero .ask-bar:focus-within { border-color: var(--color-secondary-a4); box-shadow: var(--shadow-focus); }
+      .ask-search { flex: 0 0 auto; color: var(--color-secondary-a2); }
+      .care-hero .ask-bar input { height: 22px; padding: 0 12px 0 0; color: var(--color-primary-a2); font-size: 14px; font-weight: 600; line-height: 1.6; }
+      .care-hero .ask-bar input::placeholder { color: var(--color-secondary-a2); opacity: 1; }
+      .ask-go { display: grid; width: 24px; height: 24px; flex: 0 0 auto; place-items: center; padding: 0; border: 0; border-radius: 4px; color: var(--color-secondary-a3); background: transparent; cursor: default; }
+      .ask-bar:has(input:not(:placeholder-shown)) .ask-go { color: var(--color-primary-a2); cursor: pointer; }
+      .ask-go:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .care-grid { display: grid; grid-template-columns: minmax(0, 1fr) 327px; gap: 24px; align-items: start; }
+      .care-main, .care-side { min-width: 0; }
+      @media (max-width: 480px) { .topbar { gap: 4px; padding: 0 12px; } .brand-logo { height: 26px; } }
+      .care-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .care-head h2, .care-h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 20px; }
+      .care-h2 { margin: 8px 0 12px; }
+      .count-badge { display: inline-grid; min-width: 22px; height: 22px; padding: 0 6px; place-items: center; border-radius: 11px; color: #fff; background: var(--color-system-b1); font-size: 12px; font-weight: 700; }
+      .todo-wrap { display: flex; align-items: stretch; gap: 8px; margin-top: 12px; }
+      .todo-track { display: flex; flex: 1; min-width: 0; gap: 16px; margin: 0; padding: 4px; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scrollbar-width: none; }
+      .todo-track::-webkit-scrollbar { display: none; }
+      .todo-card { display: grid; flex: 0 0 min(300px, 82%); align-content: start; gap: 8px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: var(--color-primary-c1); box-shadow: var(--shadow-soft); scroll-snap-align: start; }
+      .todo-card h3 { margin: 0; font-size: 16px; line-height: 1.3; }
+      .todo-card p { margin: 0; font-size: 13px; line-height: 1.5; }
+      .todo-for strong { color: var(--color-primary-a3); font-size: 12px; text-transform: uppercase; }
+      .todo-card .ntg-btn { width: 100%; margin-top: 8px; }
+      .todo-arrow { width: 32px; flex: 0 0 auto; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: var(--color-primary-a3); background: var(--color-primary-c1); font-size: 22px; cursor: pointer; }
+      .todo-arrow:hover:not([disabled]) { background: var(--color-secondary-b2); }
+      .todo-arrow[disabled] { color: var(--color-secondary-a3); background: var(--color-secondary-a6); cursor: default; }
+      .todo-dots { display: flex; justify-content: center; gap: 8px; margin: 12px 0 24px; }
+      .todo-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-secondary-a3); }
+      .todo-dots span.is-on { background: var(--color-primary-a3); }
+      .provider-list, .find-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+      .provider-row { display: flex; width: 100%; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid var(--color-secondary-a4); margin-top: -1px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+      .provider-row:hover { background: var(--color-secondary-b2); }
+      .provider-row .chev { margin-left: auto; color: var(--color-primary-a3); font-size: 24px; }
+      .muted { color: var(--color-secondary-a2); font-size: 12px; }
+      .avatar { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: var(--color-primary-a3); background: var(--color-secondary-c1); font-size: 13px; font-weight: 700; }
+      .care-more { margin-top: 12px; }
+
+      /* Find care results (from the Find Care spec) */
+      .find-title { margin: 8px 0 12px; font-size: 24px; }
+      .find-search { max-width: 480px; }
+      .find-tabs { display: flex; gap: 24px; margin: 16px 0; border-bottom: 1px solid var(--color-secondary-a4); }
+      .find-tab { padding: 8px 0 10px; border: 0; border-bottom: 3px solid transparent; color: var(--color-secondary-a2); background: none; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+      .find-tab[aria-selected="true"] { border-bottom-color: var(--color-primary-a3); color: var(--color-primary-a3); }
+      .find-list { gap: 16px; margin-top: 16px; }
+      .find-card { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 8px; background: var(--color-primary-c1); }
+      .find-top { display: flex; align-items: flex-start; gap: 12px; }
+      .find-top h3 { margin: 0; font-size: 16px; }
+      .find-meta { display: grid; gap: 4px; margin: 0; color: var(--color-secondary-a2); font-size: 13px; }
+      .stars { color: var(--color-primary-b1); letter-spacing: 1px; }
+      .find-ok { color: var(--color-system-a3); font-size: 13px; font-weight: 700; }
+      .find-actions { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+      .ntg-pill[aria-pressed="true"] { border-color: var(--color-primary-a3); background: var(--color-secondary-c1); }
+      .fav { display: grid; width: 40px; height: 40px; margin-left: auto; place-items: center; border: 0; border-radius: 50%; color: var(--color-secondary-a2); background: transparent; font-size: 22px; cursor: pointer; }
+      .fav:hover { background: var(--color-secondary-a5); }
+      .fav[aria-pressed="true"] { color: var(--color-primary-b1); }
+      /* Right column, from the Get Care spec */
+      .care-side { display: grid; gap: 40px; }
+      .cta-card { display: grid; width: 100%; padding: 0; overflow: hidden; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: inherit; background: var(--color-primary-c1); font: inherit; text-align: center; cursor: pointer; }
+      .cta-card:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .cta-head { position: relative; display: block; height: 86px; }
+      .cta-band { position: absolute; inset: 0 0 32px; background: var(--color-secondary-c1); }
+      .cta-icon { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); }
+      .cta-body { display: grid; gap: 8px; padding: 0 16px 16px; }
+      .cta-body strong { color: var(--color-primary-a2); font-size: 20px; font-weight: 700; line-height: 1.1; }
+      .cta-body span { color: var(--color-secondary-a2); font-size: 13px; font-weight: 600; line-height: 1.5; }
+      .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .quick-btn { position: relative; display: flex; min-height: 86px; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 14px; font-weight: 700; line-height: 1.6; text-align: center; cursor: pointer; }
+      .quick-btn:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .quick-badge { position: absolute; top: 8px; right: 8px; display: grid; min-width: 15px; height: 15px; place-items: center; padding: 1px 4px 0; border: 1px solid var(--color-primary-c1); border-radius: 10px; color: var(--color-primary-c1); background: #cd4660; font-size: 11px; font-weight: 600; line-height: 1.4; }
+      .feature-card { display: flex; align-items: center; gap: 16px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: var(--color-primary-c1); }
+      .feature-art { flex: 0 0 auto; }
+      .feature-card h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.1; }
+      .feature-card p { margin: 0; color: var(--color-secondary-a2); font-size: 13px; font-weight: 600; line-height: 1.5; }
+      .plan-card { display: grid; gap: 24px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: var(--color-primary-c1); }
+      .plan-title { display: grid; gap: 4px; text-align: center; }
+      .plan-title h3 { margin: 0; font-size: 16px; line-height: 1.1; }
+      .plan-title span { color: var(--color-secondary-a2); font-size: 11px; font-weight: 600; line-height: 1.4; }
+      .plan-graph { display: grid; justify-items: center; gap: 16px; }
+      .plan-amount { display: grid; gap: 8px; text-align: center; }
+      .plan-amount strong { color: var(--color-primary-a2); font-size: 20px; line-height: 1.1; }
+      .plan-amount span { color: var(--color-secondary-a2); font-size: 11px; font-weight: 600; line-height: 1.4; }
+      .plan-links { margin: 0; padding: 0; list-style: none; }
+      .plan-links li + li { border-top: 1px solid var(--color-secondary-a4); }
+      .plan-link { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border: 0; border-radius: 4px; color: var(--color-primary-a2); background: transparent; font: inherit; font-size: 14px; font-weight: 700; line-height: 1.6; text-align: left; cursor: pointer; }
+      .plan-link:hover { background: var(--color-secondary-b2); }
+      .plan-link:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .plan-chev { display: grid; width: 40px; height: 40px; place-items: center; }
+      #page-home { container-type: inline-size; }
+      @container (max-width: 760px) { .care-grid { grid-template-columns: minmax(0, 1fr); } .care-side { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: start; } }
+      @media (max-width: 900px) { .user-chip { display: none; } }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="topbar">
+      <button class="ntg-circle ntg-circle--float menu-button" id="menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      </button>
+      <a class="brand" href="#" data-page="home" aria-label="MyBSWHealth, go to Get Care">
+        <img class="brand-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYEAAABGCAYAAAAqwyicAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAABgaADAAQAAAABAAAARgAAAABGL2SuAAAddklEQVR4Ae1dXXLbRrYGQNmSk8odzgoCryByVRKn5sWUM7dKzkvkFYhagaQViFxB5BWIWoHll2tVTWLBLzOO/RBlBeGs4PJm8kPZJnC/D0ADDRAgfvgjyjyoIvsH3ae7PzT6nD59umEaS3R98XC7bRrGSdkqeYax9+bFea9sekknCAgCgoAgkETASgYlJAgIAoKAILBKCAgTWKWnLW0VBAQBQSCFgDCBFCASFAQEAUFglRAQJrBKT1vaKggIAoJACgFhAilAJCgICAKCwCohIExglZ62tFUQEAQEgRQCwgRSgEhQEBAEBIFVQkCYwCo9bWmrICAICAIpBIQJpACRoCAgCAgCq4TA2rwa29rZaQ4Hw2ZZ+q+c837ZtJJOEBAEBAFBYDYIzI0J/PF/w2PDMnbLVvOr1vbdUdnEkk4QEAQEAUFgJgiIOmgmMAoRQUAQEARuJgJzmwncTDik1oKAICAIFCPw5cPtIxx2aauUP74431P+ebhftL7ZtCx3X9E2LeP01ffnjgpP4woTmAY9ySsICAIriYBpGi3PM1pa4+fKBBprbtN1jbYqD/6Xyj+tK0ygBoLpRe+N5sbAOTsb1CBVmCVd1nUvoKfrU9iAVIJ51J91+uM/Vy28mA8Mj9KZpxkkmAPP8362LMOpIjlhjQp04mvaeuv0ZtFfytArkyZuYTmfTpM5psWlXKmSap4ICBOoge7vvw53MB2Lvnvw53+GDshs1SBVmOWPX4c/YYHdVgm/+vv2VpXBTOWblTv8bbjpWsZFXXqYRhuGaV6ahneJQXuqKS0H/z9/uzr6/dcrfIfCa0Iyy7j8yB1ITkdfPHw0sEzvzLxldF+dn/czEkdRrml0DDM2bJgW9xAzmwVM219QlxbaEz2DP3+9OgTZY9LWr1mWqejqNBHXx++uuidueQS+2t62i/pgeWrTpZSF4enw83NzWkgd4QxIJUiENO1E5IcQ8LxNYNbmQHb/60dP+UJUbdZXX2/vYvD/xXO9AzKAMvlDRtF23xq/fPH3R9+RieTl80zD0e+hri09XMXPQRvpbZWH/WVS2SpdnjtyzR39XsM1HT0s/uVFgH39S/R5760x8/GibquFCdRFbjxfJ3zZx+/UiOFX1pCtUyPrjcoCVc0OBuWLv/33N5tlK07m6HpGb3zwNweYZpyZBu8ZPd+fGsxVGSaYB2dZeQzonbtxptLS9VVNekQFPwb93XRySO/tdFzZsF4XtLP/T+d/LsvmlXTXh8D9r7/ZH701fzLQ56+vFuMlizpoHJPaMZAWTyDh3Zt2fYADEwbGpZEUJgLiGadWgwNufI3cWOqNYw1otcwmwjZ09t96mmTMuPcjlzOCraIpMqSoHbxEHeSJLgyKDn7dV98/d6LIlIf5wDT2KYVrt4jzRVa5l87ZAHkuUdYm03ueuUnpvc6zTZUZFG9638JzHATK/wd9I6hTmMspn1tSXhcCXEtxPfcYTHvpLmECs30kNvS934Hk3jRkOTAhvz0NjYXlNY1+jTWKg68w0wEjONKYge298xnfZOw8j/jqV/fHH847ekSW//UPz88Qf8ZyXcMEjUiF5DOCLOaNwfslXlqfCTA910NAw8minxcXMi07fZ+MoQ5TGb01WqhTdNFUMAqIRxCogcCNVgeZJqf/y3DF9cDL3b7/8NFB3VqNrwPEtOvSXMZ8r16c90yXi+lx+4gdB8a8+voDqsYcTc949vpFMQPQ6bFcy/XuYSDtq3j0o2dZEn7D8s5UGrqYDezo4TJ+zD4o8QcXFsSVly4NDPRwGb9lmjE9YFeDAZcpRtKsEAJr9x9un8y8vZY5MNe8jvvO/ExNp2dehmF0rVveZZX6z2tDh2d4h6YmXVLCxbT9rEi1kcYklBo7Kp4DFWhT0jtScR+SS/NCML0nevvCgbGX1U5Kz8AkujzL7EWBCh6Wi/WbPc81n4IeZhLPj7OyD99vXN62rgZq1oDn+iAr3aS4gHEgJy5YJh26nvlU0bMC66Oef7PkHzFQSU3Pe6n84goCdRFYQ/ds182cmw+rdt47s4VB+jEYwdM5MIKuddvo1VCb7OXWeYobDQuDtWt0gSXUDLxgrvjONyHdCsLF/6GuN8zP9GCkrrflWXN4PsXVWVgKy8VztGImh0HZziscg+hnGASja21k9qNARQ8laCj571L3n5eV9+5/vX0ZDbxYH6iiwgmZepP00S5fbQYz1VP49xlXdZ0hMA2N1FhcrD4jnZt6Ecu3v7+lrtzHyDKtwT//MZ9Fbl8n3zBhlRbjx/d2nmVe53Nhe8vuR5nfmgBeGDKAOTCCugxgrs/kxxfPj798+OgBXu0dFsSBg2aIb75/ThvuwstnloZnq4QYKLqhpKyiMt3PYX7YcGPrk2m2k5MRJU3XzJ/ZrsyCZxSZbiPa/WlZ0q7hDsqmzUo3iQFE6T3zGZ5mS4UnzVRUGuVSFaTxLIfxVDHBgMBnAqDbrEKPpqGgqcgbhlttfSLOeH2+QNjx+2sb1lm2XhM8TwMzQzI3B3Lk6Ruo7vT7Vf1kmp5hfgu8sQ6EwR8vJfpXdCEeJfpl9llmmf0jUeYCz+dQCTeCxX8/Jdah/PJVNjzFFgSMCxXWXVTzZVrNSWbFuuZdqq0wmeb4YzMl8PXxBKDck+NAO/MkSzsxPybA2s6eESwlA2BTeb111/fWreEmHrDNMM0Q8XCeFelt/XUAYMU8vNBRe2UH3/dQWVjWMO5M/o7ZeoMDF2ZR97ZfCfxZhren/PNyIVo3DWMYkUf5/44CYx6uHyBFeLmQ7ODtq/A83EbDdN6P4jKhk4+eU1F5uipILeCyL0BYYDuazI9FuQdwevQXXXiRuSM6uPBiv3Ke94vyLMt9Sv00msDsvV1UJwpQeAdafC/Q3G5VZuALM5iJY5Bvsb+AVtFlo8w2BKA2yuxgAO4WZSi6b+F9Rt1bcTr14KIYlmlHIc2D+va1oO9130HgQWdJX+m2pu/7YdbFMzbRvgMwnt6dTzYO9TWwDLKZZOpHaoyAHKk+IawB1FMBTVFktayULPGy7+m50BFpNuq/8Hq88oeLnR0VZge4426Umj0wj18mbONVfjzsFqUCFa7iMq9Kz3pwEVWF5+Xebly1ErQn9BEe/5BIi7WSSdim0tYKBuoJffFaW+idQDHY5xEM9D6WGPyj5J6H2UVwYYjaKdMGvuwUqlQ++CMaUdySetgf/Y19GGgrVtEGdidFG/t0miyLtvh6X9buBxJ/YFLsUOWq3VPeDgbKExVYZjecVV3ktDWz6kjLGVhif8z8mQCrMj0jWHoGoBCnpIcX+4kKw4XZ6FVmpwpfbG0dgLMHY8uZoKfW6EZe0/L08gB3dSuWcHOarYji5esq/1zdlMmnNfIu88rj+T+Je+hXODOIdv52In7WgeSAa6fPz8kqLmnFk6x3cl9FZHqaRSaKo2loFIBnzbUixq/HL5ufQg4EoQuosZpx3bDexXfENB9jTeguJG+TP8+17mFA2sNbkGgbZ9SYRTyN82f7uIs8p6zDj9yNv6KMuzAn3lK/1y+e/5VlYrJwqlPkQMkZgR5X1Y9FfwfvUE//JZhOIOx0QXfs58Farag80P00uSbqM7Qu2xO21SS2xDjdPtC2A/VzUMp81UF6SzRGUHGx+MYwANXcNy+ec9rFRcwW47grlmajaRVPuHhsM014+esAKlDWJeNBeU5cnrEL6bKjT/mKaKFTHak08PehfnRUeB4upV+qB1BnW9GHqeaTSSqOUJWCAULbccl+hWMg2H7qkW81rMtZLy56wQu9q+oJq6Qd+I9VOO1SxeV5sfmnUgWpdGNWR8GajqPuZ7lkKuhH/i0+n5uwS5jMGczrBPWNLl83PfL2uBYURYaeN8HO50sEe2S0Hs6oQott3mbfnrTGRsxH3hU2YwUYMY+Bs6k+Gq0fTBKqwjJp1n0JcxZdIKOFXy9Lh+7TLvgLZ9E9PRkYSwvhJuNg2XUJa8UO/fUu8wCo+LTy2hli3Af9MzDjM0BzEuXBexOqvjqLmQmoVoaMwBuZe+zIKnqCe+MYgGqLOfIlmoEKo2uyU9kqjAdwxI6twsCjB0mlo8JVXdjMn8Z5vCamfOgk5a5QfWRrqZ2sl1S7X8vLgZ/HQ7DtafUA+8Od0XqniDDXXbLUisQSNE6w8/gnWOD8L5jCxX0szFMSLaNumVRu+ggJvEifTUp/y9IYANpF5qWn9xektdkFVUL6/Sy/3ldw38lKs2xxlFSTMwCa455vlelbTHPlbtzTn3W4xtbKaicxxaL7Y/aj4L559vqH8/YkBqDToYCWmsEbZdYvdBqL9YeqRghOZdrJzZIW8EnW0dznu7G4mYAqHYzAbGDRZmQ9xkcSnipOr25r7o1lAGwDOzF2px5ilR7cl5fXDKdg9zjoYtra8aPxx44LNVBXheu4lDyw4AhJRk27zX3Q6ZShhQFmV09XsS5HHNT1/Hl+WiuoS5fYKB3eGW08LvPC8mWH1Ld1y7rqgAbbOHZx4PEHTc+36uEZQQaYgW8h0TDN06ozBZbJ/BBHN1lYOGjvjRUcRuhSO6KcrHTJ2YXXZJ9IMwuVL+gv6rmi/BLqApVXuTRHJWNU4boucLXL5M1QL8LYoZqQQ9wxI3jsWjhvJ+zXKJ99zcmqA/FD37h32xoefOSuH2elmRT3zl3vIG/cp4KNeZ1Jea7zHscN7HEpLez5M+mt7VMMOOH7HlinLXYmoBDzGYGH1XtL49zqJlxM45Z9EVirba6XA3NCukC78SLSauFEz0QcykhHep5sv742EAws2eniWM5O8GK1VQx34c6mLoriZJcMgNJhGQagKHFwoMrN13liBsSXQd3LdYE9TxzlTAEDOmYL/gF9ucnTN4DRyzjOa/4NX3qKw7GPagmq/1RMWhWk4oPZRbwwOWkdB2WHL22Q+6NP1h1Fp7wbMEbQak3zK1sengkHa//i86koWKis4fcK4n7Nuk9ak2Hf4Iy6Sn9ShTGvPvMAt7fVvWV0gWu3ar2S61GBddr1MAHWPI8RkAHcMjrJRY+qTV2e9JQu+BKoGqETt+G3VRhuN9RLalH1vG/dDUg/+sASv4h5FL23SVUEZmmgsbiLLzVmEr/oqrKypZNZvb44b0PCvItF4y0sNh6SqegYZNJi38MMjQy5rKoofYTEyIr3DuhlFKmCVFoOOKYZL4IDh8RAr9LRJUYqzPZVWetR+RbphifC2lqZU6kXg34dUwvXZOKIGfr0d1XNPmZIfqakNv4redJtGeLBbFMbI2DGunh1kF5TnxEEqqGPm7cHw8HQMTawUeQmHaCmtyfDz5cd3wd9jKV6TGmTF19oSMGdZGz9kF9WYkdqYC6ap2ZgSVgMi6a/fAEmpc2sGSTxtHSRmS6MxLEJTQMbWtD2B17MDG0XZn0YPLaqqmpUWWG9HYR9JsZvspoNz84oS2Xh4NqGdRGE952tooE1vZiLlb1vVVkRQXh4FAToqstRniyXC9nAvBXcy1YJkTnifbBV/uTaj4otdsPBzSlOOTlFoAqLVVNZqUejJINsuFbCei0rz6Q49msICn2ksYN0k9dkgjTJfzJ7jC/NZOx4KH504/eWKgbWRUV9Nre+OPQRL/5mcN9srlGCyk28kBuE3RuEDRr40+w1d28hRS+oEEr6sD441K0P+FIGi8ezrURyRyqQDcxFnaxSMvS23ax0E+PqnSJ6xik9dL0HsV7fa2JT1lO8rFMfxc36apYmZwz7TMF0DzDdx+CtDWIQRH7H18mQ5JDp8i4ORJg5XCqpnDp2Diz6ixgO2C1FI08VpO5TJQQd9IkKZz2r9Kmhta228JwgcEz9XmEwZvsmDqZQh20a6ODqem+5O8i3o8K1XB4WGXJXrImEA1g+JT6b3/DNhgaEDTDbFtaFmlmbrcYoaBx87N4SReC9GdStDvPGzM5rrpWV/HxOGhylW7fs3Hw840LddDewM+795E6m0lZ1QyuYwmzzOE+E1gcYRGDmF0h+WDw8/NccdnzyeaIcR5UDN9dcVJdayZQWsTlMgR+uOxzAkgfjRTQbsUOrpo5KNytXmQL6zKeRPM+KVieYhRQvGCeOkIjs+x1VR33A9vHEs1D3styQsSSeFdId6Gn1Z0R99SQTWj3fdfrB/D5NjaVkstNdOkHt/J80UY5T6EP7sD47wI53Ggjo/CidXMJAoLQ6yP+2rPZd05mhhzWA4XDYwcMz/OkaDEg8fL8Xz86eWRkVCXmm6yDLVsVshckp+UOf+RNa+ORfwfn2hXnqJICqpYvO3wryRuaiHZ1WWmrFPUe/vyh/YJFxtatJ5/CXs2qqU0cyH4jwWzje4ye9j4UqjMtJNNNHSKQl98SAXRbPFGNJWwnFz9EfzF5Oqt+q32OfBgO4AA42BIsUHNSDQ3rGjGKiFI3FYL1fpIh8kMHSTGAurdcWgcEItkaW0cKL9ACD5Rambhcf2sPgAAS1xNYb5/nEwWZarDkb0M+nwfCxD5odnS7PCdLDda03dBp1/JSGv9zafgZxbTfMb1Oa09UsdehOysMyoQrrQlo/idIF5qTHUTjDw/WKJK6xbjrNVItUQYr8lbveg0roOxWG5VgLfofhwDSUvuDCQvKZ8i+36w+4qtYcdGdabxzGNshq//haol+PJzyptuwMCmqrDmgn3o2ssj6kuOtjAhoDAKC2AhWST9toYNj6QBnBrCyBFF75rm9WF3bm5KJjYMZ4tQPJyM+OwRAvyXk/n9ac73ChSrvCBbzMF11LNpUXJ686OMI6vizjL3Fggo+bvEKGRSldMayqqiBVQlolhPhd/Dq8D/r0+xeeUfVFe5V5wS508P9GfaNrXt/xiAqAZ2x9C6ozbD6sZHqs01slv/4aLK7dOQxAVYCMwGsYR5BOt9j5Vby45RGYZC4amDHGi6NlpdbypU+Zcs2w8yhwB3DevUXEc5OXXg6si1oMUxWkxTuav9jrq4SiZLZauyKTiWLLqpe0DNfnjU1fqeZT7ZlnfXDkCGe70WWOvFKbD6MMS+6Zp5C2eCZQwADUsxBGoJCo51LC9Iz4KAkOKOplBGM9iqhysbFgATNKOycPXuDPEqTfjzN+qluw4H0B8fipakciT9XAGKMxfy5DIn2EBLBssW76gF2VqVIlpJdNlVDa1r7OLmGd5iL9aYyAjc4gK1eFs63CTLRIUpe/gH7eV8GK7lR1rVjWUiRfLBMoyQAUMmQEmLLvyoxAIVLNveWaPT0HFzLDAdRW8Tj3fCobbkWnrhsMoNoOW6o9UqqpL3DeEPW9aqDFIHnCfHXLZL70wMQDvcrQI3PVd5XCHPJbqoJUXs5cqzJV0sRivhPRwLpY2ta+3i5hRXGxbro9fI+nYdy09oGuPndD4aQdxFVajjIoHNlV8nwIaRfHBMAAPvpk42B88aYQxo4wgkKMMhPwpEl9cOHAh81a0bTZH7AW8M2AzMqFkThP6bvUfScVNox3jMEms/jiBqqLuowglNzbilxVHIDjS5UXrp1SRTjavfJeTSUE+q3EJr4bsEs43VD0u64eV5dx83ho0Ongx2eO02IfHet06R8asYm5f6/GcQ8hA+j4+RfwV2avwwKq4RexGCYQMgCe/Y5S7RqNE0ZQAzRmSb6MWAfQzrXxNHVRTfK1s3GKD/0+vz+9oxPJslLiYjpsvtObufxBIXx5dRIT/WQAoSCipUt8/0GLz/amj5BAGzZVyqqqoCifO2ZBY6t7ODHuWeS/IR5/NoT3XqtuZcZ9/+tv9rHI3NNo0Jahnwgj4M/OEmuHXpNHt6fTZYXZD7FXhYJIh/fNBB3GzO6CsHAZUUOfqSvERDRm5FmbEZ18MjoD0F6W/Ay5d8gIDJh7fZDmo7mtnvKGby6qnYCpk6PpnB6u4weT+bTsVJ9HRuClths4ihmbeXZgOthMlZn7PQVuZMOprPzK6kkqTweMoA2zwSdrt72zvPPfgx3Kxi6+OsVdylq55ln6Ow8p+mPBsSMkwhQcQKqqghRxqsD0TX4qni42s53p4ZvifzvaOMB+jAcQNuywzqE0v91DvznNw4r9CbOhI89zW6m2dic8KzKcI5Weu/PBCIy89Bz8+X1nqJqO8Nxs5uMgDfUeGW5Eh/GzukD7Z9DaUfR4qjAYwWPVZ1knqr5weOapilNp5+nOlwnMjgEoDIQRKCQquDxvBi/ipp4FHX8mZqF4Wdv86bTz/Z6/cx91gcTFf+1CX8G56B0tZszrM4IWdkOP7yGxMVPg92u/g1Q3sPyD2WAj7nFzkGGjfjaYh02CerkYiHCE9freWEEFEZQ8MWBHR0hoyR3NX9mLer5EppaeEc9pbI1Ev7/MfuIE5jsmtKk+k35WVJH4z8rVmXTQQgzQT3BscievvbSGA8PZRa+yVRoyAggI++HgzgHYMC3zL+gXmxBCNoFtJAyEfeHxHziGWuWftUuhC4LsUUQX9eCnMNmXULMB6tRinbCHp4U0W1G6OXvmpw6aPQNQUIhqSCFR0g2sT5IbbKY91Ktk0SWS+Z8aPOSHMUokNigx+x8byTlGl1I+BpIWpK4dDAht+kHXTtL2sfA/cFLnyGGfVoaKpq4qSNVtrZHxycga3w5Q9JbB5fOiYQd4/mm6PulnxcGZcePpzMOic/P9xehsk3KbfQE0Ofge8Thx9om4nKD/VT3OPF3HMuHQ4KGrp9UxUHVi/cqqs3Radf3lZwJr0MW9TS725BWKI30Hdz5Z7/lrANOpgPKKiGYEnlVWCs0jNR4Pybk/HntzY/iCQP/ex4u4yVZQ6rn2zxNSP4qpNz/+UXUgZnvQjA6kzB6mFi0vOLmzxbYVXH3cP61TZppu+ggJcwpVkKId7EjeZh1tFXdzdgmrGo+74eDXRh88w0C3HzLm8YSpGPZTfHzq8HXw2cnU3fEgy+HMg2MCnseuPitIpsbAz9kiGPkdd71Xtf8laVUL8VsHmJ0wUzwjSJFgX8J3wy9T0XMLlmYCoY6qU7YmmOod44H7g07ZPBXTddyG+TM+m1a6ThXp5yb/GKc/Do2hoxJsuCnrBHVjBi4+Gn2MsnqKVJ2ygsXQ+FnUPY6YdaA+fGNtuKXqU9UdvbcGHxu3+7N48cLBpYc69LB1tzlcG25y3QHts6EKaFIYcXFeDNQBA37APkxftcqZ6TlgY8C5m3lzikg873t43k1FAiqwvvJXdf31s6qZCtJPQ5OfOAR5/wRZfhMAg/QDwzRsCANReyGiXGIQfFl3cA6fcQfldHhybGPNbY5crENZoWCHPSiTjpAIP/HK/BOvBpiTC9oTE+XcZBkUYBQGYEiYvXJGgp3WFta1cvbtAPuZ9Dcw1y7W5k5V9VDufC6cB9PDA94tS50N5NlBqNBJ2TzoRHtvrtnEsWxdrzMddI4nkL7arAPw7fMjLNdZHylbEBAElgeB+a0JLE8bV7omnAUoBkAgwAS6Kw2INF4QEAQSCAgTSMBxMwM0LcuruW4Tz1nAIr8ZkFcniRcEBIHlQUCYwPI8i1o14UYXLsCnN56QMVANBKK2IiyzAIWEuIKAIKAQKL0wrDKIuzwIcEclNtQc0OQ+3FJ/hkU2nm2DjTCBzbGqLRhAT2YBCg1xBQFBQCEgTEAhccPc4JsAw2O92qE9tH86Ggb96IKfttrdKEI8goAgIAiECIg66IZ2BdrKW1bx9xZoa30HZoezNI+8oZBJtQUBQSADAZkJZIByU6JCe+K7/lkrrrljmN5nHk/bxGY3SP8TbY5vShulnoKAIDBfBIQJzBffhVAPmYGzkMKkEEFAEPigEBB10Af1OKUxgoAgIAhUQ2CpZgL8+LexVv70vA0cYVCtuZJaEBAEBAFBQEdgqZhAuHjZ1ysofkFAEBAEBIH5IbBUTIDN/BxfBGrAxcmQ/fDAqfm1XigLAoKAILDiCCwVE/gbPij+buTi5EfDaJjGYMWfjTRfEBAEBIG5I7BUC8M8npfH/mJtwOCRw3NvvRQgCAgCgsCKI7BUMwE+C1EBrXiPlOYLAoLAQhFYqpnAQlsuhQkCgoAgIAj43/0WGAQBQUAQEARWFAGZCazog5dmCwKCgCBABIQJSD8QBAQBQWCFERAmsMIPX5ouCAgCgsD/A2YMxwL6ScznAAAAAElFTkSuQmCC" width="176" height="32" alt="">
+      </a>
+      <span class="topbar-spacer"></span>
+      <button class="ntg-circle chat-entry" id="header-ask" type="button" aria-controls="drawer" aria-expanded="false" aria-label="Open chat with Baylee, an AI assistant" data-tip="Chat">
+        <span class="baylee-icon" aria-hidden="true"></span>
+      </button>
+      <button class="user-chip" type="button" id="user-chip" aria-label="Jane, account menu (demo)">JANE <span aria-hidden="true">⌄</span></button>
+      <button class="ntg-circle ntg-circle--float mail-button" type="button" data-page="communications" aria-label="Messages, 6 unread (sample)">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg>
+        <span class="mail-badge" aria-hidden="true">6</span>
+      </button>
+      <button class="ntg-circle ntg-circle--float" type="button" aria-label="Help">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.5M12 16.8h.01"></path></svg>
+      </button>
+    </header>
+
+    <div class="app" id="app">
+      <div class="scrim" id="scrim" aria-hidden="true"></div>
+
+      <nav class="sidebar" id="sidebar" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><button class="nav-item" type="button" data-page="home"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v6a4 4 0 0 0 8 0V3"></path><path d="M10 13v2a5 5 0 0 0 10 0v-1"></path><circle cx="20" cy="12" r="2"></circle></svg>Get Care</button></li>
+          <li><button class="nav-item" type="button" data-page="appointments"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg>Appointments</button></li>
+          <li><button class="nav-item" type="button" data-page="communications"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5h16v12H9l-5 3v-15Z"></path><path d="M8 10h8M8 13.5h5"></path></svg>Communications</button></li>
+          <li><button class="nav-item" type="button" data-page="billing"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg>Billing</button></li>
+          <li><button class="nav-item" type="button" data-page="results"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 4h8M9 4v5l-4.5 8A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-3L15 9V4"></path><path d="M7.5 15h9"></path></svg>Test Results</button></li>
+          <li><button class="nav-item" type="button" data-page="visits"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3.5h9l4 4v13H6z"></path><path d="M14.5 3.5v5h5M9 13h7M9 16.5h7"></path></svg>Visit Summaries</button></li>
+          <li>
+            <button class="nav-item" type="button" id="support-toggle" aria-expanded="false" aria-controls="support-subnav"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.5M12 16.8h.01"></path></svg>Feedback &amp; Support<svg class="nav-chevron" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <ul class="subnav" id="support-subnav" hidden>
+              <li><button class="nav-item" type="button" data-page="help">Help Topics</button></li>
+              <li><button class="nav-item" type="button" data-page="contact">Contact Us</button></li>
+              <li><button class="nav-item" type="button" data-page="resources">Find Local Resources</button></li>
+              <li><button class="nav-item" type="button" data-page="feedback">Provide Feedback</button></li>
+            </ul>
+          </li>
+          <li><button class="nav-item" type="button" data-page="account"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3.2"></circle><path d="M12 3.5v2.3M12 18.2v2.3M3.5 12h2.3M18.2 12h2.3M6 6l1.6 1.6M16.4 16.4 18 18M18 6l-1.6 1.6M7.6 16.4 6 18"></path></svg>Account Settings</button></li>
+        </ul>
+      </nav>
+
+      <main class="main" id="main">
+        <!-- GET CARE -->
+        <section class="page" id="page-home" data-title="Get Care" tabindex="-1">
+          <div id="care-landing">
+            <div class="care-hero">
+              <div class="care-hero-top">
+                <span class="ai-preview"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="currentColor"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"></path></svg>AI Preview</span>
+                <h1>Hi Jane, how can I help?</h1>
+              </div>
+              <form class="ask-bar" id="home-ask" role="search" aria-label="Talk with Baylee, an AI assistant">
+                <svg class="ask-search" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5"></path></svg>
+                <label class="visually-hidden" for="home-ask-input">Message to Baylee, an AI assistant</label>
+                <input id="home-ask-input" type="text" autocomplete="off" placeholder="Ask a health question…">
+                <button class="ask-go" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+              </form>
+            </div>
+            <div class="care-grid">
+              <div class="care-main">
+                <div class="care-head">
+                  <h2 id="todo-heading">Things to do <span class="count-badge" aria-label="3 items">3</span></h2>
+                  <button class="ntg-link" type="button" data-page="appointments">View all</button>
+                </div>
+                <div class="todo-wrap">
+                  <button class="todo-arrow" id="todo-prev" type="button" aria-label="Previous things to do" disabled>‹</button>
+                  <ul class="todo-track" id="todo-track" aria-labelledby="todo-heading" tabindex="0">
+                    <li class="todo-card">
+                      <h3>Your visit is scheduled!</h3>
+                      <p class="todo-for">for <strong>Sample video visit</strong></p>
+                      <p>Your visit is scheduled for today at 3:30 PM (sample time).</p>
+                      <button class="ntg-btn" type="button" data-demo="echeckin">✓ Begin eCheck-In</button>
+                    </li>
+                    <li class="todo-card">
+                      <h3>Review and sign your estimate</h3>
+                      <p class="todo-for">for <strong>Visit with Sample Provider</strong></p>
+                      <p>Estimated cost: $95.00 (sample). It's an estimate, not a final bill.</p>
+                      <button class="ntg-btn" type="button" data-demo="sign">Review and sign</button>
+                    </li>
+                    <li class="todo-card">
+                      <h3>Complete your payment</h3>
+                      <p class="todo-for">for <strong>Visit with Sample Provider</strong></p>
+                      <p>$95.00 estimated. You'll review everything before anything happens.</p>
+                      <button class="ntg-btn" type="button" data-demo="estimatepay">Complete payment</button>
+                    </li>
+                  </ul>
+                  <button class="todo-arrow" id="todo-next" type="button" aria-label="Next things to do">›</button>
+                </div>
+                <div class="todo-dots" id="todo-dots" aria-hidden="true"></div>
+                <h2 class="care-h2">Schedule a visit</h2>
+                <ul class="provider-list" aria-label="Providers you can schedule with">
+                  <li><button class="provider-row" type="button" data-find="doctors"><span class="avatar" aria-hidden="true">SA</span><span><strong>Sample Provider A, MD</strong><br><span class="muted">Pediatrics</span></span><span class="chev" aria-hidden="true">›</span></button></li>
+                  <li><button class="provider-row" type="button" data-find="doctors"><span class="avatar" aria-hidden="true">SB</span><span><strong>Sample Provider B, MD</strong><br><span class="muted">Family Medicine</span></span><span class="chev" aria-hidden="true">›</span></button></li>
+                </ul>
+                <button class="ntg-link care-more" type="button" data-find="doctors">Find more doctors and locations<span class="arrow" aria-hidden="true">›</span></button>
+              </div>
+              <aside class="care-side" aria-label="Shortcuts and plan">
+                <button class="cta-card" type="button" data-find="doctors">
+                  <span class="cta-head" aria-hidden="true">
+                    <span class="cta-band"></span>
+                    <svg class="cta-icon" viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="#364248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="10" r="2.5" fill="#fff"></circle><circle cx="33" cy="7" r="2.5" fill="#fff"></circle><path d="M12 12v13a8 8 0 0 0 8 8M36 9v16a8 8 0 0 1-8 8"></path><path d="M20 33a10 10 0 0 0 10 10h4"></path><circle cx="46" cy="42" r="10" fill="#fff"></circle><path d="M46 38v8M42 42h8" stroke="#D5647A"></path></svg>
+                  </span>
+                  <span class="cta-body"><strong>Get Care</strong><span>Easily search providers and schedule appointments.</span></span>
+                </button>
+                <div class="quick-actions">
+                  <button class="quick-btn" type="button" data-page="results"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10M12 20V4M19 20v-7"></path></svg><span>Test Results</span></button>
+                  <button class="quick-btn" type="button" data-page="communications" aria-label="Messages, 6 unread (sample)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg><span>Messages</span><span class="quick-badge" aria-hidden="true">6</span></button>
+                  <button class="quick-btn" type="button" data-page="billing"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg><span>Bill Pay</span></button>
+                  <button class="quick-btn" type="button" data-page="visits"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 3.5h9l4 4v13H6z"></path><path d="M14.5 3.5v5h5M9 13h7M9 16.5h7"></path></svg><span>Visit Summaries</span></button>
+                </div>
+                <article class="feature-card" aria-labelledby="feature-title">
+                  <svg class="feature-art" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" fill="none" stroke="#364248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="26" r="14" fill="#FEE9BC"></circle><path d="M27 42h10v6H27z" fill="#fff"></path><path d="M28 48h8l-1 4h-6z" fill="#FFC342"></path><path d="M32 4v4M12 14l3 3M52 14l-3 3M6 28h4M54 28h4"></path></svg>
+                  <div><h3 id="feature-title">What's new</h3><p>Explore new and exciting features across MyBSWHealth.</p></div>
+                </article>
+                <article class="plan-card" aria-labelledby="plan-title">
+                  <div class="plan-title"><h3 id="plan-title">Sample Health Plan</h3><span>Sample Health Plan Group</span></div>
+                  <div class="plan-graph">
+                    <svg viewBox="0 0 168 92" width="168" height="92" role="img" aria-label="Deductible: $997.51 met of $1,500.00 (sample)"><path d="M8 84a76 76 0 0 1 152 0" pathLength="100" fill="none" stroke="#DDDDDD" stroke-width="16"></path><path d="M8 84a76 76 0 0 1 152 0" pathLength="100" fill="none" stroke="#8F659C" stroke-width="16" stroke-dasharray="66.5 100"></path></svg>
+                    <div class="plan-amount"><strong>$502.49</strong><span>Deductible Remaining</span></div>
+                  </div>
+                  <ul class="plan-links" aria-label="Plan links">
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Coverage details</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Claims and balances</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Digital ID card</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-find="doctors"><span>Find a plan doctor</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Plan documents</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                  </ul>
+                </article>
+              </aside>
+            </div>
+          </div>
+
+          <div id="care-results" hidden>
+            <button class="ntg-link" id="care-back" type="button">‹ Back to Get Care</button>
+            <h1 class="find-title">Find care</h1>
+            <div class="ntg-field find-search"><label for="find-q"><span>Search doctors and locations</span></label><input id="find-q" type="search" placeholder="Try “Pediatrics” or “North”" autocomplete="off"></div>
+            <div class="find-tabs" role="tablist" aria-label="Search results">
+              <button class="find-tab" role="tab" id="tab-doctors" aria-controls="panel-doctors" aria-selected="true" type="button">DOCTORS (<span id="count-doctors">0</span>)</button>
+              <button class="find-tab" role="tab" id="tab-locations" aria-controls="panel-locations" aria-selected="false" tabindex="-1" type="button">LOCATIONS (<span id="count-locations">0</span>)</button>
+            </div>
+            <p class="visually-hidden" id="find-status" role="status"></p>
+            <div role="tabpanel" id="panel-doctors" aria-labelledby="tab-doctors">
+              <div class="chips"><button class="ntg-pill" type="button" aria-pressed="false" data-filter="newPatients">Accepts new patients</button></div>
+              <ul class="find-list" id="list-doctors"></ul>
+            </div>
+            <div role="tabpanel" id="panel-locations" aria-labelledby="tab-locations" hidden>
+              <div class="chips"><button class="ntg-pill" type="button" aria-pressed="false" data-filter="walkIns">Accepts walk-ins</button></div>
+              <ul class="find-list" id="list-locations"></ul>
+            </div>
+          </div>
+          <p class="footnote">Prototype with fictional sample data. Payments, messages, and appointments are demo-only. Components are provisional stand-ins for Nightingale.</p>
+        </section>
+
+        <section class="page" id="page-appointments" data-title="Appointments" tabindex="-1" hidden>
+          <h1>Appointments</h1>
+          <p class="lede">Your upcoming and past visits.</p>
+          <article class="ntg-card">
+            <p class="eyebrow">Upcoming</p>
+            <h2>Visit with Sample Provider</h2>
+            <p>Test Clinic · Sample date and time</p>
+            <button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-demo="reschedule">Reschedule</button>
+          </article>
+          <section class="ntg-card" id="estimate-card" tabindex="-1" aria-labelledby="estimate-title">
+            <div class="result-head"><h2 id="estimate-title" style="font-size:18px;margin:0">Before your visit</h2><span class="ntg-badge">2 things to do</span></div>
+            <p class="meta" style="margin:4px 0 16px">Estimated cost of this visit: $95.00 (sample). It's an estimate, not a final bill.</p>
+            <ol class="steps">
+              <li><span class="step-dot" aria-hidden="true"></span><div><strong>Review and sign your estimate</strong><span class="meta">Needs your review</span><div style="margin-top:8px"><button class="ntg-btn ntg-btn--sm" type="button" data-demo="sign">Review and sign</button></div></div></li>
+              <li><span class="step-dot" aria-hidden="true"></span><div><strong>Complete your payment</strong><span class="meta">$95.00 estimated</span><div style="margin-top:8px"><button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-demo="estimatepay">Complete payment</button></div></div></li>
+            </ol>
+          </section>
+        </section>
+
+        <!-- COMMUNICATIONS -->
+        <section class="page" id="page-communications" data-title="Communications" tabindex="-1" hidden>
+          <h1>Communications</h1>
+          <p class="lede">Messages with your care team.</p>
+          <article class="ntg-card">
+            <p class="eyebrow">Sample message</p>
+            <h2>From Sample Care Team</h2>
+            <p>“Thanks for your question. This is a fictional example message.”</p>
+          </article>
+          <button class="ntg-btn" type="button" data-demo="newmessage">Write a message</button>
+        </section>
+
+        <!-- BILLING -->
+        <section class="page" id="page-billing" data-title="Billing" tabindex="-1" hidden>
+          <h1>Billing</h1>
+          <p class="lede">Review what's due, and choose how you'd like to take care of it.</p>
+
+          <section class="ntg-card" id="bill-card" tabindex="-1" aria-labelledby="bill-title">
+            <div class="bill-top">
+              <div>
+                <p class="eyebrow">Current bill</p>
+                <h2 id="bill-title" class="visually-hidden">Current bill</h2>
+                <p class="amount" aria-label="Amount due, 182 dollars and 40 cents">$182.40</p>
+                <p class="meta" style="margin:0">Amount due · Due in 14 days (sample)</p>
+              </div>
+              <div class="bill-service">
+                <strong>Sample Medical Group</strong>
+                <span>Office visit and lab services</span>
+                <span class="meta">Sample visit</span>
+              </div>
+            </div>
+            <div class="bill-actions">
+              <button class="ntg-btn" type="button" data-demo="pay">Pay bill</button>
+              <button class="ntg-btn ntg-btn--secondary" type="button" data-demo="plan">Set up payment plan</button>
+              <button class="ntg-link" type="button" data-open-details="balance-details">View balance details</button>
+              <button class="ntg-link" type="button" data-open-details="account-overview">Account overview</button>
+            </div>
+            <div class="baylee-offer">
+              <span class="baylee-icon" aria-hidden="true"></span>
+              <p>Not sure what you're looking at? Baylee, our AI assistant, can walk through this bill with you. It's your choice.</p>
+              <button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-baylee="bill" data-prompt="Explain my bill" aria-label="Break it down. Ask Baylee about this bill.">Break it down</button>
+            </div>
+          </section>
+
+          <section class="ntg-card" aria-labelledby="split-title">
+            <h2 id="split-title" style="font-size:18px">Where the charges went</h2>
+            <p class="meta" style="margin-bottom:16px">Of $540.00 in total charges, in plain terms.</p>
+            <div class="split" role="img" aria-label="Of $540.00 in total charges, insurance paid $300.00, adjustments were $57.60, and your portion is $182.40.">
+              <span class="split-seg split-ins" style="--w:55.56%"></span>
+              <span class="split-seg split-adj" style="--w:10.67%"></span>
+              <span class="split-seg split-you" style="--w:33.78%"></span>
+            </div>
+            <ul class="split-legend">
+              <li><span class="dot split-ins"></span><span>Insurance paid</span><strong>$300.00</strong></li>
+              <li><span class="dot split-adj"></span><span>Adjustments</span><strong>$57.60</strong></li>
+              <li><span class="dot split-you"></span><span>Your portion</span><strong>$182.40</strong></li>
+            </ul>
+          </section>
+
+          <details class="ntg-accordion" id="balance-details">
+            <summary>Balance details</summary>
+            <div class="body">
+              <table>
+                <caption class="visually-hidden">Balance details for the current bill</caption>
+                <thead><tr><th scope="col">Item</th><th scope="col">Amount</th></tr></thead>
+                <tbody>
+                  <tr><td>Office visit</td><td>$210.00</td></tr>
+                  <tr><td>Lab services</td><td>$330.00</td></tr>
+                  <tr><th scope="row">Total charges</th><td>$540.00</td></tr>
+                  <tr><td>Insurance payment</td><td>−$300.00</td></tr>
+                  <tr><td>Insurance adjustments</td><td>−$57.60</td></tr>
+                  <tr class="total"><th scope="row">Amount due</th><td>$182.40</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details class="ntg-accordion" id="account-overview">
+            <summary>Account overview</summary>
+            <div class="body">
+              <table>
+                <caption class="visually-hidden">Account overview</caption>
+                <tbody>
+                  <tr><th scope="row">Bills to review</th><td>1</td></tr>
+                  <tr><th scope="row">Past-due balance</th><td>$0.00</td></tr>
+                  <tr><th scope="row">Last payment</th><td>$60.00 (sample)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <section class="ntg-card" aria-labelledby="support-title">
+            <h2 id="support-title" style="font-size:18px">Billing support</h2>
+            <p>A person can look at your account and talk through options, including help if paying is difficult right now.</p>
+            <ul class="ntg-list">
+              <li>Call billing support: (555) 000-0000 (fictional number)</li>
+              <li>Send a billing message (demo only)</li>
+            </ul>
+            <button class="ntg-link" type="button" data-page="contact">See all contact options<span class="arrow" aria-hidden="true">›</span></button>
+          </section>
+        </section>
+
+        <!-- TEST RESULTS -->
+        <section class="page" id="page-results" data-title="Test Results" tabindex="-1" hidden>
+          <h1>Test Results</h1>
+          <p class="lede">Your sample results, shown with the typical range beside each one.</p>
+
+          <div class="ntg-notifier" role="note">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5.5M12 7.5h.01"></path></svg>
+            <p><strong>Preview.</strong> One sample result isn't ready yet. It will appear here when it is.</p>
+          </div>
+
+          <div class="toolbar">
+            <label class="ntg-field" for="results-search"><span>Search results</span><input id="results-search" type="search" placeholder="Try “Panel B”" autocomplete="off"></label>
+            <button class="ntg-btn ntg-btn--secondary" type="button" data-baylee="results" data-prompt="Explain my results">Understand these results</button>
+          </div>
+          <p class="meta" id="results-count" role="status" aria-live="polite">Showing 4 of 4 results</p>
+
+          <div id="results-list" tabindex="-1" aria-label="Test results list">
+            <article class="ntg-card result-row" data-name="sample panel a">
+              <div class="result-head"><h3>Sample Panel A</h3><span class="ntg-badge ntg-badge--ok">✓ Within typical range</span></div>
+              <p class="meta">Sample date · 3 markers</p>
+              <details class="ntg-accordion" style="margin:16px 0 0"><summary style="font-size:14px;padding:12px 48px 12px 16px">View markers</summary>
+                <div class="body"><div class="markers" data-panel="a" role="list" aria-label="Markers in Sample Panel A"></div></div>
+              </details>
+            </article>
+            <article class="ntg-card result-row" id="panel-b" tabindex="-1" data-name="sample panel b">
+              <div class="result-head"><h3>Sample Panel B</h3><span class="ntg-badge">ⓘ A little outside the typical range</span></div>
+              <p class="meta">Sample date · 3 markers</p>
+              <p>One marker is a little outside the range printed beside it. Your care team can talk through it with you.</p>
+              <details class="ntg-accordion" style="margin:16px 0 0"><summary style="font-size:14px;padding:12px 48px 12px 16px">View markers</summary>
+                <div class="body"><div class="markers" data-panel="b" role="list" aria-label="Markers in Sample Panel B"></div></div>
+              </details>
+            </article>
+            <article class="ntg-card result-row" data-name="sample panel c">
+              <div class="result-head"><h3>Sample Panel C</h3><span class="ntg-badge ntg-badge--ok">✓ Within typical range</span></div>
+              <p class="meta">Sample date · 2 markers</p>
+            </article>
+            <article class="ntg-card result-row" data-name="sample panel d preview">
+              <div class="result-head"><h3>Sample Panel D</h3><span class="ntg-badge ntg-badge--neutral">Preview: not ready yet</span></div>
+              <p>This result is still being prepared. It will show here when it's available.</p>
+            </article>
+          </div>
+          <p id="results-empty" hidden></p>
+        </section>
+
+        <!-- VISIT SUMMARIES -->
+        <section class="page" id="page-visits" data-title="Visit Summaries" tabindex="-1" hidden>
+          <h1>Visit Summaries</h1>
+          <p class="lede">The key points from your visits, in one place.</p>
+          <section class="ntg-card" id="visit-summary" tabindex="-1" aria-labelledby="visit-title">
+            <div class="bill-top">
+              <div>
+                <p class="eyebrow">After visit summary</p>
+                <h2 id="visit-title" style="margin:0 0 4px">Visit with Sample Provider</h2>
+                <p class="meta" style="margin:0">Test Clinic · Sample visit date</p>
+              </div>
+              <div><button class="ntg-btn ntg-btn--secondary" type="button" data-baylee="visit" data-prompt="Key takeaways">Understand your visit</button></div>
+            </div>
+            <h3 class="section-title">Key takeaways</h3>
+            <ul class="ntg-list">
+              <li>This was a routine check-in.</li>
+              <li>Your provider didn't note anything urgent.</li>
+              <li>A few follow-up steps are listed below.</li>
+            </ul>
+            <h3>Follow-up steps</h3>
+            <ol class="steps" id="visit-steps" tabindex="-1">
+              <li><span class="step-dot" aria-hidden="true"></span><div><strong>Lab work</strong><span class="meta">In about 2 weeks</span></div></li>
+              <li><span class="step-dot" aria-hidden="true"></span><div><strong>Keep taking Sample Medication X as listed in your summary</strong><span class="meta">Ongoing</span></div></li>
+              <li><span class="step-dot" aria-hidden="true"></span><div><strong>Schedule a routine visit</strong><span class="meta">In about 6 months</span></div></li>
+            </ol>
+            <h3>Full summary</h3>
+            <p>Sample Provider reviewed how you've been feeling and went over your current plan. No changes were made to your plan at this visit.</p>
+            <p>Contact your care team if you have new or worsening symptoms, or questions about this plan. In an emergency, call 911.</p>
+          </section>
+        </section>
+
+        <!-- SUPPORT PAGES -->
+        <section class="page" id="page-help" data-title="Help Topics" tabindex="-1" hidden>
+          <h1>Help Topics</h1>
+          <p class="lede">Answers to common questions.</p>
+          <details class="ntg-accordion"><summary>How do I read my test results?</summary><div class="body"><p style="margin:0">Each result shows your value beside a typical range. Your care team can explain what yours mean for you.</p></div></details>
+          <details class="ntg-accordion"><summary>How do I pay a bill?</summary><div class="body"><p style="margin:0">Go to Billing and choose Pay bill or Set up payment plan. (Demo only in this prototype.)</p></div></details>
+          <details class="ntg-accordion"><summary>What is Baylee?</summary><div class="body"><p style="margin:0">Baylee is an AI assistant that can help explain information you choose to share with it. It isn't a clinician and can make mistakes.</p></div></details>
+        </section>
+
+        <section class="page" id="page-contact" data-title="Contact Us" tabindex="-1" hidden>
+          <h1>Contact Us</h1>
+          <p class="lede">Ways to reach a person.</p>
+          <article class="ntg-card"><h2 style="font-size:18px">Billing support</h2><p>(555) 000-0000 · Fictional number for this prototype.</p></article>
+          <article class="ntg-card"><h2 style="font-size:18px">Your care team</h2><p>Send a message from Communications (demo only), or call your clinic.</p><button class="ntg-link" type="button" data-page="communications">Go to Communications<span class="arrow" aria-hidden="true">›</span></button></article>
+          <article class="ntg-card"><h2 style="font-size:18px">In an emergency</h2><p style="margin:0">Call 911.</p></article>
+        </section>
+
+        <section class="page" id="page-resources" data-title="Find Local Resources" tabindex="-1" hidden>
+          <h1>Find Local Resources</h1>
+          <p class="lede">Support in your community. Sample listings only.</p>
+          <div class="grid">
+            <article class="ntg-card"><h2 style="font-size:18px">Sample Community Clinic</h2><p style="margin:0">123 Test Street, Anytown, ST 00000</p></article>
+            <article class="ntg-card"><h2 style="font-size:18px">Sample Support Group</h2><p style="margin:0">Meets weekly (fictional)</p></article>
+          </div>
+        </section>
+
+        <section class="page" id="page-feedback" data-title="Provide Feedback" tabindex="-1" hidden>
+          <h1>Provide Feedback</h1>
+          <p class="lede">We'd like to hear how things are going.</p>
+          <form class="ntg-card" id="feedback-form">
+            <label class="ntg-field" for="feedback-text" style="margin-bottom:16px"><span>Your feedback</span><textarea id="feedback-text" rows="5"></textarea></label>
+            <button class="ntg-btn" type="submit">Send feedback</button>
+            <p class="meta" style="margin:12px 0 0">Demo only. Nothing is sent.</p>
+          </form>
+        </section>
+
+        <section class="page" id="page-account" data-title="Account Settings" tabindex="-1" hidden>
+          <h1>Account Settings</h1>
+          <p class="lede">Manage how the portal works for you.</p>
+          <article class="ntg-card">
+            <h2 style="font-size:18px">Notifications</h2>
+            <label class="check-row"><input type="checkbox" checked> Email me when new results are available</label>
+            <label class="check-row"><input type="checkbox"> Text me appointment reminders</label>
+          </article>
+        </section>
+      </main>
+
+      <aside class="drawer" id="drawer" aria-labelledby="drawer-title" inert>
+        <div class="drawer-inner">
+          <header class="drawer-head">
+            <h2 id="drawer-title">Chat with Baylee</h2>
+            <span class="ntg-badge ntg-badge--dark ai-pill">AI assistant</span>
+            <div class="controls">
+              <button class="icon-plain" id="drawer-close" type="button" aria-label="Close chat. Your conversation is kept." title="Close (your conversation is kept)">
+                <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+              </button>
+            </div>
+          </header>
+
+          <section class="context-card" id="context-card" aria-labelledby="context-heading">
+            <div class="context-row">
+              <span class="label" id="context-heading">Currently reading:</span>
+              <strong id="context-name">Nothing selected yet</strong>
+              <div class="context-actions">
+                <button class="icon-plain icon-small" id="context-menu-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="context-menu" aria-label="Chat settings" title="Chat settings">
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+                </button>
+                <div class="menu" id="context-menu" role="menu" aria-label="Chat settings" hidden>
+                  <button class="menu-item" role="menuitemradio" aria-checked="true" type="button" data-menu="follow">Read the page I'm on</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="choose">Choose what to read</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="stop">Stop reading</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="see">What Baylee can see</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="new">Start a new chat</button>
+                </div>
+              </div>
+            </div>
+            <fieldset class="ntg-radio-list" id="context-options" hidden>
+              <legend class="visually-hidden">What would you like to talk about?</legend>
+              <label><input type="radio" name="ctx" value="follow"> The page I'm on, and follow me as I move around</label>
+              <label><input type="radio" name="ctx" value="bill"> This bill</label>
+              <label><input type="radio" name="ctx" value="results"> These test results</label>
+              <label><input type="radio" name="ctx" value="visit"> This visit summary</label>
+              <label><input type="radio" name="ctx" value="none"> Nothing. I have a general question</label>
+            </fieldset>
+            <button class="ntg-link" id="context-back" type="button" hidden></button>
+            <details class="how-used">
+              <summary>What Baylee can see</summary>
+              <p class="context-uses" id="context-uses-detail"></p>
+              <ul>
+                <li id="context-follow">I follow you as you move around the portal while I'm open. You can stop me any time.</li>
+                <li>I only use the fictional details for the page or item you picked, and I can't see what you type into forms.</li>
+                <li>Your messages stay in this browser tab and aren't saved or shared with your care team.</li>
+                <li>I can't pay, message, book, or change anything for you. I can explain and point you to the right place.</li>
+                <li>A real version would describe this in BSW Health's privacy policy.</li>
+              </ul>
+            </details>
+          </section>
+
+          <div class="thread" id="thread" role="log" aria-live="polite" aria-label="Conversation with Baylee" tabindex="0"></div>
+
+          <form class="composer" id="composer">
+            <p class="composer-hint" id="composer-hint"></p>
+            <div class="chat-composer">
+              <label class="visually-hidden" for="composer-input">Message to Baylee</label>
+              <textarea id="composer-input" rows="1" placeholder="What's on your mind?"></textarea>
+              <button class="ntg-circle send-circle" type="submit" aria-label="Send message">
+                <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+              </button>
+            </div>
+            <p class="composer-caption">Baylee may make mistakes and is not a substitute for professional medical advice.</p>
+          </form>
+        </div>
+      </aside>
+    </div>
+
+    <dialog id="demo-dialog" aria-labelledby="dialog-title">
+      <form method="dialog" id="dialog-form">
+        <div class="dialog-body">
+          <span class="ntg-badge">Demo only</span>
+          <h2 id="dialog-title"></h2>
+          <div id="dialog-content"></div>
+        </div>
+        <div class="dialog-foot">
+          <button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" id="dialog-cancel">Go back</button>
+          <button class="ntg-btn ntg-btn--sm" type="submit" id="dialog-confirm"></button>
+        </div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      // All content is fictional. Nothing leaves this page.
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+      const make = (tag, className, text) => { const n = document.createElement(tag); if (className) n.className = className; if (text) n.textContent = text; return n; };
+      const BAYLEE_ICON = '<span class="baylee-icon" aria-hidden="true"></span>';
+      const SPARK = BAYLEE_ICON;
+      const body = document.body;
+      const dom = {
+        main: $("#main"), drawer: $("#drawer"), thread: $("#thread"), input: $("#composer-input"), hint: $("#composer-hint"),
+        ctxCard: $("#context-card"), ctxLabel: $("#context-heading"), ctxName: $("#context-name"), ctxUses: $("#context-uses-detail"), ctxFollow: $("#context-follow"),
+        ctxBack: $("#context-back"), ctxOptions: $("#context-options"), gear: $("#context-menu-button"), menu: $("#context-menu"),
+        dialog: $("#demo-dialog"), toast: $("#toast"), sidebar: $("#sidebar"), menuButton: $("#menu-button"), headerAsk: $("#header-ask")
+      };
+
+      /* ---------- Baylee: topics (fictional) ---------- */
+      const CONTEXTS = {
+        bill: {
+          title: "Billing", label: "This bill", page: "billing", target: "bill-card", back: "Back to this bill",
+          uses: "Baylee will look at: your amount due and due date, the charges, insurance payments and adjustments, and the service summary.",
+          insight: ["$182.40 is due in 14 days. Insurance already covered $300.00 of it.", "How would you like to handle it?"],
+          chips: [{ label: "Pay it", primary: true, say: true, run: () => DEMOS.pay() }, { label: "Spread it out", say: true, run: () => DEMOS.plan() }, { label: "Explain it first", say: true, run: () => addBot({ ...withFollowUps("bill", answer("bill", "explain my bill"), "explain"), feedback: true }) }]
+        },
+        results: {
+          title: "Test Results", label: "These test results", page: "results", target: "results-list", back: "Back to these results",
+          uses: "Baylee will look at: the result names, your values and the typical ranges shown, and whether a result is still a preview.",
+          insight: ["Good news first: Panels A and C are in range.", "One marker in Panel B is a little outside its range, and your care team can explain what it means. Want to get ready to talk with them?"],
+          chips: [{ label: "Yes, help me prepare", primary: true, say: true, run: () => addBot({ ...answer("results", "questions for my care team"), feedback: true }) }, { label: "Show me Panel B", say: true, run: () => showOnPage("results", "panel-b") }, { label: "Not now", quiet: true, say: true, run: () => notNow() }]
+        },
+        visit: {
+          title: "Visit Summaries", label: "This visit summary", page: "visits", target: "visit-summary", back: "Back to the full summary",
+          uses: "Baylee will look at: the key takeaways, the follow-up steps, and the contact guidance in your summary.",
+          insight: ["One follow-up has a timeframe: lab work in about 2 weeks.", "I can't book it for you, but I can take you to Appointments."],
+          chips: [{ label: "Take me there", primary: true, say: true, run: () => navigate("appointments") }, { label: "Give me the short version", say: true, run: () => addBot({ ...withFollowUps("visit", answer("visit", "summary"), "summary"), feedback: true }) }, { label: "Not now", quiet: true, say: true, run: () => notNow() }]
+        },
+        home: {
+          title: "Get Care", label: "Get Care page", page: "home", uses: "Baylee will look at: your to-dos, scheduling options, and shortcuts on the Get Care page.",
+          insight: ["The one thing that needs you is your upcoming visit.", "I can walk you through the estimate and payment. It takes about 2 minutes."],
+          chips: [{ label: "Yes, let's do it", primary: true, say: true, run: () => visitFlow() }, { label: "Tell me about my results", say: true, run: () => navigate("results") }, { label: "Not now", quiet: true, say: true, run: () => notNow() }]
+        },
+        appointments: {
+          title: "Appointments", label: "Appointments page", page: "appointments", target: "estimate-card", back: "Back to my estimate", uses: "Baylee will look at: your upcoming visit and the estimate and payment steps on this page.",
+          insight: ["Two quick things before your visit: an estimate to sign, then a payment.", "Want to do them together?"],
+          chips: [{ label: "Let's start", primary: true, say: true, run: () => visitFlow() }, { label: "What's the estimate for?", fill: "What's the estimate for?" }, { label: "Not now", quiet: true, say: true, run: () => notNow() }]
+        },
+        communications: { title: "Communications", label: "Communications page", page: "communications", uses: "Baylee will look at: the headings and text on the Communications page.", insight: ["You have one new message from Sample Care Team.", "Want a quick summary, or help writing back?"], chips: [{ label: "What does it say?", fill: "What does my message say?" }, { label: "Help me write back", fill: "Help me write back" }] },
+        help: { title: "Help Topics", label: "Help Topics page", page: "help", uses: "Baylee will look at: the questions and answers listed on the Help Topics page.", insight: ["Most people come here for help with a bill or their results.", "Which one can I help with?"], chips: [{ label: "My bill", run: () => navigate("billing") }, { label: "My results", run: () => navigate("results") }] },
+        contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", insight: ["Not sure who to contact?", "Billing support is best for bill questions. Your care team is best for health questions."], chips: [{ label: "I have a bill question", fill: "How do I reach billing support?" }, { label: "I have a health question", fill: "How do I reach my care team?" }] },
+        resources: { title: "Find Local Resources", label: "Local resources page", page: "resources", uses: "Baylee will look at: the sample listings on this page.", insight: ["These are sample local resources near you.", "Want me to tell you what's listed?"], chips: [{ label: "What's listed here?", fill: "What's listed here?" }] },
+        feedback: { title: "Provide Feedback", label: "Feedback page", page: "feedback", uses: "Baylee will look at: the headings and text on this page. It can't see what you type into the form.", insight: ["Thanks for sharing feedback.", "I can't see what you type, so it stays between you and the form."], chips: [{ label: "Where does my feedback go?", fill: "Where does my feedback go?" }] },
+        account: { title: "Account Settings", label: "Account Settings page", page: "account", uses: "Baylee will look at: the headings and text on the Account Settings page.", insight: ["Want to change how we reach you?", "Your notification choices are right here."], chips: [{ label: "Change my notifications", fill: "Change my notifications" }] },
+        none: { title: "", label: "Nothing selected yet", page: null, target: null, back: "", uses: "Baylee can't see your portal pages, bill, results, or visit summaries unless you choose something.", insight: ["I'm not looking at anything right now. What would you like to ask?"], chips: [{ label: "Choose something to read", run: () => showContextOptions() }, { label: "Reach billing support", fill: "Reach billing support" }, { label: "Find my visit summaries", fill: "Find my visit summaries" }] }
+      };
+
+      const pageToCtx = (page) => ({ billing: "bill", results: "results", visits: "visit" }[page] || page);
+      /* Once the estimate and payment are done, Baylee stops offering them. */
+      const AFTER_VISIT = {
+        home: { insight: ["Your visit is taken care of.", "Your test results are the next thing worth a look."], chips: [{ label: "Tell me about my results", primary: true, say: true, run: () => navigate("results") }, { label: "Not now", quiet: true, say: true, run: () => notNow() }] },
+        appointments: { insight: ["Your estimate and payment are done.", "Is there anything else about your visit on your mind?"], chips: [{ label: "Can I reschedule?", fill: "Can I reschedule?" }, { label: "Not now", quiet: true, say: true, run: () => notNow() }] }
+      };
+      const state = { visitDone: false, open: false, context: null, follow: true, opener: null, clarified: {}, pending: false, suggested: null };
+      let currentPage = "home";
+      const scrollByPage = {};
+
+      /* ---------- Page navigation ---------- */
+      const SUBPAGES = ["help", "contact", "resources", "feedback"];
+
+      function setSupportOpen(open) {
+        $("#support-toggle").setAttribute("aria-expanded", String(open));
+        $("#support-subnav").hidden = !open;
+      }
+
+      function navigate(page, { focus = true } = {}) {
+        const target = $(`#page-${page}`);
+        if (!target) return;
+        scrollByPage[currentPage] = dom.main.scrollTop;
+        $(`#page-${currentPage}`).hidden = true;
+        target.hidden = false;
+        currentPage = page;
+        $$(".nav-item[data-page]").forEach((item) => (item.dataset.page === page ? item.setAttribute("aria-current", "page") : item.removeAttribute("aria-current")));
+        if (SUBPAGES.includes(page)) setSupportOpen(true);
+        document.title = `${target.dataset.title} | BSWHealth patient portal prototype`;
+        dom.main.style.scrollBehavior = "auto";
+        dom.main.scrollTop = scrollByPage[page] || 0;
+        dom.main.style.scrollBehavior = "";
+        closeNav();
+        if (focus) target.focus({ preventScroll: true });
+        target.classList.remove("enter");
+        void target.offsetWidth;
+        target.classList.add("enter");
+        onPageChange();
+      }
+
+      /* ---------- Mobile nav ---------- */
+      const navMedia = window.matchMedia("(max-width: 1024px)");
+      function syncNavInert() { dom.sidebar.inert = navMedia.matches && !body.classList.contains("nav-open"); }
+      function openNav() { body.classList.add("nav-open"); dom.menuButton.setAttribute("aria-expanded", "true"); syncNavInert(); $(".nav-item", dom.sidebar).focus(); }
+      function closeNav() { body.classList.remove("nav-open"); dom.menuButton.setAttribute("aria-expanded", "false"); syncNavInert(); }
+      dom.menuButton.addEventListener("click", () => (body.classList.contains("nav-open") ? closeNav() : openNav()));
+      $("#scrim").addEventListener("click", closeNav);
+      navMedia.addEventListener("change", syncNavInert);
+
+      /* ---------- Toast + demo dialog ---------- */
+      let toastTimer;
+      function toast(message) {
+        dom.toast.textContent = message;
+        dom.toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => dom.toast.classList.remove("show"), 3800);
+      }
+
+      let dialogConfirm = null;
+      let dialogCancel = null;
+      let dialogConfirmed = false;
+      function openDemo({ title, html, confirmLabel, onConfirm, onCancel }) {
+        dialogCancel = onCancel || null;
+        dialogConfirmed = false;
+        $("#dialog-title").textContent = title;
+        $("#dialog-content").innerHTML = html;
+        $("#dialog-confirm").textContent = confirmLabel;
+        dialogConfirm = onConfirm;
+        dom.dialog.showModal();
+      }
+      $("#dialog-cancel").addEventListener("click", () => dom.dialog.close());
+      $("#dialog-form").addEventListener("submit", () => { dialogConfirmed = true; if (dialogConfirm) dialogConfirm(); });
+      dom.dialog.addEventListener("close", () => { if (!dialogConfirmed && dialogCancel) dialogCancel(); });
+
+      const DEMOS = {
+        pay: () => openDemo({ title: "Review your payment", html: '<p>You\'re looking at a sample payment of <strong>$182.40</strong> to Sample Medical Group.</p><p>No payment will be processed. Nothing is sent anywhere.</p>', confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: no payment was processed.") }),
+        plan: () => openDemo({ title: "Choose a payment plan", html: '<p>Splitting $182.40 into smaller payments. Nothing is created in this prototype.</p><label class="radio-row"><input type="radio" name="plan" checked> 3 monthly payments of $60.80</label><label class="radio-row"><input type="radio" name="plan"> 6 monthly payments of $30.40</label>', confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: no payment plan was created.") }),
+        reschedule: () => openDemo({ title: "Reschedule this visit?", html: "<p>No appointment will be changed in this prototype.</p>", confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: your appointment wasn't changed.") }),
+        sign: ({ after, cancel } = {}) => openDemo({ title: "Review your estimate", html: '<p>Estimated cost of your visit with Sample Provider: <strong>$95.00</strong>.</p><p>This is an estimate, not a final bill. Signing means you have reviewed it.</p>', confirmLabel: "Sign (demo)", onConfirm: () => { toast("Demo only: nothing was signed."); after?.(); }, onCancel: cancel }),
+        estimatepay: ({ after, cancel } = {}) => openDemo({ title: "Complete your payment", html: '<p>You\'re looking at a sample payment of <strong>$95.00</strong> for your visit.</p><p>No payment will be processed. Nothing is sent anywhere.</p>', confirmLabel: "Confirm (demo)", onConfirm: () => { toast("Demo only: no payment was processed."); after?.(); }, onCancel: cancel }),
+        echeckin: () => openDemo({ title: "Begin eCheck-In?", html: "<p>No check-in is started in this prototype. Nothing is sent anywhere.</p>", confirmLabel: "Begin (demo)", onConfirm: () => toast("Demo only: no check-in was started.") }),
+        newmessage: () => openDemo({ title: "Write a message", html: "<p>Messages aren't sent from this prototype.</p>", confirmLabel: "Send (demo)", onConfirm: () => toast("Demo only: no message was sent.") })
+      };
+
+      /* ---------- Baylee: thread helpers ---------- */
+      /* Suggestions and actions use the Baylee button: white, 1.5px #ddd border, fully rounded, stacked. */
+      function chipsRow(chips) {
+        const row = make("div", "reply-stack");
+        chips.forEach((chip) => {
+          const button = make("button", `baylee-button${chip.quiet ? " baylee-button--quiet" : ""}`, chip.label);
+          button.type = "button";
+          button.addEventListener("click", () => {
+            if (chip.say) { dom.thread.append(make("div", "msg user", chip.label)); dom.thread.scrollTop = dom.thread.scrollHeight; }
+            if (chip.run) chip.run(); else prefill(chip.fill, "Suggested question. Edit it or replace it, then press Send.");
+          });
+          row.append(button);
+        });
+        return row;
+      }
+
+      function actionsRow(actions) {
+        const row = make("div", "reply-stack");
+        actions.forEach((action) => {
+          const control = make("button", "baylee-button", action.label);
+          control.type = "button";
+          control.addEventListener("click", action.run);
+          row.append(control);
+        });
+        return row;
+      }
+
+      /* Words fade in one after another. All text is in the DOM at once, so screen readers read it as one message. */
+      function revealInto(p, text, counter, start = 0) {
+        text.split(" ").forEach((word, i, words) => {
+          const span = make("span", "w", word);
+          span.style.setProperty("--d", `${start + Math.min(counter.n * 22, 1800)}ms`);
+          counter.n += 1;
+          p.append(span);
+          if (i < words.length - 1) p.append(document.createTextNode(" "));
+        });
+      }
+
+      function sourceLabel(ctx) {
+        if (ctx === "none") return "No page information used";
+        const c = CONTEXTS[ctx];
+        return state.follow ? `Based on: ${c.title}` : `Based on: ${c.label}`;
+      }
+
+      /* Rating: two 40px circle buttons, thumbs up and thumbs down. */
+      function feedbackRow() {
+        const row = make("div", "rating");
+        row.setAttribute("role", "group");
+        row.setAttribute("aria-label", "Rate this answer");
+        [["Helpful", "M7 11v8H4v-8h3Zm0 0 4-7a2 2 0 0 1 2 2v3h5a2 2 0 0 1 2 2.3l-1 6A2 2 0 0 1 17 19H7"], ["Not helpful", "M7 13V5H4v8h3Zm0 0 4 7a2 2 0 0 0 2-2v-3h5a2 2 0 0 0 2-2.3l-1-6A2 2 0 0 0 17 5H7"]].forEach(([label, path]) => {
+          const button = make("button", "ntg-circle");
+          button.type = "button";
+          button.setAttribute("aria-label", label);
+          button.setAttribute("title", label);
+          button.setAttribute("aria-pressed", "false");
+          button.innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="${path}"></path></svg>`;
+          button.addEventListener("click", () => {
+            $$("button", row).forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+            toast("Thank you. Demo only: your feedback isn't sent anywhere.");
+          });
+          row.append(button);
+        });
+        return row;
+      }
+
+      /* A Baylee message: the 24px Baylee icon, then body text with 16px between blocks.
+         `continued` messages follow the previous one without repeating the icon. */
+      function addBot(options) {
+        const { paras = [], quote, label = "", actions = [], chips = [], source = "", feedback = false, continued = false, delay = 0 } = options;
+        /* Natural pacing: a reply with several short thoughts arrives as a few quick messages, not one block. */
+        if (paras.length > 1) {
+          addBot({ paras: [paras[0]], label, continued, delay });
+          addBot({ ...options, label: "", paras: paras.slice(1), continued: true, delay: delay + paras[0].split(" ").length * 22 + 450 });
+          return null;
+        }
+        const message = make("div", `msg bot${continued ? " continued" : ""}`);
+        if (!continued) {
+          message.append(make("span", "visually-hidden", "Baylee says:"));
+          message.insertAdjacentHTML("beforeend", BAYLEE_ICON);
+        }
+        if (label) message.append(make("span", "step-label", label));
+        const counter = { n: 0 };
+        const start = delay;
+        paras.forEach((text) => { const p = make("p"); revealInto(p, text, counter, start); message.append(p); });
+        if (quote) { const q = make("p", "quote"); revealInto(q, quote, counter, start); message.append(q); }
+        const after = [];
+        if (actions.length) after.push(actionsRow(actions));
+        if (chips.length) after.push(chipsRow(chips));
+        if (source) after.push(make("span", "source", source));
+        if (feedback) after.push(feedbackRow());
+        after.forEach((node) => { node.classList.add("after-text"); node.style.setProperty("--ad", `${start + Math.min(counter.n * 22, 1800) + 120}ms`); message.append(node); });
+        if (delay) message.style.setProperty("--md", `${delay}ms`);
+        dom.thread.append(message);
+        dom.thread.scrollTop = dom.thread.scrollHeight;
+        return message;
+      }
+
+      const addDivider = (text) => dom.thread.append(make("div", "divider", text));
+
+      function fitInput() {
+        dom.input.style.height = "auto";
+        dom.input.style.height = `${Math.min(dom.input.scrollHeight, 120)}px`;
+      }
+
+      function setInput(value) {
+        dom.input.value = value;
+        fitInput();
+      }
+
+      function prefill(text, hintText) {
+        setInput(text);
+        state.suggested = text;
+        dom.hint.textContent = hintText;
+        dom.input.focus();
+        dom.input.setSelectionRange(text.length, text.length);
+      }
+
+      /* ---------- Baylee: context (what Baylee is reading) ---------- */
+      function renderContextCard({ flash = false } = {}) {
+        const ctx = CONTEXTS[state.context];
+        const reading = state.follow && state.context !== "none";
+        dom.ctxLabel.textContent = reading ? "You're currently reading:" : "About:";
+        dom.ctxName.textContent = reading ? ctx.title : ctx.label;
+        dom.ctxUses.textContent = ctx.uses;
+        dom.ctxFollow.hidden = !reading;
+        $('[data-menu="stop"]', dom.menu).disabled = state.context === "none";
+        $('[data-menu="follow"]', dom.menu).setAttribute("aria-checked", String(state.follow));
+        const showBack = Boolean(ctx.back) && currentPage !== ctx.page;
+        dom.ctxBack.hidden = !showBack;
+        dom.ctxBack.textContent = showBack ? `← ${ctx.back}` : "";
+        const selected = state.follow ? "follow" : state.context;
+        $$('input[name="ctx"]').forEach((radio) => { radio.checked = radio.value === selected; });
+        const askText = { bill: "What's confusing about it?", results: "What are you wondering about?", visit: "What would you like to talk through?", appointments: "What's on your mind about your visit?" };
+        dom.input.placeholder = askText[state.context] || "What's on your mind?";
+        if (flash) { dom.ctxCard.classList.remove("updated"); void dom.ctxCard.offsetWidth; dom.ctxCard.classList.add("updated"); }
+      }
+
+      function setContext(id, { moved = false } = {}) {
+        if (state.context === id) { renderContextCard(); return; }
+        const hadConversation = state.context !== null;
+        state.context = id;
+        if (hadConversation && state.suggested && dom.input.value === state.suggested) {
+          setInput("");
+          dom.hint.textContent = "Type your own question, or choose a suggestion to edit first.";
+        }
+        state.suggested = null;
+        renderContextCard({ flash: hadConversation });
+        const ctx = CONTEXTS[id];
+        /* Like a companion: say what matters on this page, in order of importance, then offer the next step. */
+        const content = state.visitDone && AFTER_VISIT[id] ? AFTER_VISIT[id] : ctx;
+        const opening = (greet) => addBot({ paras: [...(greet ? ["Hi, I'm Baylee, your AI assistant."] : []), ...content.insight], chips: content.chips });
+        if (id === "none") {
+          if (hadConversation) { addDivider("Stopped reading"); addBot({ paras: ["Okay, I've stopped reading. What would you like to ask?"], chips: ctx.chips }); }
+          else opening(true);
+        } else if (!hadConversation) opening(true);
+        else {
+          addDivider(moved ? `You moved to ${ctx.title}` : `Now talking about: ${ctx.label}`);
+          opening(false);
+        }
+      }
+
+      /* Baylee notices where you are while it is open, and follows. */
+      function syncToPage({ announce = true } = {}) {
+        if (!state.follow) return;
+        const id = pageToCtx(currentPage);
+        if (state.context === id) { renderContextCard(); return; }
+        setContext(id, { moved: announce && state.context !== null });
+      }
+
+      function onPageChange() {
+        if (state.open && state.follow) syncToPage();
+        else if (state.context !== null) renderContextCard();
+      }
+
+      function showContextOptions() { dom.ctxOptions.hidden = false; $('input[name="ctx"]:checked', dom.ctxOptions)?.focus(); }
+      function hideContextOptions() { dom.ctxOptions.hidden = true; }
+
+      $$('input[name="ctx"]').forEach((radio) => radio.addEventListener("change", () => {
+        hideContextOptions();
+        if (radio.value === "follow") { state.follow = true; setContext(pageToCtx(currentPage), { moved: false }); renderContextCard({ flash: true }); }
+        else { state.follow = false; setContext(radio.value); }
+      }));
+
+      /* ---------- Chat settings menu ---------- */
+      function closeMenu({ restoreFocus = true } = {}) {
+        if (dom.menu.hidden) return;
+        dom.menu.hidden = true;
+        dom.gear.setAttribute("aria-expanded", "false");
+        if (restoreFocus) dom.gear.focus();
+      }
+
+      function openMenu() {
+        dom.menu.hidden = false;
+        dom.gear.setAttribute("aria-expanded", "true");
+        $$(".menu-item:not([disabled])", dom.menu)[0]?.focus();
+      }
+
+      function resetChat() {
+        dom.thread.innerHTML = "";
+        state.context = null;
+        state.clarified = {};
+        state.suggested = null;
+        state.follow = true;
+        setInput("");
+        dom.hint.textContent = "";
+        hideContextOptions();
+        syncToPage({ announce: false });
+      }
+
+      dom.gear.addEventListener("click", () => (dom.menu.hidden ? openMenu() : closeMenu()));
+      dom.menu.addEventListener("click", (event) => {
+        const item = event.target.closest("[data-menu]");
+        if (!item || item.disabled) return;
+        const action = item.dataset.menu;
+        closeMenu({ restoreFocus: action !== "choose" && action !== "see" });
+        if (action === "follow") { hideContextOptions(); state.follow = true; setContext(pageToCtx(currentPage), { moved: true }); renderContextCard({ flash: true }); }
+        else if (action === "choose") showContextOptions();
+        else if (action === "stop") { hideContextOptions(); state.follow = false; setContext("none"); }
+        else if (action === "see") { const details = $(".how-used", dom.ctxCard); details.open = true; $("summary", details).focus(); }
+        else if (action === "new") resetChat();
+      });
+      dom.menu.addEventListener("keydown", (event) => {
+        const items = $$(".menu-item:not([disabled])", dom.menu);
+        const index = items.indexOf(document.activeElement);
+        if (event.key === "ArrowDown") { event.preventDefault(); items[(index + 1) % items.length].focus(); }
+        else if (event.key === "ArrowUp") { event.preventDefault(); items[(index - 1 + items.length) % items.length].focus(); }
+        else if (event.key === "Home") { event.preventDefault(); items[0].focus(); }
+        else if (event.key === "End") { event.preventDefault(); items[items.length - 1].focus(); }
+        else if (event.key === "Escape") { event.stopPropagation(); closeMenu(); }
+        else if (event.key === "Tab") closeMenu({ restoreFocus: false });
+      });
+      document.addEventListener("click", (event) => { if (!dom.menu.hidden && !event.target.closest(".context-actions")) closeMenu({ restoreFocus: false }); });
+
+      /* ---------- Open / close the drawer ---------- */
+      const phoneMedia = window.matchMedia("(max-width: 760px)");
+      function syncBackground() {
+        const covered = phoneMedia.matches && state.open;
+        dom.main.inert = covered;
+        $(".topbar").inert = covered;
+      }
+      phoneMedia.addEventListener("change", syncBackground);
+
+      /* Baylee greets you once, right after the page paints. Any choice you make first cancels it. */
+      const AUTO_OPEN_MS = 600;
+      let autoOpenTimer = null;
+      const cancelAutoOpen = () => { window.clearTimeout(autoOpenTimer); autoOpenTimer = null; };
+
+      function openDrawer({ prompt, opener, auto = false } = {}) {
+        cancelAutoOpen();
+        state.opener = opener || dom.headerAsk;
+        if (state.context === null) { state.follow = true; }
+        state.open = true;
+        if (state.follow) syncToPage();
+        else if (state.context === null) setContext("none");
+        body.classList.add("drawer-open");
+        dom.drawer.inert = false;
+        syncBackground();
+        dom.headerAsk.setAttribute("aria-expanded", "true");
+        if (prompt && !dom.input.value.trim()) { setInput(prompt); state.suggested = prompt; dom.hint.textContent = "Suggested question. Edit it or replace it, then press Send."; }
+        /* An automatic greeting never takes focus away from what the person is doing. */
+        if (!auto) window.setTimeout(() => { dom.input.focus({ preventScroll: true }); dom.input.setSelectionRange(dom.input.value.length, dom.input.value.length); }, 420);
+        dom.thread.scrollTop = dom.thread.scrollHeight;
+      }
+
+      function closeDrawer() {
+        cancelAutoOpen();
+        if (!state.open) return;
+        state.open = false;
+        body.classList.remove("drawer-open");
+        dom.drawer.inert = true;
+        syncBackground();
+        dom.headerAsk.setAttribute("aria-expanded", "false");
+        const opener = state.opener && state.opener.isConnected && state.opener.offsetParent !== null ? state.opener : dom.headerAsk;
+        opener.focus({ preventScroll: true });
+      }
+
+      $("#drawer-close").addEventListener("click", closeDrawer);
+      dom.headerAsk.addEventListener("click", () => (state.open ? closeDrawer() : openDrawer({ opener: dom.headerAsk })));
+
+      function goToItem() {
+        const ctx = CONTEXTS[state.context];
+        if (!ctx.page) return;
+        showOnPage(ctx.page, ctx.target || `page-${ctx.page}`);
+      }
+
+      /* Take the person to the exact thing being discussed, and point at it. */
+      function showOnPage(page, id) {
+        navigate(page, { focus: false });
+        if (phoneMedia.matches) closeDrawer();
+        const target = document.getElementById(id);
+        window.setTimeout(() => {
+          if (target.tagName === "DETAILS") target.open = true;
+          const details = $("details", target);
+          if (details && target.dataset.name) details.open = true;
+          target.scrollIntoView({ block: "center" });
+          target.focus({ preventScroll: true });
+          target.classList.remove("is-pointed");
+          void target.offsetWidth;
+          target.classList.add("is-pointed");
+        }, 60);
+      }
+      dom.ctxBack.addEventListener("click", goToItem);
+
+      /* ---------- Conversation ---------- */
+      const notNow = () => addBot({ paras: ["Okay. I'm here whenever you want me."] });
+
+      /* Two steps, one at a time. The person confirms each one; nothing happens on its own. */
+      function visitFlow() {
+        const payment = () => addBot({
+          label: "Step 2 of 2", paras: ["Now the payment.", "It's the same $95.00. You'll see everything before anything happens."],
+          chips: [
+            { label: "Start payment", primary: true, say: true, run: () => DEMOS.estimatepay({ after: finish, cancel: () => addBot({ paras: ["No problem. Nothing was paid."] }) }) },
+            { label: "Pay later", quiet: true, say: true, run: () => addBot({ paras: ["Okay. It'll be waiting in Appointments."] }) }
+          ]
+        });
+        const finish = () => { state.visitDone = true; addBot({
+          paras: ["That's both steps (demo only, so nothing was really signed or paid).", "Your test results are back too, if you'd like to look at them."],
+          chips: [{ label: "Tell me about my results", primary: true, say: true, run: () => navigate("results") }, { label: "I'm all set", quiet: true, say: true, run: () => addBot({ paras: ["Great. Take care."] }) }]
+        }); };
+        addBot({
+          label: "Step 1 of 2", paras: ["First, your estimate.", "It's about $95.00 after insurance. It's an estimate, not a final bill, and signing just means you've read it."],
+          chips: [
+            { label: "Review and sign", primary: true, say: true, run: () => DEMOS.sign({ after: () => { addBot({ paras: ["Signed (demo only)."] }); window.setTimeout(payment, 700); }, cancel: () => addBot({ paras: ["No problem. Nothing was signed."], chips: [{ label: "Go on to payment", say: true, run: payment }] }) }) },
+            { label: "Skip for now", quiet: true, say: true, run: payment }
+          ]
+        });
+      }
+
+      const go = (label, page) => ({ label, run: () => navigate(page) });
+      const billingSupport = go("Billing support", "contact");
+      const careTeam = go("Message my care team", "communications");
+      const planAction = { label: "See payment plans", run: () => { navigate("billing"); DEMOS.plan(); } };
+
+      const FOLLOW_UPS = {
+        bill: [{ label: "Can I split it up?", fill: "Can I split it up?" }, { label: "Who can I talk to?", fill: "Who can I talk to about this?" }],
+        results: [{ label: "What should I ask my care team?", fill: "What should I ask my care team?" }, { label: "What's a typical range?", fill: "What does typical range mean?" }],
+        visit: [{ label: "What are my next steps?", fill: "What are my next steps?" }, { label: "When should I call my care team?", fill: "When should I call my care team?" }]
+      };
+
+      function notMeant() {
+        return { label: "That's not what I meant", quiet: true, run: () => addBot({ paras: ["Thanks for telling me. What should I focus on?"], chips: CONTEXTS[state.context].chips }) };
+      }
+
+      const DRAFT = "One marker on my recent results was a little outside the typical range. What does that mean for me, and should I do anything?";
+
+      function pageAnswer(ctx, t) {
+        if (ctx === "home") {
+          if (/first|priorit|attention|focus|start/.test(t)) return { paras: ["Start with your upcoming visit.", "Review and sign the estimate, then complete the payment. After that, your results are worth a look."], actions: [{ label: "Walk me through it", run: () => visitFlow() }] };
+          if (/estimate|sign|visit|appointment/.test(t)) return { paras: ["Your estimate is on the Appointments page.", "I can't sign for you, but I can walk you through it."], actions: [{ label: "Walk me through it", run: () => visitFlow() }] };
+          if (/bill|billing|pay/.test(t)) return { paras: ["You have a bill due in 14 days, and a payment to complete before your visit."], actions: [go("Open Billing", "billing")] };
+          if (/result|test|lab/.test(t)) return { paras: ["They're back. Panels A and C are in range, and one marker in Panel B is worth a look."], actions: [go("See my results", "results")] };
+        }
+        if (ctx === "appointments" && /\bnow\b|later|have to|deadline|due|when/.test(t)) return { paras: ["I don't see a due date for this payment, and I'd rather not guess.", "Your clinic can tell you when it's needed."], actions: [go("Contact Us", "contact")] };
+        if (ctx === "appointments" && /estimate|sign|explain|walk|included/.test(t)) return { paras: ["It's what you'd likely owe for this visit, about $95.00.", "It's an estimate, not a final bill. Signing confirms you've reviewed it."], actions: [{ label: "Walk me through it", run: () => visitFlow() }] };
+        if (ctx === "appointments" && /pay|payment|complete/.test(t)) return { paras: ["Complete payment is the second step on this page.", "I can't pay for you. You'll review everything first, and nothing happens until you confirm."], actions: [{ label: "Complete payment", run: () => DEMOS.estimatepay() }] };
+        if (ctx === "appointments" && /reschedul|change|cancel/.test(t)) return { paras: ["Choose Reschedule on this page.", "Nothing changes until you confirm."] };
+        if (ctx === "appointments" && /bring|need|before|prepare/.test(t)) return { paras: ["Before the visit: sign your estimate and complete your payment.", "Your clinic can tell you what else to bring."], actions: [go("Contact Us", "contact")] };
+        if (ctx === "communications" && /summar|about|say/.test(t)) return { paras: ["Sample Care Team thanked you for your question.", "It's a fictional example, so there's nothing to act on."] };
+        if (ctx === "communications" && /repl|write|send|care team|reach/.test(t)) return { paras: ["Here's a starting point you can edit:"], quote: "“Thank you for getting back to me. I'll follow the plan and reach out if anything changes.”", actions: [go("Write a message", "communications")] };
+        if (ctx === "help" && /result/.test(t)) return { paras: ["Each result shows your value next to a typical range.", "Your care team can explain what yours mean."] };
+        if (ctx === "help" && /pay|bill/.test(t)) return { paras: ["Go to Billing and choose Pay bill or Set up payment plan."], actions: [go("Open Billing", "billing")] };
+        if (ctx === "contact" && /care team|clinic|doctor/.test(t)) return { paras: ["You can message them from Communications, or call your clinic."], actions: [careTeam] };
+        if (ctx === "contact" && /billing|phone|call|number|reach/.test(t)) return { paras: ["Billing support is (555) 000-0000.", "That's a fictional number for this prototype."] };
+        if (ctx === "feedback") return { paras: ["Your note goes in the box on this page.", "Here it isn't actually sent, and I can't see what you type."] };
+        if (ctx === "account" && /notif|email|text|remind/.test(t)) return { paras: ["You can change those under Notifications on this page.", "I can't change settings for you."] };
+        return { paras: ["I can only help with what's on this page.", "For anything else, Contact Us can connect you to a person."], actions: [go("Contact Us", "contact")] };
+      }
+
+      function answer(ctx, text) {
+        const t = text.toLowerCase();
+        if (ctx === "bill") {
+          if (/\bplans?\b|\bsplit|spread|\bpay|payment|afford|installment|assistance|can.?t pay|struggl|hard to/.test(t)) return { paras: ["You can pay in full, or split it into a plan.", "You'll review everything before anything happens. And if money is tight, billing support can talk through options."], actions: [planAction, billingSupport] };
+          if (/due|deadline|when|late/.test(t)) return { paras: ["The due date is at the top of your bill.", "Need more time? Billing support can help."], actions: [billingSupport] };
+          if (/who|talk|speak|call|person|support/.test(t)) return { paras: ["Billing support can look at your actual account, which I can't."], actions: [billingSupport] };
+          if (/walk|go through|line|item|each|break/.test(t)) return { paras: ["There are two services: your office visit and your lab services.", "Insurance paid part of each, so what's left is yours."] };
+          if (/charge|explain|understand|why|owe|amount|insurance|total|what is|overview/.test(t)) return { paras: ["Your insurance already paid its share.", "What you owe is what's left after that and any approved adjustments."], chips: [{ label: "Go through the charges", fill: "Go through the charges" }] };
+          return { paras: ["I don't see that on your bill, and I'd rather not guess.", "Billing support can check your account."], actions: [billingSupport] };
+        }
+        if (ctx === "results") {
+          if (/worr|scared|afraid|serious|cancer|diagnos|danger|urgent|emergency|symptom|bad|sick/.test(t)) return { paras: ["That sounds stressful, and I'm sorry.", "I can't say what results mean for your health, but your care team can.", "If you feel unwell, call your clinic, or 911 in an emergency."], actions: [careTeam] };
+          if (/question|care team|doctor|provider|write|draft|ask them/.test(t)) return { paras: ["Here's a draft you can edit:"], quote: `“${DRAFT}”`, actions: [{ label: "Copy draft", button: true, run: () => { navigator.clipboard?.writeText(DRAFT); toast("Copied. Nothing was sent."); } }, careTeam] };
+          if (/panel b/.test(t)) return { paras: ["Panel B has three markers. Two are in range, and one is a little outside it.", "Your care team can explain what that means for you."], actions: [{ label: "Show me Panel B", run: () => showOnPage("results", "panel-b") }, careTeam] };
+          if (/typical range|reference|range mean|what does|what's a/.test(t) && /range/.test(t)) return { paras: ["It's where most people's values land.", "A guide, not a verdict. Your care team can say what yours means."] };
+          if (/outside|abnormal|high|low|flag|normal|anything/.test(t)) return { paras: ["One marker in Panel B is a little outside its range.", "That alone doesn't say much. Your care team looks at the whole picture."], chips: [{ label: "Questions for my care team", fill: "Questions for my care team" }] };
+          if (/preview|pending|waiting|missing|not ready|panel d/.test(t)) return { paras: ["Panel D is still a preview, so I can't explain it yet.", "It'll show up when it's ready."] };
+          if (/mean|explain|plain|understand|overview|summar|what/.test(t)) return { paras: ["Most of your results are in range.", "One marker is a little outside it, and one result is still a preview."] };
+          return { paras: ["I don't see that in your results, and I'd rather not guess.", "Your care team is the best place to ask."], actions: [careTeam] };
+        }
+        if (ctx === "visit") {
+          if (/contact|call|when|worse|symptom|worr|emergency|urgent/.test(t)) return { paras: ["Reach out for new or worsening symptoms, or questions about the plan.", "If something feels off, trust that. In an emergency, call 911."], actions: [careTeam] };
+          if (/follow|next|step|todo|to do|what should i do/.test(t)) return { paras: ["Three things: lab work in about 2 weeks, keep taking Sample Medication X, and a routine visit in about 6 months.", "I can't book anything, but you can look at times in Appointments."], actions: [go("Open Appointments", "appointments")] };
+          if (/takeaway|summar|go over|overview|explain|understand|what|key/.test(t)) return { paras: ["A routine check-in, and nothing urgent was noted.", "The one with a timeframe is lab work in about 2 weeks."] };
+          return { paras: ["I don't see that in your summary, and I'd rather not guess.", "Your care team can answer it."], actions: [careTeam] };
+        }
+        if (ctx === "none") {
+          if (/billing|bill|pay/.test(t) && /support|contact|reach|talk/.test(t)) return { paras: ["Billing support can help with charges and payment options."], actions: [billingSupport] };
+          if (/visit|summar/.test(t)) return { paras: ["They're in Visit Summaries, in the menu."], actions: [go("Open Visit Summaries", "visits")] };
+          if (/result|test|lab/.test(t)) return { paras: ["They're in Test Results, in the menu.", "Pick them above if you'd like me to help read them."], actions: [go("Open Test Results", "results")] };
+          return { paras: ["I can answer general portal questions.", "To talk about your bill, results, or a visit, choose one so I know what I can look at."], chips: [{ label: "Choose something to read", run: showContextOptions }] };
+        }
+        return pageAnswer(ctx, t);
+      }
+
+      const isVague = (text) => text.trim().split(/\s+/).length <= 2 && /^(help|explain|understand|confused|what|huh|idk|i don.?t (get|understand)|please)/i.test(text.trim());
+
+      function clarifier(ctx) {
+        const asks = {
+          bill: "Is there a charge that's confusing you?",
+          results: "Is there a result you're wondering about?",
+          visit: "Is there somewhere you'd like to start?"
+        };
+        return {
+          paras: [asks[ctx] || "What would you like to start with?"],
+          chips: [
+            { label: "A specific part", fill: ctx === "bill" ? "I'm not sure about one of the charges." : ctx === "results" ? "I'm wondering about one of the results." : ctx === "visit" ? "I'd like to start with the follow-up steps." : "I'd like to start with one section." },
+            { label: "Just give me an overview", run: () => addBot({ ...withFollowUps(ctx, answer(ctx, "overview"), "overview"), feedback: true }) },
+            notMeant()
+          ]
+        };
+      }
+
+      /* At most three suggestions, and never one that repeats what was just asked. */
+      function withFollowUps(ctx, reply, asked = "") {
+        const taken = new Set([asked.toLowerCase(), ...(reply.chips || []).map((c) => c.label.toLowerCase())]);
+        const extra = (FOLLOW_UPS[ctx] || []).filter((c) => !taken.has(c.label.toLowerCase()) && !taken.has(c.fill.toLowerCase()));
+        return { ...reply, chips: [...(reply.chips || []), ...extra].slice(0, 3) };
+      }
+
+      dom.input.addEventListener("input", fitInput);
+      dom.input.addEventListener("keydown", (event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); $("#composer").requestSubmit(); } });
+
+      $("#composer").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const text = dom.input.value.trim();
+        if (!text || state.pending) return;
+        const ctx = state.context || "none";
+        dom.thread.append(make("div", "msg user", text));
+        setInput("");
+        dom.hint.textContent = "";
+        const typing = make("div", "msg bot");
+        typing.innerHTML = `<span class="thinking" role="img" aria-label="Baylee is writing">${SPARK}<span class="shimmer">Thinking</span></span>`;
+        dom.thread.append(typing);
+        dom.thread.scrollTop = dom.thread.scrollHeight;
+        state.pending = true;
+        window.setTimeout(() => {
+          typing.remove();
+          state.pending = false;
+          if (ctx !== "none" && !state.clarified[ctx] && isVague(text)) { state.clarified[ctx] = true; addBot(clarifier(ctx)); }
+          else addBot({ ...withFollowUps(ctx, answer(ctx, text), text), feedback: true });
+        }, 700);
+      });
+
+      /* ---------- Wiring ---------- */
+      document.addEventListener("click", (event) => {
+        const pageLink = event.target.closest("[data-page]");
+        const find = event.target.closest("[data-find]");
+        if (find) { navigate("home"); showCare("results", find.dataset.find); return; }
+        if (pageLink) {
+          event.preventDefault();
+          if (pageLink.dataset.page === "home" && pageLink.classList.contains("nav-item")) showCare("landing");
+          navigate(pageLink.dataset.page);
+          return;
+        }
+        const demo = event.target.closest("[data-demo]");
+        if (demo) { DEMOS[demo.dataset.demo]?.(); return; }
+        const baylee = event.target.closest("[data-baylee]");
+        if (baylee) { openDrawer({ prompt: baylee.dataset.prompt, opener: baylee }); return; }
+        const details = event.target.closest("[data-open-details]");
+        if (details) {
+          const target = document.getElementById(details.dataset.openDetails);
+          target.open = true;
+          target.scrollIntoView({ block: "nearest" });
+          $("summary", target).focus();
+        }
+      });
+
+      $("#support-toggle").addEventListener("click", () => setSupportOpen($("#support-toggle").getAttribute("aria-expanded") !== "true"));
+
+      $("#results-search").addEventListener("input", (event) => {
+        const query = event.target.value.trim().toLowerCase();
+        const rows = $$("#results-list .result-row");
+        let shown = 0;
+        rows.forEach((row) => { const match = !query || row.dataset.name.includes(query); row.hidden = !match; if (match) shown += 1; });
+        $("#results-count").textContent = `Showing ${shown} of ${rows.length} results`;
+        const empty = $("#results-empty");
+        empty.hidden = shown > 0;
+        empty.textContent = shown ? "" : `No results match “${event.target.value.trim()}”. Try a different word.`;
+      });
+
+      $("#feedback-form").addEventListener("submit", (event) => { event.preventDefault(); toast("Demo only: your feedback wasn't sent."); });
+
+      document.addEventListener("keydown", (event) => {
+        const typing = event.target.closest?.("input, textarea, [contenteditable]");
+        if (event.key === "/" && !typing && !dom.dialog.open && !event.metaKey && !event.ctrlKey && !event.altKey) {
+          event.preventDefault();
+          if (state.open) dom.input.focus(); else openDrawer({ opener: dom.headerAsk });
+          return;
+        }
+        if (event.key !== "Escape") return;
+        if (dom.dialog.open) { dom.dialog.close(); return; }
+        if (body.classList.contains("nav-open")) { closeNav(); dom.menuButton.focus(); }
+        else if (state.open) closeDrawer();
+      });
+
+      /* ---------- Test result markers: a calm range gauge ---------- */
+      const MARKERS = {
+        a: [["Sample marker 1", 4.8, 4.0, 5.6], ["Sample marker 2", 88, 70, 99], ["Sample marker 3", 1.1, 0.8, 1.3]],
+        b: [["Sample marker 4", 112, 70, 99], ["Sample marker 5", 14, 12, 16], ["Sample marker 6", 41, 36, 46]]
+      };
+
+      function renderMarkers() {
+        $$(".markers").forEach((list) => {
+          MARKERS[list.dataset.panel].forEach(([name, value, lo, hi]) => {
+            const span = hi - lo;
+            const min = lo - span * 0.6;
+            const max = hi + span * 0.6;
+            const pct = (n) => Math.max(3, Math.min(97, ((n - min) / (max - min)) * 100));
+            const inside = value >= lo && value <= hi;
+            const row = make("div", "marker");
+            row.setAttribute("role", "listitem");
+            row.innerHTML = `<div class="marker-name"><strong>${name}</strong><span class="meta">Typical range ${lo} to ${hi}</span></div>
+              <div class="gauge" aria-hidden="true"><span class="gauge-zone" style="left:${pct(lo)}%;width:${pct(hi) - pct(lo)}%"></span><span class="gauge-dot${inside ? "" : " is-outside"}" style="left:${pct(value)}%"></span></div>
+              <div class="marker-value"><strong>${value}</strong><span class="visually-hidden">${inside ? "within" : "a little outside"} the typical range</span></div>`;
+            list.append(row);
+          });
+        });
+      }
+
+      /* ---------- Get Care: things to do, and Find care ---------- */
+      const todoTrack = $("#todo-track");
+      const todoCards = $$(".todo-card", todoTrack);
+      const todoDots = $("#todo-dots");
+      todoCards.forEach(() => todoDots.append(make("span")));
+      const todoStep = () => todoCards[0].offsetWidth + 16;
+      function syncTodo() {
+        const index = Math.round(todoTrack.scrollLeft / todoStep());
+        $$("span", todoDots).forEach((dot, i) => dot.classList.toggle("is-on", i === index));
+        $("#todo-prev").disabled = todoTrack.scrollLeft < 8;
+        $("#todo-next").disabled = todoTrack.scrollLeft + todoTrack.clientWidth >= todoTrack.scrollWidth - 8;
+      }
+      $("#todo-prev").addEventListener("click", () => todoTrack.scrollBy({ left: -todoStep(), behavior: "smooth" }));
+      $("#todo-next").addEventListener("click", () => todoTrack.scrollBy({ left: todoStep(), behavior: "smooth" }));
+      todoTrack.addEventListener("scroll", syncTodo, { passive: true });
+      window.addEventListener("resize", syncTodo);
+      syncTodo();
+
+      const FIND = {
+        doctors: [
+          { name: "Sample Provider A, MD", sub: "Pediatrics", where: "Sample Clinic North", miles: 2.4, rating: 4.5, reviews: 12, newPatients: true },
+          { name: "Sample Provider B, MD", sub: "Family Medicine", where: "Sample Clinic East", miles: 3.8, rating: 4, reviews: 8, newPatients: true },
+          { name: "Sample Provider C, MD", sub: "Orthopedic Sports Medicine", where: "Sample Clinic North", miles: 2.4, rating: 5, reviews: 21, newPatients: false }
+        ],
+        locations: [
+          { name: "Sample Clinic North", sub: "Primary care", where: "123 Test Street, Anytown, ST 00000", miles: 2.4, rating: 4.5, reviews: 30, hours: "Open today until 5:00 PM", walkIns: true, newPatients: true },
+          { name: "Sample Clinic East", sub: "Primary care", where: "456 Test Avenue, Anytown, ST 00000", miles: 3.8, rating: 4, reviews: 17, hours: "Open today until 6:00 PM", walkIns: false, newPatients: true },
+          { name: "Sample Urgent Care", sub: "Urgent care", where: "789 Test Road, Anytown, ST 00000", miles: 5.1, rating: 4, reviews: 44, hours: "Open today until 9:00 PM", walkIns: true, newPatients: true }
+        ]
+      };
+      const findState = { tab: "doctors", filters: { newPatients: false, walkIns: false }, favorites: new Set() };
+
+      function stars(rating) { return "★".repeat(Math.round(rating)) + "☆".repeat(5 - Math.round(rating)); }
+
+      function findCard(kind, item) {
+        const card = make("li");
+        const article = make("article", "find-card");
+        const top = make("div", "find-top");
+        const initials = item.name.replace(/[^A-Z]/g, "").slice(0, 2) || "SC";
+        top.append(make("span", "avatar", initials));
+        const heading = make("div");
+        heading.append(make("h3", "", item.name), make("span", "muted", item.sub));
+        top.append(heading);
+        const fav = make("button", "fav", findState.favorites.has(item.name) ? "★" : "☆");
+        fav.type = "button";
+        fav.setAttribute("aria-pressed", String(findState.favorites.has(item.name)));
+        fav.setAttribute("aria-label", `Save ${item.name} to favorites`);
+        fav.addEventListener("click", () => {
+          const on = !findState.favorites.has(item.name);
+          findState.favorites[on ? "add" : "delete"](item.name);
+          fav.setAttribute("aria-pressed", String(on));
+          fav.textContent = on ? "★" : "☆";
+        });
+        top.append(fav);
+        const meta = make("p", "find-meta");
+        const rating = make("span"); rating.innerHTML = `<span class="stars" aria-hidden="true">${stars(item.rating)}</span> ${item.rating.toFixed(1)} (${item.reviews}) <span class="visually-hidden">rating out of 5, sample</span>`;
+        meta.append(rating, make("span", "", `${item.miles} mi · ${item.where}`));
+        if (item.hours) meta.append(make("span", "", item.hours));
+        if (kind === "locations" && item.walkIns) meta.append(make("span", "find-ok", "✓ Accepts walk-ins"));
+        if (item.newPatients) meta.append(make("span", "find-ok", "✓ Accepts new patients"));
+        const actions = make("div", "find-actions");
+        const book = make("button", "ntg-btn ntg-btn--sm", "Book now"); book.type = "button";
+        book.addEventListener("click", () => openDemo({ title: `Book with ${item.name}?`, html: "<p>No appointment will be booked in this prototype. Nothing is sent anywhere.</p>", confirmLabel: "Book (demo)", onConfirm: () => toast("Demo only: no appointment was booked.") }));
+        const call = make("button", "ntg-btn ntg-btn--secondary ntg-btn--sm", "Call"); call.type = "button";
+        call.addEventListener("click", () => toast("Demo only: no call was placed. (555) 000-0000"));
+        actions.append(book, call);
+        article.append(top, meta, actions);
+        card.append(article);
+        return card;
+      }
+
+      function renderFind() {
+        const q = $("#find-q").value.trim().toLowerCase();
+        ["doctors", "locations"].forEach((kind) => {
+          const flag = kind === "doctors" ? "newPatients" : "walkIns";
+          const items = FIND[kind].filter((item) => (!q || `${item.name} ${item.sub} ${item.where}`.toLowerCase().includes(q)) && (!findState.filters[flag] || item[flag]));
+          const list = $(`#list-${kind}`);
+          list.replaceChildren(...items.map((item) => findCard(kind, item)));
+          if (!items.length) list.append(make("li", "muted", "Nothing matches that yet. Try a different word."));
+          $(`#count-${kind}`).textContent = items.length;
+        });
+        $("#find-status").textContent = `${$("#count-doctors").textContent} doctors and ${$("#count-locations").textContent} locations`;
+      }
+
+      function selectFindTab(kind, { focus = false } = {}) {
+        findState.tab = kind;
+        ["doctors", "locations"].forEach((k) => {
+          const tab = $(`#tab-${k}`);
+          tab.setAttribute("aria-selected", String(k === kind));
+          tab.tabIndex = k === kind ? 0 : -1;
+          $(`#panel-${k}`).hidden = k !== kind;
+        });
+        if (focus) $(`#tab-${kind}`).focus();
+      }
+
+      function showCare(view, tab) {
+        $("#care-landing").hidden = view === "results";
+        $("#care-results").hidden = view !== "results";
+        if (view === "results") { renderFind(); selectFindTab(tab || findState.tab); $("#find-q").focus({ preventScroll: true }); }
+        dom.main.scrollTop = 0;
+        if (view !== "results") syncTodo();
+      }
+
+      $$("[data-toast]").forEach((link) => link.addEventListener("click", () => toast("Demo only: this link doesn't go anywhere in the prototype.")));
+      $("#care-back").addEventListener("click", () => showCare("landing"));
+      $("#find-q").addEventListener("input", renderFind);
+      $$("[data-filter]").forEach((pill) => pill.addEventListener("click", () => {
+        const on = pill.getAttribute("aria-pressed") !== "true";
+        pill.setAttribute("aria-pressed", String(on));
+        pill.classList.toggle("is-on", on);
+        findState.filters[pill.dataset.filter] = on;
+        renderFind();
+      }));
+      $$(".find-tab").forEach((tab) => {
+        tab.addEventListener("click", () => selectFindTab(tab.id.replace("tab-", "")));
+        tab.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); selectFindTab(findState.tab === "doctors" ? "locations" : "doctors", { focus: true }); }
+        });
+      });
+      renderFind();
+
+      /* ---------- Home: ask Baylee ---------- */
+      $("#home-ask").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const input = $("#home-ask-input");
+        const text = input.value.trim();
+        if (!text) { input.focus(); return; }
+        input.value = "";
+        openDrawer({ opener: $("#home-ask .ask-go") });
+        setInput(text);
+        window.setTimeout(() => $("#composer").requestSubmit(), 120);
+      });
+
+      /* Not on phones, where the chat would cover the whole page. Not while typing or in a dialog. */
+      if (!phoneMedia.matches) {
+        autoOpenTimer = window.setTimeout(() => {
+          const typing = document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && document.activeElement.value;
+          if (state.open || dom.dialog.open || typing || body.classList.contains("nav-open")) return;
+          openDrawer({ auto: true });
+        }, AUTO_OPEN_MS);
+        $("#home-ask-input").addEventListener("input", cancelAutoOpen, { once: true });
+      }
+
+      renderMarkers();
+      dom.drawer.inert = true;
+      syncNavInert();
+      navigate("home", { focus: false });
+    </script>
+  </body>
+</html>

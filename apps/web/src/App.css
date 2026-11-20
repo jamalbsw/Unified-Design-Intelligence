@@ -562,6 +562,42 @@ h2 {
   font-size: 12px;
 }
 
+.clickable-prototype {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 17px;
+  padding: 14px 16px;
+  border: 1px solid var(--fi-glass-border);
+  border-left: 4px solid var(--fi-luminous-cyan);
+  color: var(--fi-pearl-mist);
+  background: var(--fi-deep-ocean);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.clickable-prototype > div {
+  display: grid;
+  gap: 4px;
+}
+
+.clickable-prototype strong {
+  color: var(--fi-white);
+  font-size: 15px;
+}
+
+.clickable-prototype-link {
+  justify-self: start;
+  color: var(--fi-luminous-cyan);
+  font-size: 13px;
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.clickable-prototype-link:hover,
+.clickable-prototype-link:focus-visible {
+  color: var(--fi-white);
+}
+
 .mobile-preview .preview-canvas {
   width: 100%;
   max-width: 340px;

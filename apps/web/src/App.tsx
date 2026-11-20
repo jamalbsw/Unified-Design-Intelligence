@@ -297,6 +297,26 @@ function App() {
               </div>
               )}
             </div>
+            <div className="clickable-prototype">
+              <div>
+                <p className="example-label">CLICKABLE PROTOTYPE</p>
+                <strong>Patient portal with a chat assistant</strong>
+                <span>
+                  Click through billing, test results, and visit summaries, and open the chat
+                  beside them. Fictional data only; payments, messages, and appointments are demo-only.
+                </span>
+              </div>
+              <a
+                className="clickable-prototype-link"
+                href={`${import.meta.env.BASE_URL}prototypes/portal-chat/`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open the clickable prototype
+                <span aria-hidden="true"> ↗</span>
+                <span className="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            </div>
             <p className="preview-caption" role="status">
               {preview
                 ? `Preview ${preview.revision}: ${preview.options.layout === 'tasks' ? 'task-focused homepage' : 'homepage'}${preview.options.communication ? ' with communication summary' : ''}.${preview.request !== request ? ' Request edited. Build again to update the preview.' : ' Only these matched features are included.'}`

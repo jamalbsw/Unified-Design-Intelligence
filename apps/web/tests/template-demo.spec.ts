@@ -25,6 +25,17 @@ test.describe('template browser demo', () => {
     await expect(page.getByRole('heading', { name: 'Make the next idea tangible.' })).toBeVisible()
   })
 
+  test('step 2 links to the clickable portal prototype, which loads and opens its chat', async ({ page, context }) => {
+    const link = page.getByRole('link', { name: /Open the clickable prototype/ })
+    await expect(link).toHaveAttribute('href', /prototypes\/portal-chat\/$/)
+    const [prototype] = await Promise.all([context.waitForEvent('page'), link.click()])
+    await prototype.waitForLoadState()
+    await expect(prototype.getByRole('heading', { name: /how can I help/ })).toBeVisible()
+    // Baylee opens by itself right after the page loads
+    await expect(prototype.getByRole('heading', { name: /Chat with Baylee/ })).toBeVisible()
+    await expect(prototype.getByRole('button', { name: /Open chat/ })).toHaveAttribute('aria-expanded', 'true')
+  })
+
   test('builds a labelled homepage and preserves task progress and focus on return', async ({ page }) => {
     const build = page.getByRole('button', { name: 'Build template preview' })
     await expect(build).toBeDisabled()
