@@ -30,7 +30,7 @@ test.describe('template browser demo', () => {
     await expect(link).toHaveAttribute('href', /prototypes\/portal-chat\/$/)
     const [prototype] = await Promise.all([context.waitForEvent('page'), link.click()])
     await prototype.waitForLoadState()
-    await expect(prototype.getByRole('heading', { name: 'Welcome back' })).toBeVisible()
+    await expect(prototype.getByRole('heading', { name: /how can I help/ })).toBeVisible()
     await prototype.getByRole('button', { name: /Open chat/ }).click()
     await expect(prototype.getByRole('heading', { name: /Baylee/ })).toBeVisible()
   })
