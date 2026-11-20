@@ -670,7 +670,7 @@
       .ask-go { display: grid; width: 24px; height: 24px; flex: 0 0 auto; place-items: center; padding: 0; border: 0; border-radius: 4px; color: var(--color-secondary-a3); background: transparent; cursor: default; }
       .ask-bar:has(input:not(:placeholder-shown)) .ask-go { color: var(--color-primary-a2); cursor: pointer; }
       .ask-go:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
-      .care-grid { display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 24px; align-items: start; }
+      .care-grid { display: grid; grid-template-columns: minmax(0, 1fr) 327px; gap: 24px; align-items: start; }
       .care-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
       .care-head h2, .care-h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 20px; }
       .care-h2 { margin: 8px 0 12px; }
@@ -696,16 +696,6 @@
       .muted { color: var(--color-secondary-a2); font-size: 12px; }
       .avatar { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: var(--color-primary-a3); background: var(--color-secondary-c1); font-size: 13px; font-weight: 700; }
       .care-more { margin-top: 12px; }
-      .side-card { margin-bottom: 16px; overflow: hidden; border: 1px solid var(--color-secondary-a4); border-radius: 4px; text-align: center; background: var(--color-primary-c1); }
-      .side-band { display: grid; height: 64px; place-items: center; }
-      .side-band--visit { background: #dccde0; }
-      .side-band--care { background: var(--color-secondary-c1); }
-      .side-body { padding: 16px; }
-      .side-body h3 { margin: 0 0 4px; font-size: 18px; }
-      .side-body p { margin: 0 0 8px; font-size: 13px; line-height: 1.5; }
-      .side-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-      .mini-tile { display: grid; justify-items: center; gap: 8px; padding: 16px 8px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
-      .mini-tile:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
 
       /* Find care results (from the Find Care spec) */
       .find-title { margin: 8px 0 12px; font-size: 24px; }
@@ -725,9 +715,40 @@
       .fav { display: grid; width: 40px; height: 40px; margin-left: auto; place-items: center; border: 0; border-radius: 50%; color: var(--color-secondary-a2); background: transparent; font-size: 22px; cursor: pointer; }
       .fav:hover { background: var(--color-secondary-a5); }
       .fav[aria-pressed="true"] { color: var(--color-primary-b1); }
+      /* Right column, from the Get Care spec */
+      .care-side { display: grid; gap: 40px; }
+      .cta-card { display: grid; width: 100%; padding: 0; overflow: hidden; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: inherit; background: var(--color-primary-c1); font: inherit; text-align: center; cursor: pointer; }
+      .cta-card:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .cta-head { position: relative; display: block; height: 86px; }
+      .cta-band { position: absolute; inset: 0 0 32px; background: var(--color-secondary-c1); }
+      .cta-icon { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); }
+      .cta-body { display: grid; gap: 8px; padding: 0 16px 16px; }
+      .cta-body strong { color: var(--color-primary-a2); font-size: 20px; font-weight: 700; line-height: 1.1; }
+      .cta-body span { color: var(--color-secondary-a2); font-size: 13px; font-weight: 600; line-height: 1.5; }
+      .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .quick-btn { position: relative; display: flex; min-height: 86px; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 14px; font-weight: 700; line-height: 1.6; text-align: center; cursor: pointer; }
+      .quick-btn:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+      .quick-badge { position: absolute; top: 8px; right: 8px; display: grid; min-width: 15px; height: 15px; place-items: center; padding: 1px 4px 0; border: 1px solid var(--color-primary-c1); border-radius: 10px; color: var(--color-primary-c1); background: #cd4660; font-size: 11px; font-weight: 600; line-height: 1.4; }
+      .feature-card { display: flex; align-items: center; gap: 16px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: var(--color-primary-c1); }
+      .feature-art { flex: 0 0 auto; }
+      .feature-card h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.1; }
+      .feature-card p { margin: 0; color: var(--color-secondary-a2); font-size: 13px; font-weight: 600; line-height: 1.5; }
+      .plan-card { display: grid; gap: 24px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: var(--color-primary-c1); }
+      .plan-title { display: grid; gap: 4px; text-align: center; }
+      .plan-title h3 { margin: 0; font-size: 16px; line-height: 1.1; }
+      .plan-title span { color: var(--color-secondary-a2); font-size: 11px; font-weight: 600; line-height: 1.4; }
+      .plan-graph { display: grid; justify-items: center; gap: 16px; }
+      .plan-amount { display: grid; gap: 8px; text-align: center; }
+      .plan-amount strong { color: var(--color-primary-a2); font-size: 20px; line-height: 1.1; }
+      .plan-amount span { color: var(--color-secondary-a2); font-size: 11px; font-weight: 600; line-height: 1.4; }
+      .plan-links { margin: 0; padding: 0; list-style: none; }
+      .plan-links li + li { border-top: 1px solid var(--color-secondary-a4); }
+      .plan-link { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border: 0; border-radius: 4px; color: var(--color-primary-a2); background: transparent; font: inherit; font-size: 14px; font-weight: 700; line-height: 1.6; text-align: left; cursor: pointer; }
+      .plan-link:hover { background: var(--color-secondary-b2); }
+      .plan-link:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .plan-chev { display: grid; width: 40px; height: 40px; place-items: center; }
       #page-home { container-type: inline-size; }
-      @container (max-width: 760px) { .care-grid { grid-template-columns: 1fr; } .care-side { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } .care-side .side-card { margin-bottom: 0; } .care-side .side-tiles { grid-column: 1 / -1; } }
-      @container (max-width: 520px) { .care-side { grid-template-columns: 1fr; } }
+      @container (max-width: 760px) { .care-grid { grid-template-columns: 1fr; } .care-side { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: start; } }
       @media (max-width: 900px) { .user-chip { display: none; } }
     </style>
   </head>
@@ -833,19 +854,38 @@
                 </ul>
                 <button class="ntg-link care-more" type="button" data-find="doctors">Find more doctors and locations<span class="arrow" aria-hidden="true">›</span></button>
               </div>
-              <aside class="care-side" aria-label="Shortcuts">
-                <article class="side-card">
-                  <div class="side-band side-band--visit" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#364248" stroke-width="1.3"><circle cx="12" cy="7" r="3.2"></circle><path d="M5 20v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"></path></svg></div>
-                  <div class="side-body"><h3>Your recent visit</h3><p>Review your care plan, prescriptions, and what to do next.</p><button class="ntg-link" type="button" data-page="visits">View After Visit Summary</button></div>
-                </article>
-                <article class="side-card">
-                  <div class="side-band side-band--care" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#364248" stroke-width="1.3" stroke-linecap="round"><path d="M6 3v6a4 4 0 0 0 8 0V3"></path><path d="M10 13v2a5 5 0 0 0 10 0v-1"></path><circle cx="20" cy="12" r="2"></circle></svg></div>
-                  <div class="side-body"><h3>Get Care</h3><p>Easily search providers and schedule appointments.</p><button class="ntg-link" type="button" data-find="doctors">Find care</button></div>
-                </article>
-                <div class="side-tiles">
-                  <button class="mini-tile" type="button" data-page="results"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4h8M9 4v5l-4.5 8A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-3L15 9V4"></path><path d="M7.5 15h9"></path></svg>Test Results</button>
-                  <button class="mini-tile" type="button" data-page="billing"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg>Bill Pay</button>
+              <aside class="care-side" aria-label="Shortcuts and plan">
+                <button class="cta-card" type="button" data-find="doctors">
+                  <span class="cta-head" aria-hidden="true">
+                    <span class="cta-band"></span>
+                    <svg class="cta-icon" viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="#364248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="10" r="2.5" fill="#fff"></circle><circle cx="33" cy="7" r="2.5" fill="#fff"></circle><path d="M12 12v13a8 8 0 0 0 8 8M36 9v16a8 8 0 0 1-8 8"></path><path d="M20 33a10 10 0 0 0 10 10h4"></path><circle cx="46" cy="42" r="10" fill="#fff"></circle><path d="M46 38v8M42 42h8" stroke="#D5647A"></path></svg>
+                  </span>
+                  <span class="cta-body"><strong>Get Care</strong><span>Easily search providers and schedule appointments.</span></span>
+                </button>
+                <div class="quick-actions">
+                  <button class="quick-btn" type="button" data-page="results"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10M12 20V4M19 20v-7"></path></svg><span>Test Results</span></button>
+                  <button class="quick-btn" type="button" data-page="communications" aria-label="Messages, 6 unread (sample)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg><span>Messages</span><span class="quick-badge" aria-hidden="true">6</span></button>
+                  <button class="quick-btn" type="button" data-page="billing"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg><span>Bill Pay</span></button>
+                  <button class="quick-btn" type="button" data-page="visits"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 3.5h9l4 4v13H6z"></path><path d="M14.5 3.5v5h5M9 13h7M9 16.5h7"></path></svg><span>Visit Summaries</span></button>
                 </div>
+                <article class="feature-card" aria-labelledby="feature-title">
+                  <svg class="feature-art" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" fill="none" stroke="#364248" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="26" r="14" fill="#FEE9BC"></circle><path d="M27 42h10v6H27z" fill="#fff"></path><path d="M28 48h8l-1 4h-6z" fill="#FFC342"></path><path d="M32 4v4M12 14l3 3M52 14l-3 3M6 28h4M54 28h4"></path></svg>
+                  <div><h3 id="feature-title">What's new</h3><p>Explore new and exciting features across MyBSWHealth.</p></div>
+                </article>
+                <article class="plan-card" aria-labelledby="plan-title">
+                  <div class="plan-title"><h3 id="plan-title">Sample Health Plan</h3><span>Sample Health Plan Group</span></div>
+                  <div class="plan-graph">
+                    <svg viewBox="0 0 168 92" width="168" height="92" role="img" aria-label="Deductible: $997.51 met of $1,500.00 (sample)"><path d="M8 84a76 76 0 0 1 152 0" pathLength="100" fill="none" stroke="#DDDDDD" stroke-width="16"></path><path d="M8 84a76 76 0 0 1 152 0" pathLength="100" fill="none" stroke="#8F659C" stroke-width="16" stroke-dasharray="66.5 100"></path></svg>
+                    <div class="plan-amount"><strong>$502.49</strong><span>Deductible Remaining</span></div>
+                  </div>
+                  <ul class="plan-links" aria-label="Plan links">
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Coverage details</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Claims and balances</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Digital ID card</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-find="doctors"><span>Find a plan doctor</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                    <li><button class="plan-link" type="button" data-toast="1"><span>Plan documents</span><span class="plan-chev"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                  </ul>
+                </article>
               </aside>
             </div>
           </div>
@@ -1965,6 +2005,7 @@
         if (view !== "results") syncTodo();
       }
 
+      $$("[data-toast]").forEach((link) => link.addEventListener("click", () => toast("Demo only: this link doesn't go anywhere in the prototype.")));
       $("#care-back").addEventListener("click", () => showCare("landing"));
       $("#find-q").addEventListener("input", renderFind);
       $$("[data-filter]").forEach((pill) => pill.addEventListener("click", () => {
