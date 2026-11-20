@@ -605,6 +605,17 @@
       .chat-composer:has(textarea:placeholder-shown) .send-circle { color: var(--color-secondary-a4); background: transparent; cursor: default; }
       .composer-caption { text-align: center; color: var(--color-secondary-a2); font-size: 11px; line-height: 1.4; }
 
+      /* The panel sits on its own gray dock so its left edge stays clear of the page */
+      .drawer { background: var(--color-secondary-a5); }
+      body.drawer-open .drawer { border-left: 1px solid var(--color-secondary-a4); }
+      .context-card { padding: 8px 16px; }
+      .context-row strong { font-size: 14px; }
+      .context-card .how-used { margin-top: 2px; }
+
+      /* Short messages that follow each other sit close together */
+      .msg { animation-delay: var(--md, 0ms); }
+      .msg.bot.continued { margin-top: -14px; }
+
       @media (max-width: 1100px) { .expand-only { display: none; } }
       @media (max-width: 760px) {
         .drawer { background: var(--color-secondary-a6); }
@@ -748,7 +759,7 @@
             <div class="baylee-offer">
               <span class="baylee-icon" aria-hidden="true"></span>
               <p>Not sure what you're looking at? Baylee, our AI assistant, can walk through this bill with you. It's your choice.</p>
-              <button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-baylee="bill" data-prompt="Can you help me understand this bill?" aria-label="Break it down. Ask Baylee about this bill.">Break it down</button>
+              <button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-baylee="bill" data-prompt="Explain my bill" aria-label="Break it down. Ask Baylee about this bill.">Break it down</button>
             </div>
           </section>
 
@@ -822,7 +833,7 @@
 
           <div class="toolbar">
             <label class="ntg-field" for="results-search"><span>Search results</span><input id="results-search" type="search" placeholder="Try “Panel B”" autocomplete="off"></label>
-            <button class="ntg-btn ntg-btn--secondary" type="button" data-baylee="results" data-prompt="What do these results mean in plain language?">Understand these results</button>
+            <button class="ntg-btn ntg-btn--secondary" type="button" data-baylee="results" data-prompt="Explain my results">Understand these results</button>
           </div>
           <p class="meta" id="results-count" role="status" aria-live="polite">Showing 4 of 4 results</p>
 
@@ -865,7 +876,7 @@
                 <h2 id="visit-title" style="margin:0 0 4px">Visit with Sample Provider</h2>
                 <p class="meta" style="margin:0">Test Clinic · Sample visit date</p>
               </div>
-              <div><button class="ntg-btn ntg-btn--secondary" type="button" data-baylee="visit" data-prompt="Can you go over the key takeaways from this visit?">Understand your visit</button></div>
+              <div><button class="ntg-btn ntg-btn--secondary" type="button" data-baylee="visit" data-prompt="Key takeaways">Understand your visit</button></div>
             </div>
             <h3 class="section-title">Key takeaways</h3>
             <ul class="ntg-list">
@@ -953,14 +964,13 @@
 
           <section class="context-card" id="context-card" aria-labelledby="context-heading">
             <div class="context-row">
-              <span class="label" id="context-heading">You're currently reading:</span>
+              <span class="label" id="context-heading">Currently reading:</span>
               <strong id="context-name">Nothing selected yet</strong>
               <div class="context-actions">
                 <button class="ntg-link" id="context-change" type="button" aria-expanded="false" aria-controls="context-options">Change</button>
                 <button class="ntg-link" id="context-clear" type="button">Stop reading</button>
               </div>
             </div>
-            <p class="context-uses" id="context-uses"></p>
             <fieldset class="ntg-radio-list" id="context-options" hidden>
               <legend class="visually-hidden">What would you like to talk about?</legend>
               <label><input type="radio" name="ctx" value="follow"> The page I'm on, and follow me as I move around</label>
@@ -971,13 +981,13 @@
             </fieldset>
             <button class="ntg-link" id="context-back" type="button" hidden></button>
             <details class="how-used">
-              <summary>How your information is used</summary>
+              <summary>What Baylee can see</summary>
+              <p class="context-uses" id="context-uses-detail"></p>
               <ul>
                 <li id="context-follow">I follow you as you move around the portal while I'm open. You can stop me any time.</li>
-                <li>Baylee only uses the fictional details listed above for the page or item you picked. It can't see anything else in this prototype, and it can't see what you type into forms.</li>
-                <li>Your messages aren't sent or saved anywhere. They stay in this browser tab and disappear when you refresh.</li>
-                <li>This prototype doesn't share your chat with your care team or anyone else.</li>
-                <li>Baylee can't make payments, send messages, book appointments, or change anything for you. It can only explain and point you to the right place.</li>
+                <li>I only use the fictional details for the page or item you picked, and I can't see what you type into forms.</li>
+                <li>Your messages stay in this browser tab and aren't saved or shared with your care team.</li>
+                <li>I can't pay, message, book, or change anything for you. I can explain and point you to the right place.</li>
                 <li>A real version would describe this in BSW Health's privacy policy.</li>
               </ul>
             </details>
@@ -1025,7 +1035,7 @@
       const body = document.body;
       const dom = {
         main: $("#main"), drawer: $("#drawer"), thread: $("#thread"), input: $("#composer-input"), hint: $("#composer-hint"),
-        ctxCard: $("#context-card"), ctxLabel: $("#context-heading"), ctxName: $("#context-name"), ctxUses: $("#context-uses"), ctxFollow: $("#context-follow"),
+        ctxCard: $("#context-card"), ctxLabel: $("#context-heading"), ctxName: $("#context-name"), ctxUses: $("#context-uses-detail"), ctxFollow: $("#context-follow"),
         ctxBack: $("#context-back"), ctxOptions: $("#context-options"), ctxChange: $("#context-change"), ctxClear: $("#context-clear"),
         dialog: $("#demo-dialog"), toast: $("#toast"), sidebar: $("#sidebar"), menuButton: $("#menu-button"), headerAsk: $("#header-ask")
       };
@@ -1035,33 +1045,30 @@
         bill: {
           title: "Billing", label: "This bill", page: "billing", target: "bill-card", back: "Back to this bill",
           uses: "Baylee will look at: your amount due and due date, the charges, insurance payments and adjustments, and the service summary.",
-          saw: "I see your current bill from Sample Medical Group for an office visit and lab services.",
-          ask: "What would you like to understand about it?",
-          suggestions: ["Can you help me understand this bill?", "Why is this the amount I owe?", "What are my payment options?"]
+          peek: "your bill from Sample Medical Group",
+          suggestions: ["Explain my bill", "Why do I owe this?", "Payment options"]
         },
         results: {
           title: "Test Results", label: "These test results", page: "results", target: "results-list", back: "Back to these results",
           uses: "Baylee will look at: the result names, your values and the typical ranges shown, and whether a result is still a preview.",
-          saw: "I see 4 sample results. Three are ready to read and one is still a preview.",
-          ask: "I can explain what's shown, but not what it means for your health. Your care team can do that. What would you like help with?",
-          suggestions: ["What do these results mean in plain language?", "Is anything outside the typical range?", "Help me write a question for my care team"]
+          peek: "your 4 results, one still a preview",
+          suggestions: ["Explain my results", "Anything outside the range?", "Questions for my care team"]
         },
         visit: {
           title: "Visit Summaries", label: "This visit summary", page: "visits", target: "visit-summary", back: "Back to the full summary",
           uses: "Baylee will look at: the key takeaways, the follow-up steps, and the contact guidance in your summary.",
-          saw: "I see your visit summary from Sample Provider, with three follow-up steps.",
-          ask: "What would you like to go over?",
-          suggestions: ["Can you go over the key takeaways from this visit?", "What are my follow-up steps?", "When should I contact my care team?"]
+          peek: "your visit summary and its 3 follow-up steps",
+          suggestions: ["Key takeaways", "My follow-up steps", "When to call my care team"]
         },
-        home: { title: "Home", label: "Home page", page: "home", uses: "Baylee will look at: the headings and text on the Home page.", saw: "I see your Home page, with your bill, test results, and visit summary ready to open.", ask: "What can I help you find?", suggestions: ["What can I do on this page?", "Where do I find my bill?", "Where are my test results?"] },
-        appointments: { title: "Appointments", label: "Appointments page", page: "appointments", uses: "Baylee will look at: the headings and text on the Appointments page.", saw: "I see one upcoming sample visit with Sample Provider at Test Clinic.", ask: "What would you like to know?", suggestions: ["How do I reschedule?", "What should I bring to my visit?"] },
-        communications: { title: "Communications", label: "Communications page", page: "communications", uses: "Baylee will look at: the headings and text on the Communications page.", saw: "I see one sample message from Sample Care Team.", ask: "What can I help with?", suggestions: ["How do I write to my care team?", "What is this message about?"] },
-        help: { title: "Help Topics", label: "Help Topics page", page: "help", uses: "Baylee will look at: the questions and answers listed on the Help Topics page.", saw: "I see the Help Topics page, with a few common questions.", ask: "What are you looking for?", suggestions: ["How do I read my test results?", "How do I pay a bill?"] },
-        contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", saw: "I see the Contact Us page, with ways to reach billing support and your care team.", ask: "Who would you like to reach?", suggestions: ["How do I reach billing support?", "How do I contact my care team?"] },
-        resources: { title: "Find Local Resources", label: "Local resources page", page: "resources", uses: "Baylee will look at: the sample listings on this page.", saw: "I see the Find Local Resources page, with two sample listings.", ask: "What kind of support are you looking for?", suggestions: ["What is listed on this page?"] },
-        feedback: { title: "Provide Feedback", label: "Feedback page", page: "feedback", uses: "Baylee will look at: the headings and text on this page. It can't see what you type into the form.", saw: "I see the Provide Feedback page. I can't see anything you type into the form.", ask: "How can I help?", suggestions: ["Where does my feedback go?"] },
-        account: { title: "Account Settings", label: "Account Settings page", page: "account", uses: "Baylee will look at: the headings and text on the Account Settings page.", saw: "I see your Account Settings page and its notification choices.", ask: "What would you like to change or understand?", suggestions: ["How do I change my notifications?"] },
-        none: { title: "", label: "Nothing selected yet", page: null, target: null, back: "", uses: "Baylee can't see your portal pages, bill, results, or visit summaries unless you choose something.", saw: "", ask: "", suggestions: ["How do I reach billing support?", "Where do I find my visit summaries?"] }
+        home: { title: "Home", label: "Home page", page: "home", uses: "Baylee will look at: the headings and text on the Home page.", peek: "your home page", suggestions: ["What can I do here?", "Where's my bill?", "Where are my results?"] },
+        appointments: { title: "Appointments", label: "Appointments page", page: "appointments", uses: "Baylee will look at: the headings and text on the Appointments page.", peek: "your upcoming visit", suggestions: ["How do I reschedule?", "What should I bring?"] },
+        communications: { title: "Communications", label: "Communications page", page: "communications", uses: "Baylee will look at: the headings and text on the Communications page.", peek: "your messages", suggestions: ["How do I write to my care team?"] },
+        help: { title: "Help Topics", label: "Help Topics page", page: "help", uses: "Baylee will look at: the questions and answers listed on the Help Topics page.", peek: "the help topics", suggestions: ["How do I read my results?", "How do I pay a bill?"] },
+        contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", peek: "the ways to reach a person", suggestions: ["Reach billing support", "Reach my care team"] },
+        resources: { title: "Find Local Resources", label: "Local resources page", page: "resources", uses: "Baylee will look at: the sample listings on this page.", peek: "two sample listings", suggestions: ["What's listed here?"] },
+        feedback: { title: "Provide Feedback", label: "Feedback page", page: "feedback", uses: "Baylee will look at: the headings and text on this page. It can't see what you type into the form.", peek: "the feedback form (not what you type)", suggestions: ["Where does my feedback go?"] },
+        account: { title: "Account Settings", label: "Account Settings page", page: "account", uses: "Baylee will look at: the headings and text on the Account Settings page.", peek: "your notification choices", suggestions: ["Change my notifications"] },
+        none: { title: "", label: "Nothing selected yet", page: null, target: null, back: "", uses: "Baylee can't see your portal pages, bill, results, or visit summaries unless you choose something.", peek: "", suggestions: ["Reach billing support", "Find my visit summaries"] }
       };
 
       const pageToCtx = (page) => ({ billing: "bill", results: "results", visits: "visit" }[page] || page);
@@ -1159,10 +1166,10 @@
       }
 
       /* Words fade in one after another. All text is in the DOM at once, so screen readers read it as one message. */
-      function revealInto(p, text, counter) {
+      function revealInto(p, text, counter, start = 0) {
         text.split(" ").forEach((word, i, words) => {
           const span = make("span", "w", word);
-          span.style.setProperty("--d", `${Math.min(counter.n * 22, 1800)}ms`);
+          span.style.setProperty("--d", `${start + Math.min(counter.n * 22, 1800)}ms`);
           counter.n += 1;
           p.append(span);
           if (i < words.length - 1) p.append(document.createTextNode(" "));
@@ -1196,20 +1203,32 @@
         return row;
       }
 
-      /* A Baylee message: the 24px Baylee icon, then body text with 16px between blocks. */
-      function addBot({ paras = [], quote, actions = [], chips = [], source = "", feedback = false }) {
-        const message = make("div", "msg bot");
-        message.append(make("span", "visually-hidden", "Baylee says:"));
-        message.insertAdjacentHTML("beforeend", BAYLEE_ICON);
+      /* A Baylee message: the 24px Baylee icon, then body text with 16px between blocks.
+         `continued` messages follow the previous one without repeating the icon. */
+      function addBot(options) {
+        const { paras = [], quote, actions = [], chips = [], source = "", feedback = false, continued = false, delay = 0 } = options;
+        /* Natural pacing: a reply with several short thoughts arrives as a few quick messages, not one block. */
+        if (paras.length > 1) {
+          addBot({ paras: [paras[0]], continued, delay });
+          addBot({ ...options, paras: paras.slice(1), continued: true, delay: delay + paras[0].split(" ").length * 22 + 450 });
+          return null;
+        }
+        const message = make("div", `msg bot${continued ? " continued" : ""}`);
+        if (!continued) {
+          message.append(make("span", "visually-hidden", "Baylee says:"));
+          message.insertAdjacentHTML("beforeend", BAYLEE_ICON);
+        }
         const counter = { n: 0 };
-        paras.forEach((text) => { const p = make("p"); revealInto(p, text, counter); message.append(p); });
-        if (quote) { const q = make("p", "quote"); revealInto(q, quote, counter); message.append(q); }
+        const start = delay;
+        paras.forEach((text) => { const p = make("p"); revealInto(p, text, counter, start); message.append(p); });
+        if (quote) { const q = make("p", "quote"); revealInto(q, quote, counter, start); message.append(q); }
         const after = [];
         if (actions.length) after.push(actionsRow(actions));
         if (chips.length) after.push(chipsRow(chips));
         if (source) after.push(make("span", "source", source));
         if (feedback) after.push(feedbackRow());
-        after.forEach((node) => { node.classList.add("after-text"); node.style.setProperty("--ad", `${Math.min(counter.n * 22, 1800) + 120}ms`); message.append(node); });
+        after.forEach((node) => { node.classList.add("after-text"); node.style.setProperty("--ad", `${start + Math.min(counter.n * 22, 1800) + 120}ms`); message.append(node); });
+        if (delay) message.style.setProperty("--md", `${delay}ms`);
         dom.thread.append(message);
         dom.thread.scrollTop = dom.thread.scrollHeight;
         return message;
@@ -1267,16 +1286,21 @@
         renderContextCard({ flash: hadConversation });
         const ctx = CONTEXTS[id];
         const chips = ctx.suggestions.map((label) => ({ label, fill: label }));
+        const peek = ctx.peek ? ctx.peek.charAt(0).toUpperCase() + ctx.peek.slice(1) : "";
         if (id === "none") {
-          if (hadConversation) addDivider("No page information is being used now");
-          chips.unshift({ label: "Choose something to talk about", run: showContextOptions });
-          addBot({ paras: [hadConversation ? "Okay, I've stopped reading. I'm not using any of your portal information now." : "Hi, I'm Baylee, an AI assistant. I'm not looking at any of your portal information right now.", "You can choose something to talk about, or ask a general question about the portal."], chips });
+          if (hadConversation) addDivider("Stopped reading");
+          chips.unshift({ label: "Choose something to read", run: showContextOptions });
+          if (hadConversation) addBot({ paras: ["Okay, I've stopped reading. What would you like to ask?"], chips });
+          else {
+            addBot({ paras: ["Hi, I'm Baylee, an AI assistant."] });
+            addBot({ paras: ["I'm not looking at anything right now. What would you like to ask?"], chips, continued: true, delay: 700 });
+          }
         } else if (!hadConversation) {
-          addBot({ paras: [`Hi, I'm Baylee, an AI assistant. I'm reading ${ctx.title} with you now, and you can stop me any time.`, ctx.saw, ctx.ask], chips });
-          addBot({ paras: ["You can type your own question, or start from a suggestion and edit it first. Nothing is sent until you press Send."] });
+          addBot({ paras: ["Hi, I'm Baylee, an AI assistant."] });
+          addBot({ paras: [`I can see ${ctx.peek}. What would you like to know?`], chips, continued: true, delay: 700 });
         } else {
           addDivider(moved ? `You moved to ${ctx.title}` : `Now talking about: ${ctx.label}`);
-          addBot({ paras: [`I'm now reading ${ctx.title} with you.`, ctx.saw, ctx.ask], chips });
+          addBot({ paras: [`${peek}. What would you like to know?`], chips });
         }
       }
 
@@ -1371,96 +1395,97 @@
 
       /* ---------- Conversation ---------- */
       const go = (label, page) => ({ label, run: () => navigate(page) });
-      const billingSupport = go("Go to billing support", "contact");
-      const careTeam = go("Go to Communications", "communications");
-      const planAction = { label: "Review plan options", button: true, run: () => { navigate("billing"); DEMOS.plan(); } };
+      const billingSupport = go("Billing support", "contact");
+      const careTeam = go("Message my care team", "communications");
+      const planAction = { label: "See payment plans", run: () => { navigate("billing"); DEMOS.plan(); } };
 
       const FOLLOW_UPS = {
-        bill: [{ label: "What are my payment options?", fill: "What are my payment options?" }, { label: "Who can I talk to about this bill?", fill: "Who can I talk to about this bill?" }],
-        results: [{ label: "Help me write a question for my care team", fill: "Help me write a question for my care team" }, { label: "What does “typical range” mean?", fill: "What does “typical range” mean?" }],
-        visit: [{ label: "What are my follow-up steps?", fill: "What are my follow-up steps?" }, { label: "When should I contact my care team?", fill: "When should I contact my care team?" }]
+        bill: [{ label: "Payment options", fill: "Payment options" }, { label: "Talk to someone", fill: "Who can I talk to?" }],
+        results: [{ label: "Questions for my care team", fill: "Questions for my care team" }, { label: "What's a typical range?", fill: "What's a typical range?" }],
+        visit: [{ label: "My follow-up steps", fill: "My follow-up steps" }, { label: "When to call my care team", fill: "When to call my care team" }]
       };
 
       function notMeant() {
-        return { label: "That's not what I meant", quiet: true, run: () => addBot({ paras: ["Thank you for telling me. I may have misunderstood. What would you like me to focus on?"], chips: CONTEXTS[state.context].suggestions.map((label) => ({ label, fill: label })) }) };
+        return { label: "That's not what I meant", quiet: true, run: () => addBot({ paras: ["Thanks for telling me. What should I focus on?"], chips: CONTEXTS[state.context].suggestions.map((label) => ({ label, fill: label })) }) };
       }
 
-      const DRAFT = "I saw that one marker on my recent results was a little outside the typical range. Could you help me understand what that means for me, and whether there's anything I should do?";
+      const DRAFT = "One marker on my recent results was a little outside the typical range. What does that mean for me, and should I do anything?";
 
       function pageAnswer(ctx, t) {
-        const c = CONTEXTS[ctx];
         if (ctx === "home") {
-          if (/bill|billing|pay/.test(t)) return { paras: ["Your bill is in Billing, in the menu on the left."], actions: [go("Go to Billing", "billing")] };
-          if (/result|test|lab/.test(t)) return { paras: ["Your test results are in Test Results, in the menu on the left."], actions: [go("Go to Test Results", "results")] };
-          if (/visit|summar/.test(t)) return { paras: ["Your visit summaries are in Visit Summaries, in the menu on the left."], actions: [go("Go to Visit Summaries", "visits")] };
+          if (/bill|billing|pay/.test(t)) return { paras: ["It's in Billing, in the menu."], actions: [go("Open Billing", "billing")] };
+          if (/result|test|lab/.test(t)) return { paras: ["They're in Test Results, in the menu."], actions: [go("Open Test Results", "results")] };
+          if (/visit|summar/.test(t)) return { paras: ["They're in Visit Summaries, in the menu."], actions: [go("Open Visit Summaries", "visits")] };
         }
-        if (ctx === "appointments" && /reschedul|change|cancel/.test(t)) return { paras: ["You can choose Reschedule on this page. It's demo-only here, and nothing changes until you confirm. If you'd rather talk to a person, your clinic can help."], actions: [go("Go to Contact Us", "contact")] };
-        if (ctx === "appointments" && /bring|need|before|prepare/.test(t)) return { paras: ["I don't see specific preparation steps for this sample visit, and I don't want to guess. Your clinic can tell you what to bring."], actions: [go("Go to Contact Us", "contact")] };
-        if (ctx === "communications" && /write|send|care team|reach/.test(t)) return { paras: ["You can choose Write a message on this page. It's demo-only here, and I can't send anything for you."] };
-        if (ctx === "help" && /result/.test(t)) return { paras: ["The Help Topics page says each result shows your value beside a typical range, and your care team can explain what yours mean for you."] };
-        if (ctx === "help" && /pay|bill/.test(t)) return { paras: ["The Help Topics page says to go to Billing and choose Pay bill or Set up payment plan. Both are demo-only here."], actions: [go("Go to Billing", "billing")] };
-        if (ctx === "contact" && /billing|phone|call|number|reach/.test(t)) return { paras: ["Billing support is listed on this page: (555) 000-0000. That's a fictional number for this prototype."] };
-        if (ctx === "contact" && /care team|clinic|doctor/.test(t)) return { paras: ["This page points you to Communications to message your care team, or to call your clinic."], actions: [careTeam] };
-        if (ctx === "feedback") return { paras: ["Your note goes in the box on this page. In this prototype it isn't actually sent, and I can't see what you type there."] };
-        if (ctx === "account" && /notif|email|text|remind/.test(t)) return { paras: ["You can change those in Notifications on this page. I can't change settings for you."] };
-        return { paras: [`${c.saw} I can only explain what's on this page. If it's something else, Contact Us has ways to reach a person.`], actions: [go("Go to Contact Us", "contact")] };
+        if (ctx === "appointments" && /reschedul|change|cancel/.test(t)) return { paras: ["Choose Reschedule on this page.", "Nothing changes until you confirm."] };
+        if (ctx === "appointments" && /bring|need|before|prepare/.test(t)) return { paras: ["I don't see preparation steps for this visit, and I'd rather not guess.", "Your clinic can tell you what to bring."], actions: [go("Contact Us", "contact")] };
+        if (ctx === "communications" && /write|send|care team|reach/.test(t)) return { paras: ["Choose Write a message on this page.", "I can't send anything for you."] };
+        if (ctx === "help" && /result/.test(t)) return { paras: ["Each result shows your value next to a typical range.", "Your care team can explain what yours mean."] };
+        if (ctx === "help" && /pay|bill/.test(t)) return { paras: ["Go to Billing and choose Pay bill or Set up payment plan."], actions: [go("Open Billing", "billing")] };
+        if (ctx === "contact" && /care team|clinic|doctor/.test(t)) return { paras: ["You can message them from Communications, or call your clinic."], actions: [careTeam] };
+        if (ctx === "contact" && /billing|phone|call|number|reach/.test(t)) return { paras: ["Billing support is (555) 000-0000.", "That's a fictional number for this prototype."] };
+        if (ctx === "feedback") return { paras: ["Your note goes in the box on this page.", "Here it isn't actually sent, and I can't see what you type."] };
+        if (ctx === "account" && /notif|email|text|remind/.test(t)) return { paras: ["You can change those under Notifications on this page.", "I can't change settings for you."] };
+        return { paras: ["I can only help with what's on this page.", "For anything else, Contact Us can connect you to a person."], actions: [go("Contact Us", "contact")] };
       }
 
       function answer(ctx, text) {
         const t = text.toLowerCase();
         if (ctx === "bill") {
-          if (/plan|pay|payment|afford|installment|assistance|can.?t pay|struggl|hard to/.test(t)) return { paras: ["You have two options on the Billing page: pay the full amount, or set up a payment plan to spread it out. Both open a step where you can review everything first, and nothing happens until you confirm. In this prototype they're demo-only.", "If paying right now feels hard, billing support can talk through your options with you."], actions: [planAction, billingSupport] };
-          if (/due|deadline|when|late/.test(t)) return { paras: ["The due date is shown at the top of your bill. If you need more time, billing support can talk with you about what's possible."], actions: [billingSupport] };
-          if (/who|talk|speak|call|person|support/.test(t)) return { paras: ["Billing support can look at your account and answer questions I can't, like whether a charge is correct."], actions: [billingSupport] };
-          if (/charge|explain|understand|why|owe|amount|insurance|total|line|item|what is|overview/.test(t)) return { paras: ["Your insurance has already been applied to this bill. The amount due is what's left after your plan paid its share and after approved adjustments, so it isn't the full amount charged.", "If one of the two services doesn't look familiar, tell me which one and I'll go through what's listed for it. For questions about whether a charge is right, billing support can look at your account."], actions: [billingSupport] };
-          return { paras: ["I don't see an answer to that in the bill details you shared with me, and I don't want to guess. Billing support can look at your account directly."], actions: [billingSupport] };
+          if (/\bplans?\b|\bpay|payment|afford|installment|assistance|can.?t pay|struggl|hard to/.test(t)) return { paras: ["You can pay in full, or split it into a plan.", "You'll review everything before anything happens. And if money is tight, billing support can talk through options."], actions: [planAction, billingSupport] };
+          if (/due|deadline|when|late/.test(t)) return { paras: ["The due date is at the top of your bill.", "Need more time? Billing support can help."], actions: [billingSupport] };
+          if (/who|talk|speak|call|person|support/.test(t)) return { paras: ["Billing support can look at your actual account, which I can't."], actions: [billingSupport] };
+          if (/walk|go through|line|item|each|break/.test(t)) return { paras: ["There are two services: your office visit and your lab services.", "Insurance paid part of each, so what's left is yours."] };
+          if (/charge|explain|understand|why|owe|amount|insurance|total|what is|overview/.test(t)) return { paras: ["Your insurance already paid its share.", "What you owe is what's left after that and any approved adjustments."], chips: [{ label: "Go through the charges", fill: "Go through the charges" }] };
+          return { paras: ["I don't see that on your bill, and I'd rather not guess.", "Billing support can check your account."], actions: [billingSupport] };
         }
         if (ctx === "results") {
-          if (/worr|scared|afraid|serious|cancer|diagnos|danger|urgent|emergency|symptom|bad|sick/.test(t)) return { paras: ["That sounds like a worrying thing to carry, and I'm sorry. I can't tell you what these results mean for your health or diagnose anything, and I don't want to guess. Your care team can look at them with you.", "If you're feeling unwell or have symptoms that worry you, please call your clinic, or 911 in an emergency."], actions: [careTeam] };
-          if (/question|care team|doctor|provider|write|draft|ask them/.test(t)) return { paras: ["Here's a draft you can edit. It stays here unless you copy it:"], quote: `“${DRAFT}”`, actions: [{ label: "Copy draft", button: true, run: () => { navigator.clipboard?.writeText(DRAFT); toast("Copied. Nothing was sent."); } }, careTeam] };
-          if (/typical range|reference|range mean|what does/.test(t) && /range/.test(t)) return { paras: ["A typical range is the span where most people's values for that marker land. It's a guide, not a verdict. A value just outside it can happen for many reasons, and only your care team can say what it means for you."] };
-          if (/outside|abnormal|high|low|flag|normal|anything/.test(t)) return { paras: ["One marker in Sample Panel B is a little outside the typical range shown beside it. That alone doesn't tell us what it means for you. Your care team looks at results alongside your history and how you've been feeling.", "Would it help to write a question to bring to them?"], chips: [{ label: "Help me write a question for my care team", fill: "Help me write a question for my care team" }] };
-          if (/preview|pending|waiting|missing|not ready|panel d/.test(t)) return { paras: ["Sample Panel D is still a preview, so I can't explain it yet. It will show up on the page when it's ready."] };
-          if (/mean|explain|plain|understand|overview|summar|what/.test(t)) return { paras: ["Each result shows your value next to a typical range. Most of yours are within that range. One marker is a little outside it, and one result is still a preview.", "A value outside the range doesn't tell us on its own what it means for you. Your care team can go over it with you."] };
-          return { paras: ["I don't see that in the results you shared with me, and I don't want to guess. Your care team is the best place to ask."], actions: [careTeam] };
+          if (/worr|scared|afraid|serious|cancer|diagnos|danger|urgent|emergency|symptom|bad|sick/.test(t)) return { paras: ["That sounds stressful, and I'm sorry.", "I can't say what results mean for your health, but your care team can.", "If you feel unwell, call your clinic, or 911 in an emergency."], actions: [careTeam] };
+          if (/question|care team|doctor|provider|write|draft|ask them/.test(t)) return { paras: ["Here's a draft you can edit:"], quote: `“${DRAFT}”`, actions: [{ label: "Copy draft", button: true, run: () => { navigator.clipboard?.writeText(DRAFT); toast("Copied. Nothing was sent."); } }, careTeam] };
+          if (/typical range|reference|range mean|what does|what's a/.test(t) && /range/.test(t)) return { paras: ["It's where most people's values land.", "A guide, not a verdict. Your care team can say what yours means."] };
+          if (/outside|abnormal|high|low|flag|normal|anything/.test(t)) return { paras: ["One marker in Panel B is a little outside its range.", "That alone doesn't say much. Your care team looks at the whole picture."], chips: [{ label: "Questions for my care team", fill: "Questions for my care team" }] };
+          if (/preview|pending|waiting|missing|not ready|panel d/.test(t)) return { paras: ["Panel D is still a preview, so I can't explain it yet.", "It'll show up when it's ready."] };
+          if (/mean|explain|plain|understand|overview|summar|what/.test(t)) return { paras: ["Most of your results are in range.", "One marker is a little outside it, and one result is still a preview."] };
+          return { paras: ["I don't see that in your results, and I'd rather not guess.", "Your care team is the best place to ask."], actions: [careTeam] };
         }
         if (ctx === "visit") {
-          if (/contact|call|when|worse|symptom|worr|emergency|urgent/.test(t)) return { paras: ["Your summary says to contact your care team if you have new or worsening symptoms, or questions about the plan. I can't judge your situation, so if something feels off, please trust that and reach out. In an emergency, call 911."], actions: [careTeam] };
-          if (/follow|next|step|todo|to do|what should i do/.test(t)) return { paras: ["Your summary lists three follow-up steps: lab work in about 2 weeks, continuing Sample Medication X as listed, and a routine visit in about 6 months.", "I can't book or change anything from here. If you'd like to look at times, you can open Appointments. Nothing is booked until you confirm."], actions: [go("Go to Appointments", "appointments")] };
-          if (/takeaway|summar|go over|overview|explain|understand|what|key/.test(t)) return { paras: ["In short: it was a routine check-in, your provider didn't note anything urgent, and there are a few follow-up steps. The one with a timeframe is the lab work, in about 2 weeks."] };
-          return { paras: ["I don't see that in your visit summary, and I don't want to guess. Your care team can answer it."], actions: [careTeam] };
+          if (/contact|call|when|worse|symptom|worr|emergency|urgent/.test(t)) return { paras: ["Reach out for new or worsening symptoms, or questions about the plan.", "If something feels off, trust that. In an emergency, call 911."], actions: [careTeam] };
+          if (/follow|next|step|todo|to do|what should i do/.test(t)) return { paras: ["Three things: lab work in about 2 weeks, keep taking Sample Medication X, and a routine visit in about 6 months.", "I can't book anything, but you can look at times in Appointments."], actions: [go("Open Appointments", "appointments")] };
+          if (/takeaway|summar|go over|overview|explain|understand|what|key/.test(t)) return { paras: ["A routine check-in, and nothing urgent was noted.", "The one with a timeframe is lab work in about 2 weeks."] };
+          return { paras: ["I don't see that in your summary, and I'd rather not guess.", "Your care team can answer it."], actions: [careTeam] };
         }
         if (ctx === "none") {
-          if (/billing|bill|pay/.test(t) && /support|contact|reach|talk/.test(t)) return { paras: ["Billing support can help with questions about charges and payment options."], actions: [billingSupport] };
-          if (/visit|summar/.test(t)) return { paras: ["Your visit summaries are in the Visit Summaries section of the menu."], actions: [go("Go to Visit Summaries", "visits")] };
-          if (/result|test|lab/.test(t)) return { paras: ["Your test results are in the Test Results section of the menu. If you'd like help understanding them, choose them above and I'll look at just those."], actions: [go("Go to Test Results", "results")] };
-          return { paras: ["I can help with general questions about the portal. To talk about a page, your bill, results, or a visit, choose one above so I know what I'm allowed to look at."], chips: [{ label: "Choose something to talk about", run: showContextOptions }] };
+          if (/billing|bill|pay/.test(t) && /support|contact|reach|talk/.test(t)) return { paras: ["Billing support can help with charges and payment options."], actions: [billingSupport] };
+          if (/visit|summar/.test(t)) return { paras: ["They're in Visit Summaries, in the menu."], actions: [go("Open Visit Summaries", "visits")] };
+          if (/result|test|lab/.test(t)) return { paras: ["They're in Test Results, in the menu.", "Pick them above if you'd like me to help read them."], actions: [go("Open Test Results", "results")] };
+          return { paras: ["I can answer general portal questions.", "To talk about your bill, results, or a visit, choose one so I know what I can look at."], chips: [{ label: "Choose something to read", run: showContextOptions }] };
         }
         return pageAnswer(ctx, t);
       }
 
-      const isVague = (text) => text.trim().split(/\s+/).length <= 3 && /^(help|explain|understand|confused|what|huh|idk|i don.?t (get|understand)|please)/i.test(text.trim());
+      const isVague = (text) => text.trim().split(/\s+/).length <= 2 && /^(help|explain|understand|confused|what|huh|idk|i don.?t (get|understand)|please)/i.test(text.trim());
 
       function clarifier(ctx) {
         const asks = {
-          bill: "Is there a charge, or a word on the bill, that's tripping you up? You can tell me, or skip this and I'll give you an overview.",
-          results: "Is there a particular result you're wondering about, or would an overview of all of them help? You can skip this if you like.",
-          visit: "Is there a part of the visit summary you'd like to start with? You can skip this and I'll give you the main points."
+          bill: "Is there a charge that's confusing you?",
+          results: "Is there a result you're wondering about?",
+          visit: "Is there somewhere you'd like to start?"
         };
         return {
-          paras: [asks[ctx] || "What part of this page would you like to start with? You can skip this and I'll give you an overview."],
+          paras: [asks[ctx] || "What would you like to start with?"],
           chips: [
             { label: "A specific part", fill: ctx === "bill" ? "I'm not sure about one of the charges." : ctx === "results" ? "I'm wondering about one of the results." : ctx === "visit" ? "I'd like to start with the follow-up steps." : "I'd like to start with one section." },
-            { label: "Skip, give me an overview", run: () => addBot({ ...withFollowUps(ctx, answer(ctx, "overview")), source: sourceLabel(ctx), feedback: true }) },
+            { label: "Just give me an overview", run: () => addBot({ ...withFollowUps(ctx, answer(ctx, "overview"), "overview"), feedback: true }) },
             notMeant()
           ]
         };
       }
 
-      function withFollowUps(ctx, reply) {
-        const chips = [...(reply.chips || []), ...(FOLLOW_UPS[ctx] || [])];
-        if (ctx !== "none") chips.push(notMeant());
-        return { ...reply, chips };
+      /* At most three suggestions, and never one that repeats what was just asked. */
+      function withFollowUps(ctx, reply, asked = "") {
+        const taken = new Set([asked.toLowerCase(), ...(reply.chips || []).map((c) => c.label.toLowerCase())]);
+        const extra = (FOLLOW_UPS[ctx] || []).filter((c) => !taken.has(c.label.toLowerCase()) && !taken.has(c.fill.toLowerCase()));
+        return { ...reply, chips: [...(reply.chips || []), ...extra].slice(0, 3) };
       }
 
       dom.input.addEventListener("input", fitInput);
@@ -1475,7 +1500,7 @@
         setInput("");
         dom.hint.textContent = "";
         const typing = make("div", "msg bot");
-        typing.innerHTML = `<span class="thinking" role="img" aria-label="Baylee is writing">${SPARK}<span class="shimmer">Baylee is thinking</span></span>`;
+        typing.innerHTML = `<span class="thinking" role="img" aria-label="Baylee is writing">${SPARK}<span class="shimmer">Thinking</span></span>`;
         dom.thread.append(typing);
         dom.thread.scrollTop = dom.thread.scrollHeight;
         state.pending = true;
@@ -1483,8 +1508,8 @@
           typing.remove();
           state.pending = false;
           if (ctx !== "none" && !state.clarified[ctx] && isVague(text)) { state.clarified[ctx] = true; addBot(clarifier(ctx)); }
-          else addBot({ ...withFollowUps(ctx, answer(ctx, text)), source: sourceLabel(ctx), feedback: true });
-        }, 800);
+          else addBot({ ...withFollowUps(ctx, answer(ctx, text), text), feedback: true });
+        }, 700);
       });
 
       /* ---------- Wiring ---------- */
