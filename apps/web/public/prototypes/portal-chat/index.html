@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | BSWHealth patient portal prototype</title>
+    <title>Get Care | BSWHealth patient portal prototype</title>
     <style>
       /*
         PROTOTYPE NOTES
@@ -652,8 +652,76 @@
 
       /* Guided steps */
       .step-label { color: var(--color-secondary-a2); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-      .baylee-button--primary { border-color: var(--color-primary-b2); color: var(--color-primary-a2); background: var(--color-primary-b2); }
-      .baylee-button--primary:hover { border-color: var(--color-primary-b1); background: var(--color-primary-b1); }
+
+      /* Get Care page */
+      .user-chip { height: 40px; padding: 0 16px; border: 1px solid var(--color-secondary-a4); border-radius: 999px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+      .user-chip:hover { background: var(--color-secondary-a5); }
+      .mail-button { position: relative; }
+      .mail-badge { position: absolute; top: 2px; right: 0; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; color: #fff; background: var(--color-system-b1); font-size: 10px; font-weight: 700; line-height: 16px; }
+      .care-hero { margin-bottom: 24px; padding: 32px 24px; border-radius: 8px; text-align: center; background: var(--color-secondary-c1); }
+      .ai-preview { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; color: #fff; background: var(--color-secondary-a2); font-size: 11px; font-weight: 700; line-height: 1.6; }
+      .care-hero h1 { margin: 12px 0 20px; font-size: 22px; }
+      .care-hero .ask-bar { margin: 0 auto; }
+      .care-hero .hero-chips { justify-content: center; }
+      .care-grid { display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 24px; align-items: start; }
+      .care-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .care-head h2, .care-h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 20px; }
+      .care-h2 { margin: 8px 0 12px; }
+      .count-badge { display: inline-grid; min-width: 22px; height: 22px; padding: 0 6px; place-items: center; border-radius: 11px; color: #fff; background: var(--color-system-b1); font-size: 12px; font-weight: 700; }
+      .todo-wrap { display: flex; align-items: stretch; gap: 8px; margin-top: 12px; }
+      .todo-track { display: flex; flex: 1; min-width: 0; gap: 16px; margin: 0; padding: 4px; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scrollbar-width: none; }
+      .todo-track::-webkit-scrollbar { display: none; }
+      .todo-card { display: grid; flex: 0 0 min(300px, 82%); align-content: start; gap: 8px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: var(--color-primary-c1); box-shadow: var(--shadow-soft); scroll-snap-align: start; }
+      .todo-card h3 { margin: 0; font-size: 16px; line-height: 1.3; }
+      .todo-card p { margin: 0; font-size: 13px; line-height: 1.5; }
+      .todo-for strong { color: var(--color-primary-a3); font-size: 12px; text-transform: uppercase; }
+      .todo-card .ntg-btn { width: 100%; margin-top: 8px; }
+      .todo-arrow { width: 32px; flex: 0 0 auto; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: var(--color-primary-a3); background: var(--color-primary-c1); font-size: 22px; cursor: pointer; }
+      .todo-arrow:hover:not([disabled]) { background: var(--color-secondary-b2); }
+      .todo-arrow[disabled] { color: var(--color-secondary-a3); background: var(--color-secondary-a6); cursor: default; }
+      .todo-dots { display: flex; justify-content: center; gap: 8px; margin: 12px 0 24px; }
+      .todo-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--color-secondary-a3); }
+      .todo-dots span.is-on { background: var(--color-primary-a3); }
+      .provider-list, .find-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+      .provider-row { display: flex; width: 100%; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid var(--color-secondary-a4); margin-top: -1px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+      .provider-row:hover { background: var(--color-secondary-b2); }
+      .provider-row .chev { margin-left: auto; color: var(--color-primary-a3); font-size: 24px; }
+      .muted { color: var(--color-secondary-a2); font-size: 12px; }
+      .avatar { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: var(--color-primary-a3); background: var(--color-secondary-c1); font-size: 13px; font-weight: 700; }
+      .care-more { margin-top: 12px; }
+      .side-card { margin-bottom: 16px; overflow: hidden; border: 1px solid var(--color-secondary-a4); border-radius: 4px; text-align: center; background: var(--color-primary-c1); }
+      .side-band { display: grid; height: 64px; place-items: center; }
+      .side-band--visit { background: #dccde0; }
+      .side-band--care { background: var(--color-secondary-c1); }
+      .side-body { padding: 16px; }
+      .side-body h3 { margin: 0 0 4px; font-size: 18px; }
+      .side-body p { margin: 0 0 8px; font-size: 13px; line-height: 1.5; }
+      .side-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .mini-tile { display: grid; justify-items: center; gap: 8px; padding: 16px 8px; border: 1px solid var(--color-secondary-a4); border-radius: 4px; color: var(--color-primary-a2); background: var(--color-primary-c1); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+      .mini-tile:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); }
+
+      /* Find care results (from the Find Care spec) */
+      .find-title { margin: 8px 0 12px; font-size: 24px; }
+      .find-search { max-width: 480px; }
+      .find-tabs { display: flex; gap: 24px; margin: 16px 0; border-bottom: 1px solid var(--color-secondary-a4); }
+      .find-tab { padding: 8px 0 10px; border: 0; border-bottom: 3px solid transparent; color: var(--color-secondary-a2); background: none; font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
+      .find-tab[aria-selected="true"] { border-bottom-color: var(--color-primary-a3); color: var(--color-primary-a3); }
+      .find-list { gap: 16px; margin-top: 16px; }
+      .find-card { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--color-secondary-a4); border-radius: 8px; background: var(--color-primary-c1); }
+      .find-top { display: flex; align-items: flex-start; gap: 12px; }
+      .find-top h3 { margin: 0; font-size: 16px; }
+      .find-meta { display: grid; gap: 4px; margin: 0; color: var(--color-secondary-a2); font-size: 13px; }
+      .stars { color: var(--color-primary-b1); letter-spacing: 1px; }
+      .find-ok { color: var(--color-system-a3); font-size: 13px; font-weight: 700; }
+      .find-actions { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+      .ntg-pill[aria-pressed="true"] { border-color: var(--color-primary-a3); background: var(--color-secondary-c1); }
+      .fav { display: grid; width: 40px; height: 40px; margin-left: auto; place-items: center; border: 0; border-radius: 50%; color: var(--color-secondary-a2); background: transparent; font-size: 22px; cursor: pointer; }
+      .fav:hover { background: var(--color-secondary-a5); }
+      .fav[aria-pressed="true"] { color: var(--color-primary-b1); }
+      #page-home { container-type: inline-size; }
+      @container (max-width: 760px) { .care-grid { grid-template-columns: 1fr; } .care-side { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } .care-side .side-card { margin-bottom: 0; } .care-side .side-tiles { grid-column: 1 / -1; } }
+      @container (max-width: 520px) { .care-side { grid-template-columns: 1fr; } }
+      @media (max-width: 900px) { .user-chip { display: none; } }
     </style>
   </head>
   <body>
@@ -663,12 +731,17 @@
       <button class="ntg-circle ntg-circle--float menu-button" id="menu-button" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
       </button>
-      <a class="brand" href="#" data-page="home" aria-label="BSWHealth patient portal, go to Home">
+      <a class="brand" href="#" data-page="home" aria-label="BSWHealth patient portal, go to Get Care">
         <span class="brand-mark" aria-hidden="true">+</span>
       </a>
       <span class="topbar-spacer"></span>
       <button class="ntg-circle chat-entry" id="header-ask" type="button" aria-controls="drawer" aria-expanded="false" aria-label="Open chat with Baylee, an AI assistant" data-tip="Chat">
         <span class="baylee-icon" aria-hidden="true"></span>
+      </button>
+      <button class="user-chip" type="button" id="user-chip" aria-label="Jane, account menu (demo)">JANE <span aria-hidden="true">⌄</span></button>
+      <button class="ntg-circle ntg-circle--float mail-button" type="button" data-page="communications" aria-label="Messages, 6 unread (sample)">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg>
+        <span class="mail-badge" aria-hidden="true">6</span>
       </button>
       <button class="ntg-circle ntg-circle--float" type="button" aria-label="Help">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.5M12 16.8h.01"></path></svg>
@@ -680,7 +753,7 @@
 
       <nav class="sidebar" id="sidebar" aria-label="Main navigation">
         <ul class="nav-list">
-          <li><button class="nav-item" type="button" data-page="home"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3.5 10 8.5-7 8.5 7"></path><path d="M5.5 9v11h13V9M9.5 20v-6h5v6"></path></svg>Home</button></li>
+          <li><button class="nav-item" type="button" data-page="home"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v6a4 4 0 0 0 8 0V3"></path><path d="M10 13v2a5 5 0 0 0 10 0v-1"></path><circle cx="20" cy="12" r="2"></circle></svg>Get Care</button></li>
           <li><button class="nav-item" type="button" data-page="appointments"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg>Appointments</button></li>
           <li><button class="nav-item" type="button" data-page="communications"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5h16v12H9l-5 3v-15Z"></path><path d="M8 10h8M8 13.5h5"></path></svg>Communications</button></li>
           <li><button class="nav-item" type="button" data-page="billing"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg>Billing</button></li>
@@ -700,50 +773,96 @@
       </nav>
 
       <main class="main" id="main">
-        <!-- HOME -->
-        <section class="page" id="page-home" data-title="Home" tabindex="-1">
-          <div class="hero">
-            <p class="eyebrow">Your care at a glance</p>
-            <h1>Welcome back</h1>
-            <p class="lede">Here is what's ready for you today. Take your time. Nothing here needs to be done all at once.</p>
-            <form class="ask-bar" id="home-ask" role="search" aria-label="Talk with Baylee, an AI assistant">
-              <span class="baylee-icon" aria-hidden="true"></span>
-              <label class="visually-hidden" for="home-ask-input">Message to Baylee, an AI assistant</label>
-              <input id="home-ask-input" type="text" autocomplete="off" placeholder="What's on your mind today?">
-              <button class="ntg-circle send-circle" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
-            </form>
-            <div class="chips hero-chips" id="home-chips" aria-label="Ideas to start with"></div>
+        <!-- GET CARE -->
+        <section class="page" id="page-home" data-title="Get Care" tabindex="-1">
+          <div id="care-landing">
+            <div class="care-hero">
+              <span class="ai-preview"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="currentColor"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"></path></svg>AI Preview</span>
+              <h1>Hi Jane, how can I help?</h1>
+              <form class="ask-bar" id="home-ask" role="search" aria-label="Talk with Baylee, an AI assistant">
+                <span class="baylee-icon" aria-hidden="true"></span>
+                <label class="visually-hidden" for="home-ask-input">Message to Baylee, an AI assistant</label>
+                <input id="home-ask-input" type="text" autocomplete="off" placeholder="Check my bill or insurance info">
+                <button class="ntg-circle send-circle" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+              </form>
+              <div class="chips hero-chips" id="home-chips" aria-label="Ideas to start with"></div>
+            </div>
+            <div class="care-grid">
+              <div class="care-main">
+                <div class="care-head">
+                  <h2 id="todo-heading">Things to do <span class="count-badge" aria-label="3 items">3</span></h2>
+                  <button class="ntg-link" type="button" data-page="appointments">View all</button>
+                </div>
+                <div class="todo-wrap">
+                  <button class="todo-arrow" id="todo-prev" type="button" aria-label="Previous things to do" disabled>‹</button>
+                  <ul class="todo-track" id="todo-track" aria-labelledby="todo-heading" tabindex="0">
+                    <li class="todo-card">
+                      <h3>Your visit is scheduled!</h3>
+                      <p class="todo-for">for <strong>Sample video visit</strong></p>
+                      <p>Your visit is scheduled for today at 3:30 PM (sample time).</p>
+                      <button class="ntg-btn" type="button" data-demo="echeckin">✓ Begin eCheck-In</button>
+                    </li>
+                    <li class="todo-card">
+                      <h3>Review and sign your estimate</h3>
+                      <p class="todo-for">for <strong>Visit with Sample Provider</strong></p>
+                      <p>Estimated cost: $95.00 (sample). It's an estimate, not a final bill.</p>
+                      <button class="ntg-btn" type="button" data-demo="sign">Review and sign</button>
+                    </li>
+                    <li class="todo-card">
+                      <h3>Complete your payment</h3>
+                      <p class="todo-for">for <strong>Visit with Sample Provider</strong></p>
+                      <p>$95.00 estimated. You'll review everything before anything happens.</p>
+                      <button class="ntg-btn" type="button" data-demo="estimatepay">Complete payment</button>
+                    </li>
+                  </ul>
+                  <button class="todo-arrow" id="todo-next" type="button" aria-label="Next things to do">›</button>
+                </div>
+                <div class="todo-dots" id="todo-dots" aria-hidden="true"></div>
+                <h2 class="care-h2">Schedule a visit</h2>
+                <ul class="provider-list" aria-label="Providers you can schedule with">
+                  <li><button class="provider-row" type="button" data-find="doctors"><span class="avatar" aria-hidden="true">SA</span><span><strong>Sample Provider A, MD</strong><br><span class="muted">Pediatrics</span></span><span class="chev" aria-hidden="true">›</span></button></li>
+                  <li><button class="provider-row" type="button" data-find="doctors"><span class="avatar" aria-hidden="true">SB</span><span><strong>Sample Provider B, MD</strong><br><span class="muted">Family Medicine</span></span><span class="chev" aria-hidden="true">›</span></button></li>
+                </ul>
+                <button class="ntg-link care-more" type="button" data-find="doctors">Find more doctors and locations<span class="arrow" aria-hidden="true">›</span></button>
+              </div>
+              <aside class="care-side" aria-label="Shortcuts">
+                <article class="side-card">
+                  <div class="side-band side-band--visit" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#364248" stroke-width="1.3"><circle cx="12" cy="7" r="3.2"></circle><path d="M5 20v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"></path></svg></div>
+                  <div class="side-body"><h3>Your recent visit</h3><p>Review your care plan, prescriptions, and what to do next.</p><button class="ntg-link" type="button" data-page="visits">View After Visit Summary</button></div>
+                </article>
+                <article class="side-card">
+                  <div class="side-band side-band--care" aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#364248" stroke-width="1.3" stroke-linecap="round"><path d="M6 3v6a4 4 0 0 0 8 0V3"></path><path d="M10 13v2a5 5 0 0 0 10 0v-1"></path><circle cx="20" cy="12" r="2"></circle></svg></div>
+                  <div class="side-body"><h3>Get Care</h3><p>Easily search providers and schedule appointments.</p><button class="ntg-link" type="button" data-find="doctors">Find care</button></div>
+                </article>
+                <div class="side-tiles">
+                  <button class="mini-tile" type="button" data-page="results"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4h8M9 4v5l-4.5 8A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-3L15 9V4"></path><path d="M7.5 15h9"></path></svg>Test Results</button>
+                  <button class="mini-tile" type="button" data-page="billing"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg>Bill Pay</button>
+                </div>
+              </aside>
+            </div>
           </div>
-          <div class="grid tiles">
-            <button class="ntg-card ntg-card--action tile tile--priority" type="button" data-page="appointments">
-              <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg></span>
-              <span class="tile-title">Upcoming visit</span>
-              <span class="tile-text">Review and sign your estimate, then complete your payment.</span>
-              <span class="tile-go" aria-hidden="true">›</span>
-            </button>
-            <button class="ntg-card ntg-card--action tile" type="button" data-page="results">
-              <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4h8M9 4v5l-4.5 8A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-3L15 9V4"></path><path d="M7.5 15h9"></path></svg></span>
-              <span class="tile-title">Test Results</span>
-              <span class="tile-text">Your results are back, with one marker worth a look.</span>
-              <span class="tile-go" aria-hidden="true">›</span>
-            </button>
-            <button class="ntg-card ntg-card--action tile" type="button" data-page="billing">
-              <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg></span>
-              <span class="tile-title">Billing</span>
-              <span class="tile-text">A bill is due in 14 days.</span>
-              <span class="tile-go" aria-hidden="true">›</span>
-            </button>
-            <button class="ntg-card ntg-card--action tile" type="button" data-page="visits">
-              <span class="tile-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3.5h9l4 4v13H6z"></path><path d="M14.5 3.5v5h5M9 13h7M9 16.5h7"></path></svg></span>
-              <span class="tile-title">Visit Summaries</span>
-              <span class="tile-text">Lab work is due in about 2 weeks.</span>
-              <span class="tile-go" aria-hidden="true">›</span>
-            </button>
+
+          <div id="care-results" hidden>
+            <button class="ntg-link" id="care-back" type="button">‹ Back to Get Care</button>
+            <h1 class="find-title">Find care</h1>
+            <div class="ntg-field find-search"><label for="find-q"><span>Search doctors and locations</span></label><input id="find-q" type="search" placeholder="Try “Pediatrics” or “North”" autocomplete="off"></div>
+            <div class="find-tabs" role="tablist" aria-label="Search results">
+              <button class="find-tab" role="tab" id="tab-doctors" aria-controls="panel-doctors" aria-selected="true" type="button">DOCTORS (<span id="count-doctors">0</span>)</button>
+              <button class="find-tab" role="tab" id="tab-locations" aria-controls="panel-locations" aria-selected="false" tabindex="-1" type="button">LOCATIONS (<span id="count-locations">0</span>)</button>
+            </div>
+            <p class="visually-hidden" id="find-status" role="status"></p>
+            <div role="tabpanel" id="panel-doctors" aria-labelledby="tab-doctors">
+              <div class="chips"><button class="ntg-pill" type="button" aria-pressed="false" data-filter="newPatients">Accepts new patients</button></div>
+              <ul class="find-list" id="list-doctors"></ul>
+            </div>
+            <div role="tabpanel" id="panel-locations" aria-labelledby="tab-locations" hidden>
+              <div class="chips"><button class="ntg-pill" type="button" aria-pressed="false" data-filter="walkIns">Accepts walk-ins</button></div>
+              <ul class="find-list" id="list-locations"></ul>
+            </div>
           </div>
           <p class="footnote">Prototype with fictional sample data. Payments, messages, and appointments are demo-only. Components are provisional stand-ins for Nightingale.</p>
         </section>
 
-        <!-- APPOINTMENTS -->
         <section class="page" id="page-appointments" data-title="Appointments" tabindex="-1" hidden>
           <h1>Appointments</h1>
           <p class="lede">Your upcoming and past visits.</p>
@@ -1106,7 +1225,7 @@
           chips: [{ label: "Take me there", primary: true, say: true, run: () => navigate("appointments") }, { label: "Give me the short version", say: true, run: () => addBot({ ...withFollowUps("visit", answer("visit", "summary"), "summary"), feedback: true }) }, { label: "Not now", quiet: true, say: true, run: () => notNow() }]
         },
         home: {
-          title: "Home", label: "Home page", page: "home", uses: "Baylee will look at: the headings and text on the Home page.",
+          title: "Get Care", label: "Get Care page", page: "home", uses: "Baylee will look at: your to-dos, scheduling options, and shortcuts on the Get Care page.",
           insight: ["The one thing that needs you is your upcoming visit.", "I can walk you through the estimate and payment. It takes about 2 minutes."],
           chips: [{ label: "Yes, let's do it", primary: true, say: true, run: () => visitFlow() }, { label: "Tell me about my results", say: true, run: () => navigate("results") }, { label: "Not now", quiet: true, say: true, run: () => notNow() }]
         },
@@ -1203,6 +1322,7 @@
         reschedule: () => openDemo({ title: "Reschedule this visit?", html: "<p>No appointment will be changed in this prototype.</p>", confirmLabel: "Confirm (demo)", onConfirm: () => toast("Demo only: your appointment wasn't changed.") }),
         sign: ({ after, cancel } = {}) => openDemo({ title: "Review your estimate", html: '<p>Estimated cost of your visit with Sample Provider: <strong>$95.00</strong>.</p><p>This is an estimate, not a final bill. Signing means you have reviewed it.</p>', confirmLabel: "Sign (demo)", onConfirm: () => { toast("Demo only: nothing was signed."); after?.(); }, onCancel: cancel }),
         estimatepay: ({ after, cancel } = {}) => openDemo({ title: "Complete your payment", html: '<p>You\'re looking at a sample payment of <strong>$95.00</strong> for your visit.</p><p>No payment will be processed. Nothing is sent anywhere.</p>', confirmLabel: "Confirm (demo)", onConfirm: () => { toast("Demo only: no payment was processed."); after?.(); }, onCancel: cancel }),
+        echeckin: () => openDemo({ title: "Begin eCheck-In?", html: "<p>No check-in is started in this prototype. Nothing is sent anywhere.</p>", confirmLabel: "Begin (demo)", onConfirm: () => toast("Demo only: no check-in was started.") }),
         newmessage: () => openDemo({ title: "Write a message", html: "<p>Messages aren't sent from this prototype.</p>", confirmLabel: "Send (demo)", onConfirm: () => toast("Demo only: no message was sent.") })
       };
 
@@ -1211,7 +1331,7 @@
       function chipsRow(chips) {
         const row = make("div", "reply-stack");
         chips.forEach((chip) => {
-          const button = make("button", `baylee-button${chip.quiet ? " baylee-button--quiet" : ""}${chip.primary ? " baylee-button--primary" : ""}`, chip.label);
+          const button = make("button", `baylee-button${chip.quiet ? " baylee-button--quiet" : ""}`, chip.label);
           button.type = "button";
           button.addEventListener("click", () => {
             if (chip.say) { dom.thread.append(make("div", "msg user", chip.label)); dom.thread.scrollTop = dom.thread.scrollHeight; }
@@ -1661,7 +1781,14 @@
       /* ---------- Wiring ---------- */
       document.addEventListener("click", (event) => {
         const pageLink = event.target.closest("[data-page]");
-        if (pageLink) { event.preventDefault(); navigate(pageLink.dataset.page); return; }
+        const find = event.target.closest("[data-find]");
+        if (find) { navigate("home"); showCare("results", find.dataset.find); return; }
+        if (pageLink) {
+          event.preventDefault();
+          if (pageLink.dataset.page === "home" && pageLink.classList.contains("nav-item")) showCare("landing");
+          navigate(pageLink.dataset.page);
+          return;
+        }
         const demo = event.target.closest("[data-demo]");
         if (demo) { DEMOS[demo.dataset.demo]?.(); return; }
         const baylee = event.target.closest("[data-baylee]");
@@ -1726,6 +1853,126 @@
           });
         });
       }
+
+      /* ---------- Get Care: things to do, and Find care ---------- */
+      const todoTrack = $("#todo-track");
+      const todoCards = $$(".todo-card", todoTrack);
+      const todoDots = $("#todo-dots");
+      todoCards.forEach(() => todoDots.append(make("span")));
+      const todoStep = () => todoCards[0].offsetWidth + 16;
+      function syncTodo() {
+        const index = Math.round(todoTrack.scrollLeft / todoStep());
+        $$("span", todoDots).forEach((dot, i) => dot.classList.toggle("is-on", i === index));
+        $("#todo-prev").disabled = todoTrack.scrollLeft < 8;
+        $("#todo-next").disabled = todoTrack.scrollLeft + todoTrack.clientWidth >= todoTrack.scrollWidth - 8;
+      }
+      $("#todo-prev").addEventListener("click", () => todoTrack.scrollBy({ left: -todoStep(), behavior: "smooth" }));
+      $("#todo-next").addEventListener("click", () => todoTrack.scrollBy({ left: todoStep(), behavior: "smooth" }));
+      todoTrack.addEventListener("scroll", syncTodo, { passive: true });
+      window.addEventListener("resize", syncTodo);
+      syncTodo();
+
+      const FIND = {
+        doctors: [
+          { name: "Sample Provider A, MD", sub: "Pediatrics", where: "Sample Clinic North", miles: 2.4, rating: 4.5, reviews: 12, newPatients: true },
+          { name: "Sample Provider B, MD", sub: "Family Medicine", where: "Sample Clinic East", miles: 3.8, rating: 4, reviews: 8, newPatients: true },
+          { name: "Sample Provider C, MD", sub: "Orthopedic Sports Medicine", where: "Sample Clinic North", miles: 2.4, rating: 5, reviews: 21, newPatients: false }
+        ],
+        locations: [
+          { name: "Sample Clinic North", sub: "Primary care", where: "123 Test Street, Anytown, ST 00000", miles: 2.4, rating: 4.5, reviews: 30, hours: "Open today until 5:00 PM", walkIns: true, newPatients: true },
+          { name: "Sample Clinic East", sub: "Primary care", where: "456 Test Avenue, Anytown, ST 00000", miles: 3.8, rating: 4, reviews: 17, hours: "Open today until 6:00 PM", walkIns: false, newPatients: true },
+          { name: "Sample Urgent Care", sub: "Urgent care", where: "789 Test Road, Anytown, ST 00000", miles: 5.1, rating: 4, reviews: 44, hours: "Open today until 9:00 PM", walkIns: true, newPatients: true }
+        ]
+      };
+      const findState = { tab: "doctors", filters: { newPatients: false, walkIns: false }, favorites: new Set() };
+
+      function stars(rating) { return "★".repeat(Math.round(rating)) + "☆".repeat(5 - Math.round(rating)); }
+
+      function findCard(kind, item) {
+        const card = make("li");
+        const article = make("article", "find-card");
+        const top = make("div", "find-top");
+        const initials = item.name.replace(/[^A-Z]/g, "").slice(0, 2) || "SC";
+        top.append(make("span", "avatar", initials));
+        const heading = make("div");
+        heading.append(make("h3", "", item.name), make("span", "muted", item.sub));
+        top.append(heading);
+        const fav = make("button", "fav", findState.favorites.has(item.name) ? "★" : "☆");
+        fav.type = "button";
+        fav.setAttribute("aria-pressed", String(findState.favorites.has(item.name)));
+        fav.setAttribute("aria-label", `Save ${item.name} to favorites`);
+        fav.addEventListener("click", () => {
+          const on = !findState.favorites.has(item.name);
+          findState.favorites[on ? "add" : "delete"](item.name);
+          fav.setAttribute("aria-pressed", String(on));
+          fav.textContent = on ? "★" : "☆";
+        });
+        top.append(fav);
+        const meta = make("p", "find-meta");
+        const rating = make("span"); rating.innerHTML = `<span class="stars" aria-hidden="true">${stars(item.rating)}</span> ${item.rating.toFixed(1)} (${item.reviews}) <span class="visually-hidden">rating out of 5, sample</span>`;
+        meta.append(rating, make("span", "", `${item.miles} mi · ${item.where}`));
+        if (item.hours) meta.append(make("span", "", item.hours));
+        if (kind === "locations" && item.walkIns) meta.append(make("span", "find-ok", "✓ Accepts walk-ins"));
+        if (item.newPatients) meta.append(make("span", "find-ok", "✓ Accepts new patients"));
+        const actions = make("div", "find-actions");
+        const book = make("button", "ntg-btn ntg-btn--sm", "Book now"); book.type = "button";
+        book.addEventListener("click", () => openDemo({ title: `Book with ${item.name}?`, html: "<p>No appointment will be booked in this prototype. Nothing is sent anywhere.</p>", confirmLabel: "Book (demo)", onConfirm: () => toast("Demo only: no appointment was booked.") }));
+        const call = make("button", "ntg-btn ntg-btn--secondary ntg-btn--sm", "Call"); call.type = "button";
+        call.addEventListener("click", () => toast("Demo only: no call was placed. (555) 000-0000"));
+        actions.append(book, call);
+        article.append(top, meta, actions);
+        card.append(article);
+        return card;
+      }
+
+      function renderFind() {
+        const q = $("#find-q").value.trim().toLowerCase();
+        ["doctors", "locations"].forEach((kind) => {
+          const flag = kind === "doctors" ? "newPatients" : "walkIns";
+          const items = FIND[kind].filter((item) => (!q || `${item.name} ${item.sub} ${item.where}`.toLowerCase().includes(q)) && (!findState.filters[flag] || item[flag]));
+          const list = $(`#list-${kind}`);
+          list.replaceChildren(...items.map((item) => findCard(kind, item)));
+          if (!items.length) list.append(make("li", "muted", "Nothing matches that yet. Try a different word."));
+          $(`#count-${kind}`).textContent = items.length;
+        });
+        $("#find-status").textContent = `${$("#count-doctors").textContent} doctors and ${$("#count-locations").textContent} locations`;
+      }
+
+      function selectFindTab(kind, { focus = false } = {}) {
+        findState.tab = kind;
+        ["doctors", "locations"].forEach((k) => {
+          const tab = $(`#tab-${k}`);
+          tab.setAttribute("aria-selected", String(k === kind));
+          tab.tabIndex = k === kind ? 0 : -1;
+          $(`#panel-${k}`).hidden = k !== kind;
+        });
+        if (focus) $(`#tab-${kind}`).focus();
+      }
+
+      function showCare(view, tab) {
+        $("#care-landing").hidden = view === "results";
+        $("#care-results").hidden = view !== "results";
+        if (view === "results") { renderFind(); selectFindTab(tab || findState.tab); $("#find-q").focus({ preventScroll: true }); }
+        dom.main.scrollTop = 0;
+        if (view !== "results") syncTodo();
+      }
+
+      $("#care-back").addEventListener("click", () => showCare("landing"));
+      $("#find-q").addEventListener("input", renderFind);
+      $$("[data-filter]").forEach((pill) => pill.addEventListener("click", () => {
+        const on = pill.getAttribute("aria-pressed") !== "true";
+        pill.setAttribute("aria-pressed", String(on));
+        pill.classList.toggle("is-on", on);
+        findState.filters[pill.dataset.filter] = on;
+        renderFind();
+      }));
+      $$(".find-tab").forEach((tab) => {
+        tab.addEventListener("click", () => selectFindTab(tab.id.replace("tab-", "")));
+        tab.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); selectFindTab(findState.tab === "doctors" ? "locations" : "doctors", { focus: true }); }
+        });
+      });
+      renderFind();
 
       /* ---------- Home: ask Baylee ---------- */
       ["What should I do first?", "Walk me through my estimate", "What do my results mean?"].forEach((label) => {
