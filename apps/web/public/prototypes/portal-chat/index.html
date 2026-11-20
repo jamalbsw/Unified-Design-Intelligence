@@ -529,6 +529,91 @@
         .marker .gauge { grid-column: 1 / -1; order: 3; }
       }
     </style>
+    <style>
+      /* ---------- Baylee chat, aligned to the Baylee Web 12-2 spec ---------- */
+      :root { --shadow-regular: 2px 8px 10px 0 rgba(58, 68, 85, 0.15); --drawer-full: clamp(380px, 36vw, 480px); }
+      body.chat-wide { --drawer-full: clamp(520px, 50vw, 800px); }
+
+      /* The Baylee icon: conic gradient from the Baylee Color token, in a four-point star */
+      .baylee-icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        flex: 0 0 auto;
+        background: conic-gradient(from -0.1deg at 50% 49.62%, #ffb71b 0deg, #ff9527 88.27deg, #d5647a 159.23deg, #8f659c 199.04deg, #007eb4 259.62deg, #3f9f90 294.23deg, #ffb71b 360deg);
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1c.7 5.4 2.9 9.3 11 11-8.1 1.7-10.3 5.6-11 11-.7-5.4-2.9-9.3-11-11C9.1 10.3 11.3 6.4 12 1z'/%3E%3C/svg%3E") center / contain no-repeat;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1c.7 5.4 2.9 9.3 11 11-8.1 1.7-10.3 5.6-11 11-.7-5.4-2.9-9.3-11-11C9.1 10.3 11.3 6.4 12 1z'/%3E%3C/svg%3E") center / contain no-repeat;
+      }
+
+      .chat-entry { width: 44px; height: 44px; border: 1px solid var(--color-secondary-a4); background: var(--color-primary-c1); }
+      .chat-entry:hover, .chat-entry:active { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); box-shadow: 0 4px 14px rgba(255, 183, 27, 0.4); }
+      .chat-entry:hover .baylee-icon, .chat-entry:focus-visible .baylee-icon { animation: twirl 1.6s var(--ease) infinite; }
+      .chat-entry[aria-expanded="true"] { background: var(--color-primary-c1); box-shadow: inset 0 0 0 2px var(--color-primary-a3); }
+      .thinking .baylee-icon { animation: twirl 1.6s var(--ease) infinite; }
+      .ask-bar .baylee-icon, .baylee-offer .baylee-icon { width: 28px; height: 28px; }
+
+      /* Panel: #F8F8F8, 32px radius, shadow-regular */
+      .drawer { background: transparent; }
+      body.drawer-open .drawer { border-left: 0; }
+      .drawer-inner { top: 16px; right: 16px; bottom: 16px; width: calc(var(--drawer-full) - 16px); overflow: hidden; border-radius: 32px; background: var(--color-secondary-a6); box-shadow: var(--shadow-regular); }
+
+      /* Header: 24px padding, 8px gap, Heading/01 bold title, plain 24px icon controls */
+      .drawer-head { min-height: 72px; gap: 8px; padding: 24px 24px 12px; border-bottom: 0; background: transparent; }
+      .drawer-head h2 { margin: 0; color: var(--color-primary-a2); font-size: 16px; font-weight: 700; line-height: 1.1; }
+      .ai-pill { height: 21px; padding: 0 8px; border-radius: 10px; background: var(--color-secondary-a2); }
+      .controls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+      .icon-plain { display: inline-grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border: 0; border-radius: 50%; color: var(--color-primary-a2); background: transparent; transition: background-color 150ms ease; }
+      .icon-plain:hover { background: var(--color-secondary-a5); }
+      .drawer-head .grow, .drawer-sub { display: none; }
+
+      /* Reading context: a quiet white strip */
+      .context-card { margin: 0 24px 4px; padding: 10px 16px; border: 1px solid var(--color-secondary-a5); border-radius: 16px; background: var(--color-primary-c1); }
+
+      /* Conversation: 24px side padding, 24px between messages, bottom aligned */
+      .thread { gap: 24px; padding: 8px 24px 16px; background: transparent; }
+      .thread > :first-child { margin-top: auto; }
+      .msg.bot { gap: 16px; font-size: 14px; line-height: 1.6; }
+      .msg.bot > .baylee-icon { filter: drop-shadow(0 0.4px 0.8px rgba(0, 0, 0, 0.05)) drop-shadow(0 0.8px 1.6px rgba(0, 0, 0, 0.1)); }
+      .msg.user { padding: 12px 20px; border-radius: 22px 22px 6px 22px; color: var(--color-primary-a2); background: var(--color-secondary-a5); }
+      .quote { border-left-color: var(--color-primary-b1); border-radius: 0 16px 16px 0; background: var(--color-primary-c1); }
+
+      /* Baylee button: white, 1.5px #ddd border, fully rounded, 44px tall, stacked */
+      .reply-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+      .baylee-button { min-height: 44px; max-width: 100%; padding: 8px 24px; border: 1.5px solid var(--color-secondary-a4); border-radius: 31px; color: var(--color-primary-a2); background: var(--color-primary-c1); font-size: 14px; font-weight: 700; line-height: 1.6; text-align: center; transition: background-color 150ms ease, border-color 150ms ease, transform 150ms var(--ease); }
+      .baylee-button:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); transform: translateY(-1px); }
+      .baylee-button:active { background: var(--color-secondary-b1); }
+      .baylee-button--quiet { min-height: 36px; padding: 4px 12px; border-color: transparent; color: var(--color-secondary-a2); background: transparent; font-weight: 600; text-decoration: underline; }
+      .baylee-button--quiet:hover { border-color: transparent; background: var(--color-secondary-a5); }
+
+      /* Rating: two 40px circle buttons, 4px apart */
+      .rating { display: flex; align-items: center; gap: 4px; }
+      .rating .ntg-circle { border-color: transparent; background: transparent; }
+      .rating .ntg-circle:hover { background: var(--color-secondary-a5); }
+      .rating .ntg-circle[aria-pressed="true"] { background: var(--color-secondary-c1); }
+      .source { padding: 0; border: 0; background: none; color: var(--color-secondary-a2); font-size: 11px; line-height: 1.4; }
+
+      /* Composer: 16px padding, 32px radius white field with shadow-soft, 40px circle send */
+      .composer { gap: 12px; padding: 8px 16px 16px; border-top: 0; background: transparent; }
+      .composer-hint { min-height: 0; padding: 0 8px; color: var(--color-secondary-a2); font-size: 11px; }
+      .composer-hint:empty { display: none; }
+      .chat-composer { display: flex; align-items: center; gap: 16px; padding: 16px 16px 16px 24px; border: 1px solid var(--color-secondary-a5); border-radius: 32px; background: var(--color-primary-c1); box-shadow: var(--shadow-soft); transition: box-shadow 150ms ease; }
+      .chat-composer:focus-within { box-shadow: var(--shadow-soft), 0 0 0 3px #3a97f9; }
+      .chat-composer textarea { min-height: 22px; max-height: 120px; flex: 1; padding: 0; border: 0; color: var(--color-primary-a2); background: transparent; font-size: 14px; line-height: 1.6; box-shadow: none; resize: none; overflow-y: auto; }
+      .chat-composer textarea::placeholder { color: var(--color-secondary-a2); opacity: 1; }
+      .send-circle { border: 0; color: var(--color-primary-a2); background: var(--color-primary-b2); transition: background-color 150ms ease, color 150ms ease; }
+      .send-circle:hover, .send-circle:active { background: var(--color-primary-b1); }
+      .chat-composer:has(textarea:placeholder-shown) .send-circle { color: var(--color-secondary-a4); background: transparent; cursor: default; }
+      .composer-caption { text-align: center; color: var(--color-secondary-a2); font-size: 11px; line-height: 1.4; }
+
+      @media (max-width: 1100px) { .expand-only { display: none; } }
+      @media (max-width: 760px) {
+        .drawer { background: var(--color-secondary-a6); }
+        .drawer-inner { inset: 0; width: 100%; border-radius: 0; box-shadow: none; }
+        .drawer-head { padding: 16px 16px 8px; }
+        .context-card { margin: 0 16px 4px; }
+        .thread { padding: 8px 16px 16px; }
+      }
+    </style>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
@@ -541,8 +626,8 @@
         <span class="brand-mark" aria-hidden="true">+</span>
       </a>
       <span class="topbar-spacer"></span>
-      <button class="ntg-circle ntg-circle--accent chat-entry" id="header-ask" type="button" aria-controls="drawer" aria-expanded="false" aria-label="Open chat with Baylee, an AI assistant" data-tip="Chat">
-        <svg class="spark" viewBox="0 0 24 24" aria-hidden="true" style="width:22px;height:22px"><path fill="#ffffff" stroke="#364248" stroke-width="1.2" d="M12 2c.6 4.9 2.6 8.4 8 10-5.4 1.6-7.4 5.1-8 10-.6-4.9-2.6-8.4-8-10 5.4-1.6 7.4-5.1 8-10z"></path></svg>
+      <button class="ntg-circle chat-entry" id="header-ask" type="button" aria-controls="drawer" aria-expanded="false" aria-label="Open chat with Baylee, an AI assistant" data-tip="Chat">
+        <span class="baylee-icon" aria-hidden="true"></span>
       </button>
       <button class="ntg-circle ntg-circle--float" type="button" aria-label="Help">
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.5M12 16.8h.01"></path></svg>
@@ -581,7 +666,7 @@
             <h1>Welcome back</h1>
             <p class="lede">Here is what's ready for you today. Take your time. Nothing here needs to be done all at once.</p>
             <form class="ask-bar" id="home-ask" role="search" aria-label="Ask Baylee">
-              <svg class="spark" viewBox="0 0 24 24" aria-hidden="true" style="width:24px;height:24px"><path fill="#ffb71b" stroke="#364248" stroke-width="1" d="M12 2c.6 4.9 2.6 8.4 8 10-5.4 1.6-7.4 5.1-8 10-.6-4.9-2.6-8.4-8-10 5.4-1.6 7.4-5.1 8-10z"></path></svg>
+              <span class="baylee-icon" aria-hidden="true"></span>
               <label class="visually-hidden" for="home-ask-input">Ask Baylee, an AI assistant</label>
               <input id="home-ask-input" type="text" autocomplete="off" placeholder="Ask Baylee, our AI assistant, about your portal">
               <button class="ntg-btn ntg-btn--sm" type="submit">Ask</button>
@@ -661,7 +746,7 @@
               <button class="ntg-link" type="button" data-open-details="account-overview">Account overview</button>
             </div>
             <div class="baylee-offer">
-              <svg class="spark" viewBox="0 0 24 24" aria-hidden="true" style="width:24px;height:24px"><path fill="#ffb71b" stroke="#364248" stroke-width="1" d="M12 2c.6 4.9 2.6 8.4 8 10-5.4 1.6-7.4 5.1-8 10-.6-4.9-2.6-8.4-8-10 5.4-1.6 7.4-5.1 8-10z"></path></svg>
+              <span class="baylee-icon" aria-hidden="true"></span>
               <p>Not sure what you're looking at? Baylee, our AI assistant, can walk through this bill with you. It's your choice.</p>
               <button class="ntg-btn ntg-btn--secondary ntg-btn--sm" type="button" data-baylee="bill" data-prompt="Can you help me understand this bill?" aria-label="Break it down. Ask Baylee about this bill.">Break it down</button>
             </div>
@@ -850,17 +935,20 @@
       <aside class="drawer" id="drawer" aria-labelledby="drawer-title" inert>
         <div class="drawer-inner">
           <header class="drawer-head">
-            <button class="ntg-circle mobile-only" id="drawer-back" type="button" aria-label="Back to the page. Your conversation is kept.">
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+            <button class="icon-plain mobile-only" id="drawer-back" type="button" aria-label="Back to the page. Your conversation is kept.">
+              <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
             </button>
-            <svg class="spark" viewBox="0 0 24 24" aria-hidden="true" style="width:24px;height:24px"><path fill="#ffb71b" stroke="#364248" stroke-width="1" d="M12 2c.6 4.9 2.6 8.4 8 10-5.4 1.6-7.4 5.1-8 10-.6-4.9-2.6-8.4-8-10 5.4-1.6 7.4-5.1 8-10z"></path></svg>
-            <div class="grow">
-              <h2 id="drawer-title">Baylee <span class="ntg-badge ntg-badge--dark">AI assistant</span></h2>
-              <p class="drawer-sub">Not a clinician. Can make mistakes.</p>
+            <h2 id="drawer-title">Chat with Baylee</h2>
+            <span class="ntg-badge ntg-badge--dark ai-pill">AI assistant</span>
+            <div class="controls">
+              <button class="icon-plain desktop-only expand-only" id="drawer-expand" type="button" aria-pressed="false" aria-label="Make the chat wider" title="Make the chat wider">
+                <svg class="icon-expand" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"></path></svg>
+                <svg class="icon-contract" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M20 10h-6V4M4 14h6v6M14 10l7-7M10 14l-7 7"></path></svg>
+              </button>
+              <button class="icon-plain desktop-only" id="drawer-close" type="button" aria-label="Close chat. Your conversation is kept." title="Close (your conversation is kept)">
+                <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+              </button>
             </div>
-            <button class="ntg-circle desktop-only" id="drawer-close" type="button" aria-label="Close Baylee. Your conversation is kept." title="Close (your conversation is kept)">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
-            </button>
           </header>
 
           <section class="context-card" id="context-card" aria-labelledby="context-heading">
@@ -889,6 +977,7 @@
                 <li>Baylee only uses the fictional details listed above for the page or item you picked. It can't see anything else in this prototype, and it can't see what you type into forms.</li>
                 <li>Your messages aren't sent or saved anywhere. They stay in this browser tab and disappear when you refresh.</li>
                 <li>This prototype doesn't share your chat with your care team or anyone else.</li>
+                <li>Baylee can't make payments, send messages, book appointments, or change anything for you. It can only explain and point you to the right place.</li>
                 <li>A real version would describe this in BSW Health's privacy policy.</li>
               </ul>
             </details>
@@ -897,10 +986,15 @@
           <div class="thread" id="thread" role="log" aria-live="polite" aria-label="Conversation with Baylee" tabindex="0"></div>
 
           <form class="composer" id="composer">
-            <p class="composer-hint" id="composer-hint">Type your own question, or choose a suggestion to edit first.</p>
-            <label class="ntg-field" for="composer-input"><span>Your question</span><textarea id="composer-input" rows="2"></textarea></label>
-            <button class="ntg-btn ntg-btn--sm ntg-btn--fluid" type="submit">Send</button>
-            <p class="composer-caption">Press Enter to send, or Shift+Enter for a new line. Nothing is sent until then. Baylee can't make payments, send messages, or change anything for you.</p>
+            <p class="composer-hint" id="composer-hint"></p>
+            <div class="chat-composer">
+              <label class="visually-hidden" for="composer-input">Message to Baylee</label>
+              <textarea id="composer-input" rows="1" placeholder="Ask a question"></textarea>
+              <button class="ntg-circle send-circle" type="submit" aria-label="Send message">
+                <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+              </button>
+            </div>
+            <p class="composer-caption">Baylee may make mistakes and is not a substitute for professional medical advice.</p>
           </form>
         </div>
       </aside>
@@ -926,7 +1020,8 @@
       const $ = (selector, root = document) => root.querySelector(selector);
       const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
       const make = (tag, className, text) => { const n = document.createElement(tag); if (className) n.className = className; if (text) n.textContent = text; return n; };
-      const SPARK = '<svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ffb71b" stroke="#364248" stroke-width="1" d="M12 2c.6 4.9 2.6 8.4 8 10-5.4 1.6-7.4 5.1-8 10-.6-4.9-2.6-8.4-8-10 5.4-1.6 7.4-5.1 8-10z"></path></svg>';
+      const BAYLEE_ICON = '<span class="baylee-icon" aria-hidden="true"></span>';
+      const SPARK = BAYLEE_ICON;
       const body = document.body;
       const dom = {
         main: $("#main"), drawer: $("#drawer"), thread: $("#thread"), input: $("#composer-input"), hint: $("#composer-hint"),
@@ -1040,10 +1135,11 @@
       };
 
       /* ---------- Baylee: thread helpers ---------- */
+      /* Suggestions and actions use the Baylee button: white, 1.5px #ddd border, fully rounded, stacked. */
       function chipsRow(chips) {
-        const row = make("div", "chips");
+        const row = make("div", "reply-stack");
         chips.forEach((chip) => {
-          const button = make("button", `ntg-pill${chip.quiet ? " ntg-pill--quiet" : ""}`, chip.label);
+          const button = make("button", `baylee-button${chip.quiet ? " baylee-button--quiet" : ""}`, chip.label);
           button.type = "button";
           button.addEventListener("click", () => (chip.run ? chip.run() : prefill(chip.fill, "Suggested question. Edit it or replace it, then press Send.")));
           row.append(button);
@@ -1052,11 +1148,10 @@
       }
 
       function actionsRow(actions) {
-        const row = make("div", "reply-actions");
+        const row = make("div", "reply-stack");
         actions.forEach((action) => {
-          const control = action.button ? make("button", "ntg-btn ntg-btn--secondary ntg-btn--sm", action.label) : make("button", "ntg-link");
+          const control = make("button", "baylee-button", action.label);
           control.type = "button";
-          if (!action.button) { control.append(document.createTextNode(action.label)); control.append(make("span", "arrow", "›")); control.lastChild.setAttribute("aria-hidden", "true"); }
           control.addEventListener("click", action.run);
           row.append(control);
         });
@@ -1080,15 +1175,18 @@
         return state.follow ? `Based on: ${c.title}` : `Based on: ${c.label}`;
       }
 
+      /* Rating: two 40px circle buttons, thumbs up and thumbs down. */
       function feedbackRow() {
-        const row = make("div", "feedback");
-        row.append(make("span", "meta", "Was this helpful?"));
-        [["Yes, this was helpful", "M7 11v8H4v-8h3Zm0 0 4-7a2 2 0 0 1 2 2v3h5a2 2 0 0 1 2 2.3l-1 6A2 2 0 0 1 17 19H7"], ["No, this wasn't helpful", "M7 13V5H4v8h3Zm0 0 4 7a2 2 0 0 0 2-2v-3h5a2 2 0 0 0 2-2.3l-1-6A2 2 0 0 0 17 5H7"]].forEach(([label, path]) => {
-          const button = make("button", "ntg-circle ntg-circle--float ntg-circle--sm");
+        const row = make("div", "rating");
+        row.setAttribute("role", "group");
+        row.setAttribute("aria-label", "Rate this answer");
+        [["Helpful", "M7 11v8H4v-8h3Zm0 0 4-7a2 2 0 0 1 2 2v3h5a2 2 0 0 1 2 2.3l-1 6A2 2 0 0 1 17 19H7"], ["Not helpful", "M7 13V5H4v8h3Zm0 0 4 7a2 2 0 0 0 2-2v-3h5a2 2 0 0 0 2-2.3l-1-6A2 2 0 0 0 17 5H7"]].forEach(([label, path]) => {
+          const button = make("button", "ntg-circle");
           button.type = "button";
           button.setAttribute("aria-label", label);
+          button.setAttribute("title", label);
           button.setAttribute("aria-pressed", "false");
-          button.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="${path}"></path></svg>`;
+          button.innerHTML = `<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="${path}"></path></svg>`;
           button.addEventListener("click", () => {
             $$("button", row).forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
             toast("Thank you. Demo only: your feedback isn't sent anywhere.");
@@ -1098,11 +1196,11 @@
         return row;
       }
 
+      /* A Baylee message: the 24px Baylee icon, then body text with 16px between blocks. */
       function addBot({ paras = [], quote, actions = [], chips = [], source = "", feedback = false }) {
         const message = make("div", "msg bot");
-        const meta = make("div", "msg-meta");
-        meta.innerHTML = `${SPARK}<strong>Baylee</strong><span class="ntg-badge ntg-badge--dark">AI assistant</span>`;
-        message.append(meta);
+        message.append(make("span", "visually-hidden", "Baylee says:"));
+        message.insertAdjacentHTML("beforeend", BAYLEE_ICON);
         const counter = { n: 0 };
         paras.forEach((text) => { const p = make("p"); revealInto(p, text, counter); message.append(p); });
         if (quote) { const q = make("p", "quote"); revealInto(q, quote, counter); message.append(q); }
@@ -1119,8 +1217,18 @@
 
       const addDivider = (text) => dom.thread.append(make("div", "divider", text));
 
+      function fitInput() {
+        dom.input.style.height = "auto";
+        dom.input.style.height = `${Math.min(dom.input.scrollHeight, 120)}px`;
+      }
+
+      function setInput(value) {
+        dom.input.value = value;
+        fitInput();
+      }
+
       function prefill(text, hintText) {
-        dom.input.value = text;
+        setInput(text);
         state.suggested = text;
         dom.hint.textContent = hintText;
         dom.input.focus();
@@ -1142,6 +1250,8 @@
         dom.ctxBack.textContent = showBack ? `← ${ctx.back}` : "";
         const selected = state.follow ? "follow" : state.context;
         $$('input[name="ctx"]').forEach((radio) => { radio.checked = radio.value === selected; });
+        const askText = { bill: "Ask about this bill", results: "Ask about these results", visit: "Ask about this visit", none: "Ask a question" };
+        dom.input.placeholder = askText[state.context] || "Ask about this page";
         if (flash) { dom.ctxCard.classList.remove("updated"); void dom.ctxCard.offsetWidth; dom.ctxCard.classList.add("updated"); }
       }
 
@@ -1150,7 +1260,7 @@
         const hadConversation = state.context !== null;
         state.context = id;
         if (hadConversation && state.suggested && dom.input.value === state.suggested) {
-          dom.input.value = "";
+          setInput("");
           dom.hint.textContent = "Type your own question, or choose a suggestion to edit first.";
         }
         state.suggested = null;
@@ -1213,7 +1323,7 @@
         dom.drawer.inert = false;
         syncBackground();
         dom.headerAsk.setAttribute("aria-expanded", "true");
-        if (prompt && !dom.input.value.trim()) { dom.input.value = prompt; state.suggested = prompt; dom.hint.textContent = "Suggested question. Edit it or replace it, then press Send."; }
+        if (prompt && !dom.input.value.trim()) { setInput(prompt); state.suggested = prompt; dom.hint.textContent = "Suggested question. Edit it or replace it, then press Send."; }
         window.setTimeout(() => { dom.input.focus({ preventScroll: true }); dom.input.setSelectionRange(dom.input.value.length, dom.input.value.length); }, 420);
         dom.thread.scrollTop = dom.thread.scrollHeight;
       }
@@ -1231,6 +1341,16 @@
 
       $("#drawer-close").addEventListener("click", closeDrawer);
       $("#drawer-back").addEventListener("click", closeDrawer);
+      $("#drawer-expand").addEventListener("click", () => {
+        const wide = body.classList.toggle("chat-wide");
+        const button = $("#drawer-expand");
+        button.setAttribute("aria-pressed", String(wide));
+        const label = wide ? "Make the chat narrower" : "Make the chat wider";
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
+        $(".icon-expand", button).hidden = wide;
+        $(".icon-contract", button).hidden = !wide;
+      });
       dom.headerAsk.addEventListener("click", () => (state.open ? closeDrawer() : openDrawer({ opener: dom.headerAsk })));
 
       function goToItem() {
@@ -1343,7 +1463,7 @@
         return { ...reply, chips };
       }
 
-      dom.input.addEventListener("input", () => { dom.input.style.height = "auto"; dom.input.style.height = `${Math.min(dom.input.scrollHeight, 120)}px`; });
+      dom.input.addEventListener("input", fitInput);
       dom.input.addEventListener("keydown", (event) => { if (event.key === "Enter" && !event.shiftKey) { event.preventDefault(); $("#composer").requestSubmit(); } });
 
       $("#composer").addEventListener("submit", (event) => {
@@ -1352,9 +1472,8 @@
         if (!text || state.pending) return;
         const ctx = state.context || "none";
         dom.thread.append(make("div", "msg user", text));
-        dom.input.value = "";
-        dom.input.style.height = "";
-        dom.hint.textContent = "Type your own question, or choose a suggestion to edit first.";
+        setInput("");
+        dom.hint.textContent = "";
         const typing = make("div", "msg bot");
         typing.innerHTML = `<span class="thinking" role="img" aria-label="Baylee is writing">${SPARK}<span class="shimmer">Baylee is thinking</span></span>`;
         dom.thread.append(typing);
@@ -1452,7 +1571,7 @@
         if (!text) { input.focus(); return; }
         input.value = "";
         openDrawer({ opener: $("#home-ask .ntg-btn") });
-        dom.input.value = text;
+        setInput(text);
         window.setTimeout(() => $("#composer").requestSubmit(), 120);
       });
 
