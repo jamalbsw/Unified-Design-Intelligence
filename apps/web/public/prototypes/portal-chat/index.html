@@ -605,10 +605,15 @@
       .chat-composer:has(textarea:placeholder-shown) .send-circle { color: var(--color-secondary-a4); background: transparent; cursor: default; }
       .composer-caption { text-align: center; color: var(--color-secondary-a2); font-size: 11px; line-height: 1.4; }
 
-      /* The panel sits on its own gray dock so its left edge stays clear of the page */
-      .drawer { background: var(--color-secondary-a5); }
+      /* Docked drawer: full height, flush to the edge, no floating gap around the panel */
+      .drawer { background: var(--color-secondary-a6); box-shadow: -8px 0 24px rgba(54, 66, 72, 0.06); }
       body.drawer-open .drawer { border-left: 1px solid var(--color-secondary-a4); }
-      .context-card { padding: 8px 16px; }
+      .drawer-inner { top: 0; right: 0; bottom: 0; width: var(--drawer-full); border-radius: 0; box-shadow: none; background: transparent; }
+      .drawer-head { min-height: 64px; padding: 16px 16px 12px 20px; }
+      .context-card { margin: 0; padding: 8px 20px; border: 0; border-top: 1px solid var(--color-secondary-a5); border-bottom: 1px solid var(--color-secondary-a5); border-radius: 0; background: var(--color-primary-c1); }
+      .thread { padding: 16px 20px; }
+      .composer { padding: 8px 16px 12px; gap: 8px; }
+      .chat-composer { padding: 12px 12px 12px 20px; }
       .context-row strong { font-size: 14px; }
       .context-card .how-used { margin-top: 2px; }
 
@@ -619,10 +624,10 @@
       @media (max-width: 1100px) { .expand-only { display: none; } }
       @media (max-width: 760px) {
         .drawer { background: var(--color-secondary-a6); }
-        .drawer-inner { inset: 0; width: 100%; border-radius: 0; box-shadow: none; }
-        .drawer-head { padding: 16px 16px 8px; }
-        .context-card { margin: 0 16px 4px; }
-        .thread { padding: 8px 16px 16px; }
+        .drawer-inner { inset: 0; width: 100%; }
+        .drawer-head { padding: 12px 12px 8px 16px; }
+        .context-card { margin: 0; padding: 8px 16px; }
+        .thread { padding: 12px 16px; }
       }
     </style>
   </head>
