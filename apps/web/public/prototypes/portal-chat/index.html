@@ -447,7 +447,6 @@
       .ask-bar { display: flex; max-width: 640px; align-items: center; gap: 12px; padding: 5px 5px 5px 16px; border: 1px solid var(--color-secondary-a4); border-radius: var(--radius-medium); background: var(--color-primary-c1); box-shadow: var(--shadow-soft); transition: box-shadow 150ms ease, border-color 150ms ease; }
       .ask-bar:focus-within { border-color: var(--color-primary-a2); box-shadow: var(--shadow-focus); }
       .ask-bar input { height: 44px; min-width: 0; flex: 1; border: 0; color: var(--color-primary-a2); background: transparent; font-size: 16px; box-shadow: none; }
-      .hero-chips { margin-top: var(--space-s); }
 
       .ntg-card--action { display: grid; width: 100%; grid-template-areas: "icon title go" "icon text go"; grid-template-columns: auto 1fr auto; align-items: center; column-gap: 16px; text-align: left; cursor: pointer; transition: background-color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms var(--ease); }
       .ntg-card--action:hover { transform: translateY(-2px); border-color: var(--color-primary-b1); background: var(--color-secondary-b2); box-shadow: var(--shadow-lift); }
@@ -658,11 +657,19 @@
       .user-chip:hover { background: var(--color-secondary-a5); }
       .mail-button { position: relative; }
       .mail-badge { position: absolute; top: 2px; right: 0; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; color: #fff; background: var(--color-system-b1); font-size: 10px; font-weight: 700; line-height: 16px; }
-      .care-hero { margin-bottom: 24px; padding: 32px 24px; border-radius: 8px; text-align: center; background: var(--color-secondary-c1); }
-      .ai-preview { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; color: #fff; background: var(--color-secondary-a2); font-size: 11px; font-weight: 700; line-height: 1.6; }
-      .care-hero h1 { margin: 12px 0 20px; font-size: 22px; }
-      .care-hero .ask-bar { margin: 0 auto; }
-      .care-hero .hero-chips { justify-content: center; }
+      /* Header container, from the Get Care spec */
+      .care-hero { display: flex; flex-direction: column; align-items: center; gap: 40px; margin-bottom: 24px; padding: 32px 16px; border-bottom: 1px solid var(--color-secondary-a4); background: var(--color-secondary-c2); }
+      .care-hero-top { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+      .ai-preview { display: inline-flex; height: 21px; align-items: center; justify-content: center; gap: 4px; padding: 0 8px; border-radius: 10px; color: var(--color-primary-c1); background: var(--color-secondary-a2); font-size: 13px; font-weight: 600; line-height: 21px; }
+      .care-hero h1 { margin: 0; color: var(--color-primary-a2); font-size: 20px; font-weight: 600; line-height: 1.1; text-align: center; }
+      .care-hero .ask-bar { width: min(600px, 100%); max-width: none; min-height: 62px; gap: 8px; padding: 16px 24px; border: 1px solid var(--color-secondary-a4); border-radius: 31px; background: var(--color-primary-c1); box-shadow: none; }
+      .care-hero .ask-bar:focus-within { border-color: var(--color-secondary-a4); box-shadow: var(--shadow-focus); }
+      .ask-search { flex: 0 0 auto; color: var(--color-secondary-a2); }
+      .care-hero .ask-bar input { height: 22px; padding: 0 12px 0 0; color: var(--color-primary-a2); font-size: 14px; font-weight: 600; line-height: 1.6; }
+      .care-hero .ask-bar input::placeholder { color: var(--color-secondary-a2); opacity: 1; }
+      .ask-go { display: grid; width: 24px; height: 24px; flex: 0 0 auto; place-items: center; padding: 0; border: 0; border-radius: 4px; color: var(--color-secondary-a3); background: transparent; cursor: default; }
+      .ask-bar:has(input:not(:placeholder-shown)) .ask-go { color: var(--color-primary-a2); cursor: pointer; }
+      .ask-go:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
       .care-grid { display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 24px; align-items: start; }
       .care-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
       .care-head h2, .care-h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 20px; }
@@ -777,15 +784,16 @@
         <section class="page" id="page-home" data-title="Get Care" tabindex="-1">
           <div id="care-landing">
             <div class="care-hero">
-              <span class="ai-preview"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="currentColor"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"></path></svg>AI Preview</span>
-              <h1>Hi Jane, how can I help?</h1>
+              <div class="care-hero-top">
+                <span class="ai-preview"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" fill="currentColor"><path d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"></path></svg>AI Preview</span>
+                <h1>Hi Jane, how can I help?</h1>
+              </div>
               <form class="ask-bar" id="home-ask" role="search" aria-label="Talk with Baylee, an AI assistant">
-                <span class="baylee-icon" aria-hidden="true"></span>
+                <svg class="ask-search" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5"></path></svg>
                 <label class="visually-hidden" for="home-ask-input">Message to Baylee, an AI assistant</label>
-                <input id="home-ask-input" type="text" autocomplete="off" placeholder="Check my bill or insurance info">
-                <button class="ntg-circle send-circle" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+                <input id="home-ask-input" type="text" autocomplete="off" placeholder="Ask a health question…">
+                <button class="ask-go" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
               </form>
-              <div class="chips hero-chips" id="home-chips" aria-label="Ideas to start with"></div>
             </div>
             <div class="care-grid">
               <div class="care-main">
@@ -1975,20 +1983,13 @@
       renderFind();
 
       /* ---------- Home: ask Baylee ---------- */
-      ["What should I do first?", "Walk me through my estimate", "What do my results mean?"].forEach((label) => {
-        const pill = make("button", "ntg-pill", label);
-        pill.type = "button";
-        pill.addEventListener("click", () => { const input = $("#home-ask-input"); input.value = label; input.focus(); input.setSelectionRange(label.length, label.length); });
-        $("#home-chips").append(pill);
-      });
-
       $("#home-ask").addEventListener("submit", (event) => {
         event.preventDefault();
         const input = $("#home-ask-input");
         const text = input.value.trim();
         if (!text) { input.focus(); return; }
         input.value = "";
-        openDrawer({ opener: $("#home-ask .send-circle") });
+        openDrawer({ opener: $("#home-ask .ask-go") });
         setInput(text);
         window.setTimeout(() => $("#composer").requestSubmit(), 120);
       });
