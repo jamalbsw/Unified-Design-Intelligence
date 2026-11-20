@@ -568,17 +568,16 @@
       /* Reading context: a quiet white strip */
       .context-card { margin: 0 24px 4px; padding: 10px 16px; border: 1px solid var(--color-secondary-a5); border-radius: 16px; background: var(--color-primary-c1); }
 
-      /* Conversation: 24px side padding, 24px between messages, bottom aligned */
-      .thread { gap: 24px; padding: 8px 24px 16px; background: transparent; }
-      .thread > :first-child { margin-top: auto; }
-      .msg.bot { gap: 16px; font-size: 14px; line-height: 1.6; }
+      /* Conversation: 24px side padding, starts at the top, compact spacing */
+      .thread { gap: 16px; padding: 4px 24px 16px; background: transparent; }
+      .msg.bot { gap: 12px; font-size: 14px; line-height: 1.6; }
       .msg.bot > .baylee-icon { filter: drop-shadow(0 0.4px 0.8px rgba(0, 0, 0, 0.05)) drop-shadow(0 0.8px 1.6px rgba(0, 0, 0, 0.1)); }
       .msg.user { padding: 12px 20px; border-radius: 22px 22px 6px 22px; color: var(--color-primary-a2); background: var(--color-secondary-a5); }
       .quote { border-left-color: var(--color-primary-b1); border-radius: 0 16px 16px 0; background: var(--color-primary-c1); }
 
       /* Baylee button: white, 1.5px #ddd border, fully rounded, 44px tall, stacked */
-      .reply-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-      .baylee-button { min-height: 44px; max-width: 100%; padding: 8px 24px; border: 1.5px solid var(--color-secondary-a4); border-radius: 31px; color: var(--color-primary-a2); background: var(--color-primary-c1); font-size: 14px; font-weight: 700; line-height: 1.6; text-align: center; transition: background-color 150ms ease, border-color 150ms ease, transform 150ms var(--ease); }
+      .reply-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+      .baylee-button { min-height: 40px; max-width: 100%; padding: 6px 20px; border: 1.5px solid var(--color-secondary-a4); border-radius: 31px; color: var(--color-primary-a2); background: var(--color-primary-c1); font-size: 14px; font-weight: 700; line-height: 1.6; text-align: center; transition: background-color 150ms ease, border-color 150ms ease, transform 150ms var(--ease); }
       .baylee-button:hover { border-color: var(--color-primary-b1); background: var(--color-secondary-b2); transform: translateY(-1px); }
       .baylee-button:active { background: var(--color-secondary-b1); }
       .baylee-button--quiet { min-height: 36px; padding: 4px 12px; border-color: transparent; color: var(--color-secondary-a2); background: transparent; font-weight: 600; text-decoration: underline; }
@@ -618,7 +617,7 @@
 
       /* Short messages that follow each other sit close together */
       .msg { animation-delay: var(--md, 0ms); }
-      .msg.bot.continued { margin-top: -14px; }
+      .msg.bot.continued { margin-top: -8px; }
 
       @media (max-width: 760px) {
         .drawer { background: var(--color-secondary-a6); }
