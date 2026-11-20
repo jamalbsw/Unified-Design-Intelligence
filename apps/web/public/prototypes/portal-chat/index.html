@@ -1489,7 +1489,13 @@
       }
       phoneMedia.addEventListener("change", syncBackground);
 
-      function openDrawer({ prompt, opener } = {}) {
+      /* Baylee greets you once, 10 seconds after you land. Any choice you make first cancels it. */
+      const AUTO_OPEN_MS = 10000;
+      let autoOpenTimer = null;
+      const cancelAutoOpen = () => { window.clearTimeout(autoOpenTimer); autoOpenTimer = null; };
+
+      function openDrawer({ prompt, opener, auto = false } = {}) {
+        cancelAutoOpen();
         state.opener = opener || dom.headerAsk;
         if (state.context === null) { state.follow = true; }
         state.open = true;
@@ -1500,11 +1506,13 @@
         syncBackground();
         dom.headerAsk.setAttribute("aria-expanded", "true");
         if (prompt && !dom.input.value.trim()) { setInput(prompt); state.suggested = prompt; dom.hint.textContent = "Suggested question. Edit it or replace it, then press Send."; }
-        window.setTimeout(() => { dom.input.focus({ preventScroll: true }); dom.input.setSelectionRange(dom.input.value.length, dom.input.value.length); }, 420);
+        /* An automatic greeting never takes focus away from what the person is doing. */
+        if (!auto) window.setTimeout(() => { dom.input.focus({ preventScroll: true }); dom.input.setSelectionRange(dom.input.value.length, dom.input.value.length); }, 420);
         dom.thread.scrollTop = dom.thread.scrollHeight;
       }
 
       function closeDrawer() {
+        cancelAutoOpen();
         if (!state.open) return;
         state.open = false;
         body.classList.remove("drawer-open");
@@ -1754,6 +1762,16 @@
         setInput(text);
         window.setTimeout(() => $("#composer").requestSubmit(), 120);
       });
+
+      /* Not on phones, where the chat would cover the whole page. Not while typing or in a dialog. */
+      if (!phoneMedia.matches) {
+        autoOpenTimer = window.setTimeout(() => {
+          const typing = document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName) && document.activeElement.value;
+          if (state.open || dom.dialog.open || typing || body.classList.contains("nav-open")) return;
+          openDrawer({ auto: true });
+        }, AUTO_OPEN_MS);
+        $("#home-ask-input").addEventListener("input", cancelAutoOpen, { once: true });
+      }
 
       renderMarkers();
       dom.drawer.inert = true;
