@@ -233,6 +233,11 @@ function App() {
               </button>
             </div>
             {requestError && <p className="access-error" id="request-error" role="alert">{requestError}</p>}
+            {preview && preview.request !== request && (
+              <p className="preview-stale-status" role="status">
+                Preview is out of date. Build again to update it.
+              </p>
+            )}
             <p className="demo-description">
               Predefined layouts only. No AI, live Figma reading, or saved versions.
             </p>
@@ -248,7 +253,7 @@ function App() {
                 <h2 id="preview-title">Your prototype preview</h2>
               </div>
               <fieldset className="viewport-control">
-                <legend>Preview size</legend>
+                <legend className="visually-hidden">Preview view</legend>
                 <div className="viewport-options">
                   <button
                     aria-pressed={viewport === 'desktop'}
@@ -338,33 +343,6 @@ function App() {
                 </a>
               </div>
             )}
-            <p className="preview-caption" role="status">
-              {preview
-                ? `Preview ${preview.revision}: ${preview.options.layout === 'tasks' ? 'task-focused homepage' : 'homepage'}${preview.options.communication ? ' with communication summary' : ''}.${preview.request !== request ? ' Request edited. Build again to update the preview.' : ' Only these matched features are included.'}`
-                : prototypeActive
-                  ? 'Showing the clickable portal prototype. Fictional data only; payments, messages, and appointments are demo-only. Build a template preview to see the starter layout instead.'
-                  : 'No template built yet.'}
-            </p>
-            <p className="preview-caption">
-              Nightingale-inspired approximations, not official components.
-              Requested fonts and wireframe colors are temporary; visual fidelity is not verified.
-            </p>
-            <div className="pipeline" aria-label="Prototype workflow status">
-              <div className="pipeline-item complete">
-                <span className="pipeline-marker" aria-hidden="true">1</span>
-                <span>Describe</span>
-              </div>
-              <span className="pipeline-line" aria-hidden="true" />
-              <div className={`pipeline-item${preview || prototypeActive ? ' complete' : ''}`}>
-                <span className="pipeline-marker" aria-hidden="true">2</span>
-                <span>{prototypeActive && !preview ? 'Prototype ready' : 'Build template'}</span>
-              </div>
-              <span className="pipeline-line" aria-hidden="true" />
-              <div className="pipeline-item human">
-                <span className="pipeline-marker" aria-hidden="true">3</span>
-                <span>Review locally</span>
-              </div>
-            </div>
           </section>
         </section>
 
