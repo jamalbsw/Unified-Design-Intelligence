@@ -16,12 +16,37 @@
   display: block;
   flex: 0 0 auto;
   position: relative;
-  border: 1px solid var(--udi-blue-mid);
   border-radius: 50%;
   background:
-    radial-gradient(circle at center, var(--udi-accent-gold) 0 10%, transparent 11%),
-    radial-gradient(circle at center, var(--udi-chat-glow), transparent 70%),
-    var(--udi-bg-card);
+    radial-gradient(circle at 50% 56%, var(--udi-accent-gold) 0, var(--udi-blue-mid) 20%, rgb(79 125 168 / 90%) 36%, transparent 52%),
+    radial-gradient(circle at 50% 50%, rgb(79 125 168 / 40%) 0, rgb(140 200 255 / 14%) 66%, transparent 70%);
+  box-shadow:
+    inset 0 0 0 1px rgb(140 200 255 / 60%),
+    0 0 30px rgb(79 125 168 / 28%);
+}
+
+.cell::after {
+  content: '';
+  width: 34%;
+  height: 22%;
+  position: absolute;
+  top: 12%;
+  left: 17%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgb(140 200 255 / 55%), transparent);
+  transform: rotate(-24deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cell {
+    animation: cell-drift 9s ease-in-out infinite;
+  }
+}
+
+@keyframes cell-drift {
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .access-gate {
@@ -422,7 +447,7 @@ h2 {
   padding-top: 17px;
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 14px;
   border-top: 1px solid var(--udi-border-card);
 }
@@ -430,18 +455,23 @@ h2 {
 .viewport-control {
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: center;
+  display: grid;
+  justify-items: end;
   gap: 6px;
   border: 0;
 }
 
 .viewport-control legend {
-  margin-bottom: 7px;
+  margin-bottom: 0;
   color: var(--udi-text-muted);
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   font-weight: 600;
+}
+
+.viewport-options {
+  display: flex;
+  gap: 6px;
 }
 
 .viewport-control button {
@@ -493,17 +523,6 @@ h2 {
 .preview-card {
   display: flex;
   flex-direction: column;
-}
-
-.preview-status {
-  padding: 6px 10px;
-  border: 1px solid var(--udi-border-chip);
-  border-radius: 999px;
-  color: var(--udi-text-chip);
-  background: var(--udi-bg-card);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
 }
 
 .preview-canvas {
@@ -885,6 +904,16 @@ h2 {
   font-weight: 700;
 }
 
+.main-nav .nav-disabled {
+  padding: 9px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--udi-text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
 main:focus {
   outline: none;
 }
@@ -942,6 +971,10 @@ main:focus {
     min-height: 450px;
   }
 
+  .preview-heading {
+    flex-wrap: wrap;
+  }
+
   .reference-section {
     grid-template-columns: 1fr;
   }
@@ -991,6 +1024,10 @@ main:focus {
 
   .generate-button {
     width: 100%;
+  }
+
+  .preview-heading .viewport-control {
+    margin-left: auto;
   }
 
   .disabled-reason {

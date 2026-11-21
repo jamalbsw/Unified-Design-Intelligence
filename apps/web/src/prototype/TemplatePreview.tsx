@@ -39,7 +39,7 @@ function HomepageTemplate({ options }: { options: TemplateOptions }) {
     <>
       <style>{styles}</style>
       <div className="demo-banner">
-        Template demo | Not AI-generated | Nightingale approximation | Synthetic content
+        Local interactive preview | Not AI-generated | Nightingale approximation | Synthetic content
       </div>
       <header className="demo-header">
         <strong>Sample workspace</strong>

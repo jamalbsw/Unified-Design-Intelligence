@@ -14,17 +14,9 @@ const storybookUrl =
 
 const examples = [
   {
-    label: 'Simple homepage',
+    label: 'Baylee entry points',
     prompt: 'Create a home page.',
     clickablePrototype: true,
-  },
-  {
-    label: 'Task-focused homepage',
-    prompt: 'Create a task-focused home page.',
-  },
-  {
-    label: 'Communication summary',
-    prompt: 'Create a home page with a communication summary.',
   },
 ]
 
@@ -37,7 +29,7 @@ function App() {
   const [view, setView] = useState<View>(viewFromHash)
   const [preview, setPreview] = useState<{ options: TemplateOptions; request: string; revision: number } | null>(null)
   const [requestError, setRequestError] = useState('')
-  // Choosing "Simple homepage" activates Step 2 with the clickable portal prototype.
+  // Choosing "Baylee entry points" activates Step 2 with the clickable portal prototype.
   const [prototypeActive, setPrototypeActive] = useState(false)
   const isFirstView = useRef(true)
 
@@ -128,7 +120,13 @@ function App() {
         </a>
         <nav className="main-nav" aria-label="Main">
           <a aria-current={view === 'studio' ? 'page' : undefined} href="#home">Applied AI Design</a>
-          <a aria-current={view === 'research' ? 'page' : undefined} href="#research">Research Lab</a>
+          <span
+            aria-disabled="true"
+            className="nav-disabled"
+            title="Research Lab is not enabled yet"
+          >
+            Research Lab
+          </span>
         </nav>
       </header>
 
@@ -159,9 +157,8 @@ function App() {
         <div className="notice" role="note">
           <span className="notice-icon" aria-hidden="true">i</span>
           <p>
-            Template-based demo, not AI generation. Requests select predefined
-            layouts locally; no AI or Figma calls are made. Use fictional examples
-            only. Nothing is saved or shared.
+            Local prototype preview, not AI generation. No AI or Figma calls are
+            made. Use fictional examples only; nothing is saved or shared.
           </p>
         </div>
 
@@ -175,8 +172,7 @@ function App() {
               <span className="heading-icon" aria-hidden="true">✦</span>
             </div>
             <p className="card-description">
-              Try a homepage, a task-focused homepage, or a homepage with a
-              communication summary. This demo matches keywords, not intent.
+              Choose a Baylee entry point to explore the clickable portal prototype.
             </p>
 
             <label htmlFor="prototype-request">What would you like to prototype?</label>
@@ -194,12 +190,12 @@ function App() {
               maxLength={1200}
             />
             <div className="textarea-meta">
-              <span id="request-help">Recognizes home, task, and communication/message keywords. Other details are not interpreted. Do not enter personal or confidential data.</span>
+              <span id="request-help">Requests are matched to local templates; no AI is used. Do not enter personal or confidential data.</span>
               <span>{request.length}/1200</span>
             </div>
 
             <div className="example-group">
-              <p className="example-label">TRY AN EXAMPLE</p>
+              <p className="example-label">BAYLEE ENTRY POINTS</p>
               <div className="example-buttons">
                 {examples.map((example) => (
                   <button
@@ -227,32 +223,13 @@ function App() {
             </div>
 
             <div className="form-footer">
-              <fieldset className="viewport-control">
-                <legend>Preview size</legend>
-                <button
-                  aria-pressed={viewport === 'desktop'}
-                  className={viewport === 'desktop' ? 'selected' : ''}
-                  onClick={() => setViewport('desktop')}
-                  type="button"
-                >
-                  Desktop
-                </button>
-                <button
-                  aria-pressed={viewport === 'mobile'}
-                  className={viewport === 'mobile' ? 'selected' : ''}
-                  onClick={() => setViewport('mobile')}
-                  type="button"
-                >
-                  Mobile
-                </button>
-              </fieldset>
               <button
                 className="generate-button"
                 disabled={!request.trim()}
                 onClick={buildPreview}
                 type="button"
               >
-                Build template preview
+                Build
                 <span aria-hidden="true">→</span>
               </button>
             </div>
@@ -271,7 +248,27 @@ function App() {
                 <p className="step-label">STEP 2</p>
                 <h2 id="preview-title">Your prototype preview</h2>
               </div>
-              <span className="preview-status">{prototypeActive && !preview ? 'Clickable prototype' : 'Template demo'}</span>
+              <fieldset className="viewport-control">
+                <legend>Preview size</legend>
+                <div className="viewport-options">
+                  <button
+                    aria-pressed={viewport === 'desktop'}
+                    className={viewport === 'desktop' ? 'selected' : ''}
+                    onClick={() => setViewport('desktop')}
+                    type="button"
+                  >
+                    Desktop
+                  </button>
+                  <button
+                    aria-pressed={viewport === 'mobile'}
+                    className={viewport === 'mobile' ? 'selected' : ''}
+                    onClick={() => setViewport('mobile')}
+                    type="button"
+                  >
+                    Mobile
+                  </button>
+                </div>
+              </fieldset>
             </div>
             <div className="preview-canvas">
               {preview ? (
@@ -304,9 +301,8 @@ function App() {
                 </div>
                 <h3>Your preview will appear here</h3>
                 <p>
-                  Choose an example and build a template to explore a homepage
-                  and a sample detail screen. Choose Simple homepage to see a
-                  clickable prototype here. This is not AI generation.
+                  Choose Baylee entry points to view a clickable portal
+                  prototype. Build a local template preview from your request.
                 </p>
                 <a
                   className="preview-link"
