@@ -72,6 +72,10 @@ test.describe('template browser demo', () => {
     await expect(switcher).toHaveAccessibleName('Preview view')
     await expect(page.locator('.preview-caption, .pipeline')).toHaveCount(0)
     await expect(page.getByText('TEMPLATES', { exact: true })).toBeVisible()
+    await expect(page.locator('.request-input-shell + .example-group')).toHaveCount(1)
+    for (const label of ['Example A', 'Example B', 'Example C']) {
+      await expect(page.getByRole('button', { name: label, exact: true })).toBeDisabled()
+    }
     await expect(page.getByRole('button', { name: 'Restart', exact: true })).toHaveCount(0)
     await entryButton.click()
     await expect(entryButton).toHaveAttribute('aria-pressed', 'true')
@@ -89,18 +93,14 @@ test.describe('template browser demo', () => {
     }
     await expect(attachInsights).toBeDisabled()
     await expect(page.locator('.request-input-shell .request-action-chip')).toHaveCount(2)
-    const exampleControls = page.locator('.example-controls')
-    await expect(build.locator('xpath=..')).toHaveClass(/example-controls/)
+    const requestActionsFooter = page.locator('.request-actions-footer')
+    await expect(build.locator('xpath=..')).toHaveClass(/request-actions-footer/)
     const entryButtonBounds = await entryButton.boundingBox()
     const buildButtonBounds = await build.boundingBox()
-    const controlsBounds = await exampleControls.boundingBox()
+    const controlsBounds = await requestActionsFooter.boundingBox()
     expect(entryButtonBounds).not.toBeNull()
     expect(buildButtonBounds).not.toBeNull()
     expect(controlsBounds).not.toBeNull()
-    expect(Math.abs(
-      entryButtonBounds!.y + entryButtonBounds!.height / 2
-      - buildButtonBounds!.y - buildButtonBounds!.height / 2,
-    )).toBeLessThan(1)
     expect(Math.abs(
       controlsBounds!.x + controlsBounds!.width
       - buildButtonBounds!.x - buildButtonBounds!.width,

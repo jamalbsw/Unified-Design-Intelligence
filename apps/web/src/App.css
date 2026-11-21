@@ -480,20 +480,11 @@ h2 {
 }
 
 .example-group {
-  margin-top: auto;
-  padding-top: 21px;
+  margin-top: 21px;
 }
 
 .example-label {
   margin-bottom: 9px;
-}
-
-.example-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .example-buttons {
@@ -503,8 +494,11 @@ h2 {
   gap: 8px;
 }
 
-.example-controls > .generate-button {
-  margin-left: auto;
+.request-actions-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: 21px;
 }
 
 .example-button {

@@ -370,6 +370,36 @@ function App() {
                 </div>
               </div>
             </div>
+            <div className="example-group">
+              <p className="example-label">TEMPLATES</p>
+              <div className="example-buttons">
+                {examples.map((example) => (
+                  <button
+                    aria-pressed={prototypeActive && !!example.clickablePrototype}
+                    className="request-action-chip"
+                    key={example.label}
+                    onClick={() => {
+                      setRequest(example.prompt)
+                      setRequestError('')
+                      setPrototypeActive(!!example.clickablePrototype)
+                    }}
+                    type="button"
+                  >
+                    {example.label}
+                  </button>
+                ))}
+                {['Example A', 'Example B', 'Example C'].map((label) => (
+                  <button className="request-action-chip" disabled key={label} type="button">
+                    {label}
+                  </button>
+                ))}
+                {prototypeActive && (
+                  <button className="example-button restart-button" onClick={handleRestart} type="button">
+                    Restart
+                  </button>
+                )}
+              </div>
+            </div>
             <p
               className={`voice-status${voiceError ? ' is-error' : ''}`}
               id="voice-status"
@@ -387,40 +417,15 @@ function App() {
                 Preview is out of date. Build again to update it.
               </p>
             )}
-            <div className="example-group">
-              <p className="example-label">TEMPLATES</p>
-              <div className="example-controls">
-                <div className="example-buttons">
-                  {examples.map((example) => (
-                    <button
-                      aria-pressed={prototypeActive && !!example.clickablePrototype}
-                      className="request-action-chip"
-                      key={example.label}
-                      onClick={() => {
-                        setRequest(example.prompt)
-                        setRequestError('')
-                        setPrototypeActive(!!example.clickablePrototype)
-                      }}
-                      type="button"
-                    >
-                      {example.label}
-                    </button>
-                  ))}
-                  {prototypeActive && (
-                    <button className="example-button restart-button" onClick={handleRestart} type="button">
-                      Restart
-                    </button>
-                  )}
-                </div>
-                <button
-                  className={`generate-button${prototypeActive ? ' is-entrypoint-selected' : ''}`}
-                  disabled={!request.trim() || prototypeActive}
-                  onClick={buildPreview}
-                  type="button"
-                >
-                  Build
-                </button>
-              </div>
+            <div className="request-actions-footer">
+              <button
+                className={`generate-button${prototypeActive ? ' is-entrypoint-selected' : ''}`}
+                disabled={!request.trim() || prototypeActive}
+                onClick={buildPreview}
+                type="button"
+              >
+                Build
+              </button>
             </div>
           </section>
 
