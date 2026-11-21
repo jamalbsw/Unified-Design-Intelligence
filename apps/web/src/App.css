@@ -2,8 +2,7 @@
 .access-card,
 .request-card,
 .preview-card,
-.reference-section,
-.notice {
+.reference-section {
   border: 1px solid var(--fi-glass-border);
   background: var(--fi-glass);
   box-shadow: var(--fi-glass-rim), var(--fi-glass-lift);
@@ -127,11 +126,17 @@
 }
 
 /* Disabled controls stay legible: a dashed outline signals the state, not low opacity. */
-.access-button:disabled,
-.generate-button:disabled {
+.access-button:disabled {
   border: 1px dashed var(--udi-blue-mid);
   color: var(--udi-text-chip);
   background: transparent;
+  cursor: not-allowed;
+}
+
+.generate-button:disabled {
+  border-color: var(--udi-wireframe-button);
+  color: var(--udi-wireframe-card);
+  background: var(--udi-wireframe-button);
   cursor: not-allowed;
 }
 
@@ -155,16 +160,7 @@
   color: var(--udi-text-muted);
 }
 
-.access-warning {
-  margin: 17px 0 0;
-  padding: 11px 12px;
-  border: 1px solid var(--udi-accent-gold);
-  border-radius: 8px;
-  color: var(--udi-text-chip);
-  background: var(--udi-bg-main);
-  font-size: 13px;
-  line-height: 1.5;
-}
+
 
 .app-shell {
   min-height: 100vh;
@@ -301,36 +297,6 @@ h1 {
   background: var(--udi-blue-light);
 }
 
-.notice {
-  margin: 0 0 20px;
-  padding: 12px 15px;
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-  border-left: 4px solid var(--udi-accent-gold);
-  border-radius: 10px;
-}
-
-.notice-icon {
-  width: 20px;
-  height: 20px;
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  color: var(--udi-text-on-blue);
-  background: var(--udi-accent-gold);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.notice p {
-  margin: 0;
-  color: var(--udi-text-primary);
-  font-size: 14px;
-  line-height: 1.55;
-}
-
 .workspace-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
@@ -393,25 +359,45 @@ h2 {
   font-weight: 700;
 }
 
-.request-label-row {
-  margin-bottom: 8px;
+.request-input-shell {
+  border: 1px solid var(--udi-border-chip);
+  border-radius: 12px;
+  background: var(--fi-deep-ocean);
+}
+
+.request-input-shell:focus-within {
+  border-color: var(--udi-blue-light);
+  box-shadow: 0 0 0 1px var(--udi-blue-light);
+}
+
+.request-card .request-input-shell textarea {
+  display: block;
+  border: 0;
+  border-radius: 11px 11px 0 0;
+  background: transparent;
+}
+
+.request-input-toolbar {
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
+  border-top: 1px solid var(--udi-border-card);
 }
 
-.request-label-row label {
-  margin-bottom: 0;
+.request-input-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.voice-button {
-  min-height: 36px;
-  padding: 6px 11px;
+.request-action-chip {
+  min-height: 32px;
+  padding: 5px 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
   gap: 7px;
   border: 1px solid var(--udi-border-chip);
   border-radius: 999px;
@@ -422,18 +408,24 @@ h2 {
   cursor: pointer;
 }
 
-.voice-button:hover:not(:disabled) {
+.request-action-chip:hover:not(:disabled) {
   border-color: var(--udi-blue-light);
   background: var(--udi-chat-glow);
 }
 
-.voice-button:disabled {
+.request-action-chip[aria-pressed="true"] {
+  border-color: var(--udi-blue-light);
+  color: var(--udi-blue-light);
+  background: var(--udi-chat-glow);
+}
+
+.request-action-chip:disabled {
   border-style: dashed;
   color: var(--udi-text-muted);
   cursor: not-allowed;
 }
 
-.voice-button svg {
+.request-action-chip svg {
   width: 16px;
   height: 16px;
   fill: none;
@@ -468,7 +460,7 @@ h2 {
 }
 
 .textarea-meta {
-  margin-top: 7px;
+  margin: 0;
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -505,11 +497,18 @@ h2 {
   background: var(--udi-chat-glow);
 }
 
+.example-button[aria-pressed="true"] {
+  border-color: var(--udi-blue-light);
+  color: var(--udi-blue-light);
+  background: var(--udi-chat-glow);
+  box-shadow: inset 0 0 0 1px var(--udi-blue-light);
+}
+
 .form-footer {
   margin-top: 22px;
   padding-top: 17px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
   gap: 14px;
   border-top: 1px solid var(--udi-border-card);
@@ -565,16 +564,9 @@ h2 {
   background: var(--udi-blue-mid);
 }
 
-.generate-button span {
-  font-size: 16px;
-}
 
-.demo-description {
-  margin: 8px 0 0;
-  color: var(--udi-text-muted);
-  font-size: 12px;
-  text-align: right;
-}
+
+
 
 .preview-stale-status {
   margin: 10px 0 0;
@@ -783,7 +775,7 @@ h2 {
 }
 
 .reference-section {
-  margin: 27px 0 38px;
+  margin: 0 0 20px;
   padding: 23px 24px;
   display: grid;
   grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.8fr);
@@ -795,6 +787,16 @@ h2 {
 .reference-section h2 {
   margin: 8px 0 7px;
   font-size: 17px;
+}
+
+.reference-title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.reference-title-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .reference-section > div:first-child > p:last-child {
@@ -860,14 +862,6 @@ h2 {
   font-size: 13px;
 }
 
-.reference-links small {
-  overflow: hidden;
-  color: var(--udi-text-muted);
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .reference-arrow {
   margin-left: auto;
   color: var(--udi-blue-light);
@@ -914,34 +908,13 @@ main:focus {
   outline: none;
 }
 
-.attach-research {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--udi-text-body);
-  font-size: 13px;
-  line-height: 1.5;
-}
 
-.attach-button {
-  flex: 0 0 auto;
-  padding: 8px 12px;
-  border: 1px dashed var(--udi-blue-mid);
-  border-radius: 8px;
-  color: var(--udi-text-chip);
-  background: transparent;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: not-allowed;
-}
 
 @media (forced-colors: active) {
   .access-card,
   .request-card,
   .preview-card,
   .reference-section,
-  .notice,
   .topbar {
     border-color: CanvasText;
   }
@@ -981,11 +954,6 @@ main:focus {
 }
 
 @media (max-width: 560px) {
-  .attach-research {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .topbar {
     min-height: 67px;
     padding-right: 14px;
@@ -1014,16 +982,7 @@ main:focus {
   }
 
   .form-footer {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .request-label-row {
-    align-items: flex-start;
-  }
-
-  .generate-button {
-    width: 100%;
+    align-items: center;
   }
 
   .preview-heading .viewport-control {

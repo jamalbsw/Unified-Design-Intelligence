@@ -208,7 +208,7 @@ function App() {
           <h1>Welcome to the pilot.</h1>
           <p className="access-description">Enter the demo password to continue.</p>
           <label className="access-label" htmlFor="pilot-password">
-            Pilot password
+            Password
           </label>
           <input
             autoComplete="current-password"
@@ -226,10 +226,6 @@ function App() {
           <button className="access-button" disabled={!pilotPassword} type="submit">
             Continue to pilot
           </button>
-          <p className="access-warning" role="note">
-            A demo password is required to access this pilot.
-            Do not enter patient or confidential information.
-          </p>
         </form>
       </main>
     )
@@ -267,23 +263,48 @@ function App() {
               into a prototype, review it, and build on it together.
             </p>
           </div>
-          <div className="intro-aside">
-            <a className="mode-badge" href={storybookUrl} target="_blank" rel="noreferrer">
-              <span className="status-dot" aria-hidden="true" />
-              Nightingale Storybook
-              <span aria-hidden="true">↗</span>
-              <span className="visually-hidden"> (opens in a new tab)</span>
+        </section>
+
+        <section className="reference-section" aria-labelledby="reference-title">
+          <div>
+            <p className="eyebrow">DESIGN GUIDANCE</p>
+            <h2 id="reference-title">
+              <a className="reference-title-link" href={storybookUrl} target="_blank" rel="noreferrer">
+                Grounded in Nightingale
+                <span className="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            </h2>
+          </div>
+          <div className="reference-links">
+            <a
+              href="https://storybook.bswsites.com/?path=/story/foundation-colors--page"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <span className="reference-icon color-icon" aria-hidden="true">Aa</span>
+              <span><strong>Foundations</strong></span>
+              <span className="reference-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a
+              href="https://storybook.bswsites.com/?path=/story/core-button--page"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <span className="reference-icon button-icon" aria-hidden="true">●</span>
+              <span><strong>Components</strong></span>
+              <span className="reference-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a
+              href="https://storybook.bswsites.com/?path=/docs/patterns-accessibility--page"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <span className="reference-icon access-icon" aria-hidden="true">✓</span>
+              <span><strong>Accessibility</strong></span>
+              <span className="reference-arrow" aria-hidden="true">↗</span>
             </a>
           </div>
         </section>
-
-        <div className="notice" role="note">
-          <span className="notice-icon" aria-hidden="true">i</span>
-          <p>
-            Local prototype preview, not AI generation. No AI or Figma calls are
-            made. Use fictional examples only; nothing is saved or shared.
-          </p>
-        </div>
 
         <section className="workspace-grid" aria-label="Prototype workspace">
           <section className="request-card" aria-labelledby="request-title">
@@ -295,44 +316,54 @@ function App() {
               <span className="heading-icon" aria-hidden="true">✦</span>
             </div>
             <p className="card-description">
-              Choose a Baylee entry point to explore the clickable portal prototype.
+              Describe who the experience is for, what they need to accomplish, and the key steps, content, and actions they should encounter. Include the target device and what a successful outcome looks like. Keep the scope focused and use fictional information.
             </p>
 
-            <div className="request-label-row">
-              <label htmlFor="prototype-request">What would you like to prototype?</label>
-              <button
-                aria-pressed={isListening}
-                className="voice-button"
-                disabled={!voiceSupported}
-                onClick={handleVoiceInput}
-                title={voiceSupported
-                  ? 'Voice transcription may be processed by your browser speech service.'
-                  : 'Voice input is not supported in this browser.'}
-                type="button"
-              >
-                <svg aria-hidden="true" viewBox="0 0 24 24">
-                  {isListening ? (
-                    <rect x="7" y="7" width="10" height="10" rx="1" />
-                  ) : (
-                    <>
-                      <rect x="9" y="3" width="6" height="12" rx="3" />
-                      <path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8" />
-                    </>
-                  )}
-                </svg>
-                {isListening ? 'Stop listening' : 'Voice Command'}
-              </button>
+            <label htmlFor="prototype-request">What would you like to prototype?</label>
+            <div className="request-input-shell">
+              <textarea
+                id="prototype-request"
+                value={request}
+                onChange={(event) => handleRequestChange(event.target.value)}
+                aria-describedby={`voice-status${requestError ? ' request-error' : ''}`}
+                aria-invalid={!!requestError}
+                placeholder="Create a home page."
+                rows={6}
+                maxLength={1200}
+              />
+              <div className="request-input-toolbar">
+                <div className="request-input-actions">
+                  <button
+                    aria-pressed={isListening}
+                    className="request-action-chip"
+                    disabled={!voiceSupported}
+                    onClick={handleVoiceInput}
+                    title={voiceSupported
+                      ? 'Voice transcription may be processed by your browser speech service.'
+                      : 'Voice input is not supported in this browser.'}
+                    type="button"
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 24 24">
+                      {isListening ? (
+                        <rect x="7" y="7" width="10" height="10" rx="1" />
+                      ) : (
+                        <>
+                          <rect x="9" y="3" width="6" height="12" rx="3" />
+                          <path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8" />
+                        </>
+                      )}
+                    </svg>
+                    {isListening ? 'Stop listening' : 'Voice Command'}
+                  </button>
+                  <button className="request-action-chip" disabled type="button">
+                    Attach insights
+                  </button>
+                </div>
+                <div className="textarea-meta">
+                  <span>{request.length}/1200</span>
+                </div>
+              </div>
             </div>
-            <textarea
-              id="prototype-request"
-              value={request}
-              onChange={(event) => handleRequestChange(event.target.value)}
-              aria-describedby={`request-help voice-status${requestError ? ' request-error' : ''}`}
-              aria-invalid={!!requestError}
-              placeholder="Create a home page."
-              rows={6}
-              maxLength={1200}
-            />
             <p
               className={`voice-status${voiceError ? ' is-error' : ''}`}
               id="voice-status"
@@ -344,16 +375,12 @@ function App() {
                   ? 'Voice is transcribed into this field. Do not speak personal or confidential information.'
                   : 'Voice input is not available in this browser; type your request instead.')}
             </p>
-            <div className="textarea-meta">
-              <span id="request-help">Requests are matched to local templates; no prototype-generation AI is used. Voice input may be processed by your browser&apos;s speech service. Use fictional examples only.</span>
-              <span>{request.length}/1200</span>
-            </div>
-
             <div className="example-group">
-              <p className="example-label">BAYLEE ENTRY POINTS</p>
+              <p className="example-label">TEMPLATES</p>
               <div className="example-buttons">
                 {examples.map((example) => (
                   <button
+                    aria-pressed={prototypeActive && !!example.clickablePrototype}
                     className="example-button"
                     key={example.label}
                     onClick={() => {
@@ -369,14 +396,6 @@ function App() {
               </div>
             </div>
 
-            <div className="attach-research">
-              <button className="attach-button" disabled type="button">Attach insights</button>
-              <span>
-                Add relevant research findings to this brief. Available when the
-                Research Lab is connected.
-              </span>
-            </div>
-
             <div className="form-footer">
               <button
                 className="generate-button"
@@ -385,7 +404,6 @@ function App() {
                 type="button"
               >
                 Build
-                <span aria-hidden="true">→</span>
               </button>
             </div>
             {requestError && <p className="access-error" id="request-error" role="alert">{requestError}</p>}
@@ -394,9 +412,6 @@ function App() {
                 Preview is out of date. Build again to update it.
               </p>
             )}
-            <p className="demo-description">
-              Predefined layouts only. No AI, live Figma reading, or saved versions.
-            </p>
           </section>
 
           <section
@@ -502,45 +517,6 @@ function App() {
           </section>
         </section>
 
-        <section className="reference-section" aria-labelledby="reference-title">
-          <div>
-            <p className="eyebrow">DESIGN GUIDANCE</p>
-            <h2 id="reference-title">Grounded in Nightingale</h2>
-            <p>
-              Storybook is the current design reference. Previews made before
-              package access is confirmed are temporary approximations.
-            </p>
-          </div>
-          <div className="reference-links">
-            <a
-              href="https://storybook.bswsites.com/?path=/story/foundation-colors--page"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <span className="reference-icon color-icon" aria-hidden="true">Aa</span>
-              <span><strong>Foundations</strong><small>Colors and design tokens</small></span>
-              <span className="reference-arrow" aria-hidden="true">↗</span>
-            </a>
-            <a
-              href="https://storybook.bswsites.com/?path=/story/core-button--page"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <span className="reference-icon button-icon" aria-hidden="true">●</span>
-              <span><strong>Components</strong><small>Browse component examples</small></span>
-              <span className="reference-arrow" aria-hidden="true">↗</span>
-            </a>
-            <a
-              href="https://storybook.bswsites.com/?path=/docs/patterns-accessibility--page"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <span className="reference-icon access-icon" aria-hidden="true">✓</span>
-              <span><strong>Accessibility</strong><small>Inclusive interaction guidance</small></span>
-              <span className="reference-arrow" aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </section>
       </main>
       )}
     </div>
