@@ -79,9 +79,30 @@ test.describe('template browser demo', () => {
     const build = page.getByRole('button', { name: 'Build', exact: true })
     const attachInsights = page.getByRole('button', { name: 'Attach insights' })
     const voiceCommand = page.getByRole('button', { name: 'Voice Command' })
+    for (const property of ['min-height', 'padding', 'border-radius', 'font-size', 'font-weight']) {
+      await expect(entryButton).toHaveCSS(property, await voiceCommand.evaluate(
+        (element, cssProperty) => getComputedStyle(element).getPropertyValue(cssProperty),
+        property,
+      ))
+    }
     await expect(attachInsights).toBeDisabled()
     await expect(page.locator('.request-input-shell .request-action-chip')).toHaveCount(2)
-    await expect(page.locator('.form-footer > button')).toHaveCount(1)
+    const exampleControls = page.locator('.example-controls')
+    await expect(build.locator('xpath=..')).toHaveClass(/example-controls/)
+    const entryButtonBounds = await entryButton.boundingBox()
+    const buildButtonBounds = await build.boundingBox()
+    const controlsBounds = await exampleControls.boundingBox()
+    expect(entryButtonBounds).not.toBeNull()
+    expect(buildButtonBounds).not.toBeNull()
+    expect(controlsBounds).not.toBeNull()
+    expect(Math.abs(
+      entryButtonBounds!.y + entryButtonBounds!.height / 2
+      - buildButtonBounds!.y - buildButtonBounds!.height / 2,
+    )).toBeLessThan(1)
+    expect(Math.abs(
+      controlsBounds!.x + controlsBounds!.width
+      - buildButtonBounds!.x - buildButtonBounds!.width,
+    )).toBeLessThan(1)
     await expect(attachInsights).toHaveCSS('border-radius', '999px')
     await expect(voiceCommand).toHaveCSS('border-radius', '999px')
     await expect(page.getByText(/Storybook is the current design reference/)).toHaveCount(0)
@@ -106,6 +127,49 @@ test.describe('template browser demo', () => {
 
     await page.goto('/#research')
     await expect(page.locator('#research .cell')).toHaveCount(0)
+  })
+
+  test('fits a larger desktop preview without cropping at Surface Pro viewport size', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 960 })
+    await page.getByRole('button', { name: 'Baylee entry points', exact: true }).click()
+
+    const requestBounds = await page.locator('.request-card').boundingBox()
+    const previewBounds = await page.locator('.preview-card').boundingBox()
+    const canvasBounds = await page.locator('.preview-canvas').boundingBox()
+    const imageBounds = await page.getByRole('img', { name: /Preview of the Get Care page/ }).boundingBox()
+    expect(requestBounds).not.toBeNull()
+    expect(previewBounds).not.toBeNull()
+    expect(canvasBounds).not.toBeNull()
+    expect(imageBounds).not.toBeNull()
+    expect(previewBounds!.width).toBeGreaterThan(requestBounds!.width)
+    expect(previewBounds!.y + previewBounds!.height).toBeLessThanOrEqual(960)
+    expect(imageBounds!.x).toBeGreaterThanOrEqual(canvasBounds!.x)
+    expect(imageBounds!.y).toBeGreaterThanOrEqual(canvasBounds!.y)
+    expect(imageBounds!.x + imageBounds!.width).toBeLessThanOrEqual(canvasBounds!.x + canvasBounds!.width)
+    expect(imageBounds!.y + imageBounds!.height).toBeLessThanOrEqual(canvasBounds!.y + canvasBounds!.height)
+    expect(Math.abs(imageBounds!.width / imageBounds!.height - 1440 / 1066)).toBeLessThan(0.01)
+  })
+
+  test('stacks the workspace without horizontal overflow at 393 by 852', async ({ page }) => {
+    await page.setViewportSize({ width: 393, height: 852 })
+    const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth)
+    expect(documentWidth).toBeLessThanOrEqual(393)
+
+    const requestBounds = await page.locator('.request-card').boundingBox()
+    const previewBounds = await page.locator('.preview-card').boundingBox()
+    expect(requestBounds).not.toBeNull()
+    expect(previewBounds).not.toBeNull()
+    expect(previewBounds!.y).toBeGreaterThan(requestBounds!.y)
+    expect(Math.abs(previewBounds!.width - requestBounds!.width)).toBeLessThan(1)
+
+    await page.getByRole('button', { name: 'Baylee entry points', exact: true }).click()
+    const canvasBounds = await page.locator('.preview-canvas').boundingBox()
+    const imageBounds = await page.getByRole('img', { name: /Preview of the Get Care page/ }).boundingBox()
+    expect(canvasBounds).not.toBeNull()
+    expect(imageBounds).not.toBeNull()
+    expect(imageBounds!.x).toBeGreaterThanOrEqual(canvasBounds!.x)
+    expect(imageBounds!.x + imageBounds!.width).toBeLessThanOrEqual(canvasBounds!.x + canvasBounds!.width)
+    expect(Math.abs(imageBounds!.width / imageBounds!.height - 1440 / 1066)).toBeLessThan(0.01)
   })
 
   test('voice input appends speech to the request and can be stopped', async ({ page }) => {

@@ -320,10 +320,9 @@ function App() {
                 <p className="step-label">STEP 1</p>
                 <h2 id="request-title">Describe your request</h2>
               </div>
-              <span className="heading-icon" aria-hidden="true">✦</span>
             </div>
             <p className="card-description">
-              Describe who the experience is for, what they need to accomplish, and the key steps, content, and actions they should encounter. Include the target device and what a successful outcome looks like. Keep the scope focused and use fictional information.
+              Describe the user, their goal, key steps, and target device. Keep it focused, and use fictional information.
             </p>
 
             <label htmlFor="prototype-request">What would you like to prototype?</label>
@@ -384,40 +383,40 @@ function App() {
             </p>
             <div className="example-group">
               <p className="example-label">TEMPLATES</p>
-              <div className="example-buttons">
-                {examples.map((example) => (
-                  <button
-                    aria-pressed={prototypeActive && !!example.clickablePrototype}
-                    className="example-button"
-                    key={example.label}
-                    onClick={() => {
-                      setRequest(example.prompt)
-                      setRequestError('')
-                      setPrototypeActive(!!example.clickablePrototype)
-                    }}
-                    type="button"
-                  >
-                    {example.label}
-                  </button>
-                ))}
-                {prototypeActive && (
-                  <button className="example-button restart-button" onClick={handleRestart} type="button">
-                    Restart
-                  </button>
-                )}
+              <div className="example-controls">
+                <div className="example-buttons">
+                  {examples.map((example) => (
+                    <button
+                      aria-pressed={prototypeActive && !!example.clickablePrototype}
+                      className="request-action-chip"
+                      key={example.label}
+                      onClick={() => {
+                        setRequest(example.prompt)
+                        setRequestError('')
+                        setPrototypeActive(!!example.clickablePrototype)
+                      }}
+                      type="button"
+                    >
+                      {example.label}
+                    </button>
+                  ))}
+                  {prototypeActive && (
+                    <button className="example-button restart-button" onClick={handleRestart} type="button">
+                      Restart
+                    </button>
+                  )}
+                </div>
+                <button
+                  className={`generate-button${prototypeActive ? ' is-entrypoint-selected' : ''}`}
+                  disabled={!request.trim() || prototypeActive}
+                  onClick={buildPreview}
+                  type="button"
+                >
+                  Build
+                </button>
               </div>
             </div>
 
-            <div className="form-footer">
-              <button
-                className={`generate-button${prototypeActive ? ' is-entrypoint-selected' : ''}`}
-                disabled={!request.trim() || prototypeActive}
-                onClick={buildPreview}
-                type="button"
-              >
-                Build
-              </button>
-            </div>
             {requestError && <p className="access-error" id="request-error" role="alert">{requestError}</p>}
             {preview && preview.request !== request && (
               <p className="preview-stale-status" role="status">
