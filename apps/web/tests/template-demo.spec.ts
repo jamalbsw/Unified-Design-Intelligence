@@ -26,6 +26,10 @@ test.describe('template browser demo', () => {
   })
 
   test('step 2 links to the clickable portal prototype, which loads and opens its chat', async ({ page, context }) => {
+    await expect(page.getByRole('link', { name: /Open the clickable prototype/ })).toHaveCount(0)
+    await page.getByRole('button', { name: 'Simple homepage', exact: true }).click()
+    await expect(page.getByRole('img', { name: /Preview of the Get Care page/ })).toBeVisible()
+    await expect(page.getByText('Clickable prototype', { exact: true })).toBeVisible()
     const link = page.getByRole('link', { name: /Open the clickable prototype/ })
     await expect(link).toHaveAttribute('href', /prototypes\/portal-chat\/$/)
     const [prototype] = await Promise.all([context.waitForEvent('page'), link.click()])

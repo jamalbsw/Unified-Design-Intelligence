@@ -16,6 +16,7 @@ const examples = [
   {
     label: 'Simple homepage',
     prompt: 'Create a home page.',
+    clickablePrototype: true,
   },
   {
     label: 'Task-focused homepage',
@@ -36,6 +37,8 @@ function App() {
   const [view, setView] = useState<View>(viewFromHash)
   const [preview, setPreview] = useState<{ options: TemplateOptions; request: string; revision: number } | null>(null)
   const [requestError, setRequestError] = useState('')
+  // Choosing "Simple homepage" activates Step 2 with the clickable portal prototype.
+  const [prototypeActive, setPrototypeActive] = useState(false)
   const isFirstView = useRef(true)
 
   useEffect(() => {
@@ -205,6 +208,7 @@ function App() {
                     onClick={() => {
                       setRequest(example.prompt)
                       setRequestError('')
+                      setPrototypeActive(!!example.clickablePrototype)
                     }}
                     type="button"
                   >
@@ -259,7 +263,7 @@ function App() {
           </section>
 
           <section
-            className={`preview-card ${viewport === 'mobile' ? 'mobile-preview' : ''}`}
+            className={`preview-card ${viewport === 'mobile' ? 'mobile-preview' : ''}${preview || prototypeActive ? ' is-active' : ''}`}
             aria-labelledby="preview-title"
           >
             <div className="preview-heading">
@@ -267,11 +271,30 @@ function App() {
                 <p className="step-label">STEP 2</p>
                 <h2 id="preview-title">Your prototype preview</h2>
               </div>
-              <span className="preview-status">Template demo</span>
+              <span className="preview-status">{prototypeActive && !preview ? 'Clickable prototype' : 'Template demo'}</span>
             </div>
             <div className="preview-canvas">
               {preview ? (
                 <TemplatePreview key={preview.revision} options={preview.options} />
+              ) : prototypeActive ? (
+                <a
+                  className="prototype-thumb"
+                  href={`${import.meta.env.BASE_URL}prototypes/portal-chat/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img
+                    src={`${import.meta.env.BASE_URL}prototypes/portal-chat/thumbnail.jpg`}
+                    alt="Preview of the Get Care page with a chat assistant open beside it"
+                    width={1440}
+                    height={1066}
+                  />
+                  <span className="prototype-thumb-cta">
+                    Open the clickable prototype
+                    <span aria-hidden="true"> ↗</span>
+                    <span className="visually-hidden"> (opens in a new tab)</span>
+                  </span>
+                </a>
               ) : (
               <div className="preview-empty">
                 <div className="preview-symbol" aria-hidden="true">
@@ -282,7 +305,8 @@ function App() {
                 <h3>Your preview will appear here</h3>
                 <p>
                   Choose an example and build a template to explore a homepage
-                  and a sample detail screen. This is not AI generation.
+                  and a sample detail screen. Choose Simple homepage to see a
+                  clickable prototype here. This is not AI generation.
                 </p>
                 <a
                   className="preview-link"
@@ -297,30 +321,34 @@ function App() {
               </div>
               )}
             </div>
-            <div className="clickable-prototype">
-              <div>
-                <p className="example-label">CLICKABLE PROTOTYPE</p>
-                <strong>Patient portal with a chat assistant</strong>
-                <span>
-                  Click through billing, test results, and visit summaries, and open the chat
-                  beside them. Fictional data only; payments, messages, and appointments are demo-only.
-                </span>
+            {prototypeActive && preview && (
+              <div className="clickable-prototype">
+                <div>
+                  <p className="example-label">CLICKABLE PROTOTYPE</p>
+                  <strong>Get Care page with a chat assistant</strong>
+                  <span>
+                    Click through Appointments, Billing, Test Results, and Visit Summaries with the
+                    chat beside them. Fictional data only; payments, messages, and appointments are demo-only.
+                  </span>
+                </div>
+                <a
+                  className="clickable-prototype-link"
+                  href={`${import.meta.env.BASE_URL}prototypes/portal-chat/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Open the clickable prototype
+                  <span aria-hidden="true"> ↗</span>
+                  <span className="visually-hidden"> (opens in a new tab)</span>
+                </a>
               </div>
-              <a
-                className="clickable-prototype-link"
-                href={`${import.meta.env.BASE_URL}prototypes/portal-chat/`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open the clickable prototype
-                <span aria-hidden="true"> ↗</span>
-                <span className="visually-hidden"> (opens in a new tab)</span>
-              </a>
-            </div>
+            )}
             <p className="preview-caption" role="status">
               {preview
                 ? `Preview ${preview.revision}: ${preview.options.layout === 'tasks' ? 'task-focused homepage' : 'homepage'}${preview.options.communication ? ' with communication summary' : ''}.${preview.request !== request ? ' Request edited. Build again to update the preview.' : ' Only these matched features are included.'}`
-                : 'No template built yet.'}
+                : prototypeActive
+                  ? 'Showing the clickable portal prototype. Fictional data only; payments, messages, and appointments are demo-only. Build a template preview to see the starter layout instead.'
+                  : 'No template built yet.'}
             </p>
             <p className="preview-caption">
               Nightingale-inspired approximations, not official components.
@@ -332,9 +360,9 @@ function App() {
                 <span>Describe</span>
               </div>
               <span className="pipeline-line" aria-hidden="true" />
-              <div className={`pipeline-item${preview ? ' complete' : ''}`}>
+              <div className={`pipeline-item${preview || prototypeActive ? ' complete' : ''}`}>
                 <span className="pipeline-marker" aria-hidden="true">2</span>
-                <span>Build template</span>
+                <span>{prototypeActive && !preview ? 'Prototype ready' : 'Build template'}</span>
               </div>
               <span className="pipeline-line" aria-hidden="true" />
               <div className="pipeline-item human">

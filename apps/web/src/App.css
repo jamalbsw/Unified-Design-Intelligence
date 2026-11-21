@@ -598,6 +598,64 @@ h2 {
   color: var(--fi-white);
 }
 
+/* Step 2 becomes active when a prototype is ready. */
+.preview-card.is-active {
+  border-color: var(--fi-luminous-cyan);
+  box-shadow: 0 0 0 1px var(--fi-luminous-cyan), 0 0 28px rgb(76 201 240 / 18%);
+}
+
+.prototype-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  align-self: stretch;
+  overflow: hidden;
+  border-radius: 10px;
+  color: var(--fi-white);
+  text-decoration: none;
+}
+
+.prototype-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 290px;
+  object-fit: cover;
+  object-position: top left;
+  transition: transform 300ms ease;
+}
+
+@media (max-width: 900px) {
+  .prototype-thumb img {
+    height: auto;
+    min-height: 0;
+  }
+}
+
+.prototype-thumb:hover img,
+.prototype-thumb:focus-visible img {
+  transform: scale(1.02);
+}
+
+.prototype-thumb:focus-visible {
+  outline: 3px solid var(--fi-luminous-cyan);
+  outline-offset: 2px;
+}
+
+.prototype-thumb-cta {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 8px 14px;
+  border: 1px solid var(--fi-luminous-cyan);
+  border-radius: 999px;
+  color: var(--fi-white);
+  background: var(--fi-deep-ocean);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 35%);
+}
+
 .mobile-preview .preview-canvas {
   width: 100%;
   max-width: 340px;
