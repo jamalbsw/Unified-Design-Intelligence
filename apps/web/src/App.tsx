@@ -370,8 +370,22 @@ function App() {
                 </div>
               </div>
             </div>
+            <p
+              className={`voice-status${voiceError ? ' is-error' : ''}`}
+              id="voice-status"
+              role={voiceError ? 'alert' : isListening ? 'status' : undefined}
+            >
+              {voiceError || (isListening
+                ? 'Listening. Speak your request; your browser may process audio through its speech service.'
+                : voiceSupported
+                  ? 'Voice is transcribed into this field. Do not speak personal or confidential information.'
+                  : 'Voice input is not available in this browser; type your request instead.')}
+            </p>
             <div className="example-group">
               <p className="example-label">TEMPLATES</p>
+              <p className="example-hint">
+                Not sure where to start? Choose an available template to get started.
+              </p>
               <div className="example-buttons">
                 {examples.map((example) => (
                   <button
@@ -400,17 +414,6 @@ function App() {
                 )}
               </div>
             </div>
-            <p
-              className={`voice-status${voiceError ? ' is-error' : ''}`}
-              id="voice-status"
-              role={voiceError ? 'alert' : isListening ? 'status' : undefined}
-            >
-              {voiceError || (isListening
-                ? 'Listening. Speak your request; your browser may process audio through its speech service.'
-                : voiceSupported
-                  ? 'Voice is transcribed into this field. Do not speak personal or confidential information.'
-                  : 'Voice input is not available in this browser; type your request instead.')}
-            </p>
             {requestError && <p className="access-error" id="request-error" role="alert">{requestError}</p>}
             {preview && preview.request !== request && (
               <p className="preview-stale-status" role="status">

@@ -72,7 +72,10 @@ test.describe('template browser demo', () => {
     await expect(switcher).toHaveAccessibleName('Preview view')
     await expect(page.locator('.preview-caption, .pipeline')).toHaveCount(0)
     await expect(page.getByText('TEMPLATES', { exact: true })).toBeVisible()
-    await expect(page.locator('.request-input-shell + .example-group')).toHaveCount(1)
+    await expect(page.locator('.request-input-shell + .voice-status')).toHaveCount(1)
+    await expect(page.locator('.voice-status + .example-group')).toHaveCount(1)
+    await expect(page.locator('.example-group')).toHaveCSS('border-top-width', '1px')
+    await expect(page.locator('.example-group')).toHaveCSS('padding-top', '16px')
     for (const label of ['Example A', 'Example B', 'Example C']) {
       await expect(page.getByRole('button', { name: label, exact: true })).toBeDisabled()
     }
