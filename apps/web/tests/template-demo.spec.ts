@@ -36,7 +36,7 @@ test.describe('template browser demo', () => {
     await prototype.waitForLoadState()
     await expect(prototype.getByRole('heading', { name: /how can I help/ })).toBeVisible()
     // Baylee opens by itself right after the page loads
-    await expect(prototype.getByRole('heading', { name: /Chat with Baylee/ })).toBeVisible()
+    await expect(prototype.getByRole('heading', { name: 'Baylee', exact: true })).toBeVisible()
     await expect(prototype.getByRole('button', { name: /Open chat/ })).toHaveAttribute('aria-expanded', 'true')
   })
 

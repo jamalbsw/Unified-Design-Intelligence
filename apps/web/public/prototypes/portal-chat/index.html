@@ -558,7 +558,8 @@
       /* Header: 24px padding, 8px gap, Heading/01 bold title, plain 24px icon controls */
       .drawer-head { min-height: 72px; gap: 8px; padding: 24px 24px 12px; border-bottom: 0; background: transparent; }
       .drawer-head h2 { margin: 0; color: var(--color-primary-a2); font-size: 16px; font-weight: 700; line-height: 1.1; }
-      .ai-pill { height: 21px; padding: 0 8px; border-radius: 10px; background: var(--color-secondary-a2); }
+      /* Pill from the spec: light yellow, 1px dark-yellow border, 40px tall, text then the Baylee icon */
+      .ai-pill { box-sizing: border-box; display: inline-flex; height: 40px; align-items: center; justify-content: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--color-primary-b1); border-radius: 50px; color: var(--color-primary-a2); background: var(--color-secondary-b2); font-size: 13px; font-weight: 600; line-height: 1.5; white-space: nowrap; }
       .controls { display: flex; align-items: center; gap: 8px; margin-left: auto; }
       .icon-plain { display: inline-grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border: 0; border-radius: 50%; color: var(--color-primary-a2); background: transparent; transition: background-color 150ms ease; }
       .icon-plain:hover { background: var(--color-secondary-a5); }
@@ -627,7 +628,8 @@
       }
 
       /* Chat settings menu and priority tile */
-      .context-actions { position: relative; margin-left: auto; gap: 0; }
+      .context-actions { position: relative; gap: 0; }
+      .drawer-head { position: relative; z-index: 3; }
       .icon-small { width: 32px; height: 32px; }
       .icon-small:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
       .menu { position: absolute; top: calc(100% + 4px); right: 0; z-index: 20; min-width: 224px; padding: 8px 0; border: 1px solid var(--color-secondary-a4); border-radius: 4px; background: #fff; box-shadow: 0 2px 8px rgba(54, 66, 72, 0.15); }
@@ -751,6 +753,56 @@
       #page-home { container-type: inline-size; }
       @container (max-width: 760px) { .care-grid { grid-template-columns: minmax(0, 1fr); } .care-side { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: start; } }
       @media (max-width: 900px) { .user-chip { display: none; } }
+
+      /* Notifications page, from the Notifications spec */
+      .notif-title { margin: 0 0 16px; color: var(--color-primary-a2); font-size: 44px; font-weight: 600; letter-spacing: -1px; line-height: 1.1; }
+      .notif-divider { margin: 0 0 32px; border: 0; border-top: 1px solid var(--color-secondary-a4); }
+      .notif-section { display: grid; gap: 24px; }
+      .notif-header { display: grid; gap: 8px; }
+      .notif-header h2 { margin: 0; color: var(--color-primary-a2); font-size: 22px; font-weight: 600; letter-spacing: -0.25px; line-height: 1.1; }
+      .notif-header p, .notif-sub { margin: 0; color: var(--color-secondary-a2); font-size: 14px; font-weight: 600; line-height: 1.6; }
+      .notif-content { display: grid; grid-template-columns: minmax(0, 538px) minmax(0, 1fr); gap: 32px; align-items: start; }
+      .notif-col { display: grid; gap: 16px; }
+      .notif-col h3 { margin: 0; color: var(--color-primary-a2); font-size: 20px; font-weight: 600; line-height: 1.1; }
+      .toggle-list, .proxy-list { margin: 0; padding: 8px 0; list-style: none; }
+      .toggle-item { display: flex; align-items: center; gap: 16px; padding: 8px 0 8px; border-top: 1px solid var(--color-secondary-a4); }
+      .toggle-list > li:first-child { border-top: 0; }
+      .toggle-icon { flex: 0 0 auto; color: var(--color-secondary-a2); }
+      .toggle-text { display: grid; flex: 1; gap: 2px; min-width: 0; }
+      .toggle-text strong { color: var(--color-secondary-a2); font-size: 13px; font-weight: 700; line-height: 1.5; }
+      .toggle-text span { color: var(--color-secondary-a2); font-size: 11px; font-weight: 600; line-height: 1.4; }
+      .switch { position: relative; width: 56px; height: 32px; flex: 0 0 auto; padding: 0; border: 0; border-radius: 50px; background: var(--color-secondary-a3); cursor: pointer; transition: background-color 150ms ease; }
+      .switch::after { position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%; background: var(--color-primary-c1); content: ""; transition: transform 150ms var(--ease); }
+      .switch[aria-checked="true"] { background: var(--color-system-a1); }
+      .switch[aria-checked="true"]::after { transform: translateX(24px); }
+      .switch:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .notifier-wrap { padding: 16px 0; border-top: 1px solid var(--color-secondary-a4); }
+      .notifier { display: flex; gap: 16px; padding: 16px; border: 1px solid var(--color-primary-b2); border-radius: 4px; background: var(--color-secondary-b2); }
+      .notifier-icon { flex: 0 0 auto; color: var(--color-primary-a3); }
+      .notifier-body { display: grid; gap: 8px; }
+      .notifier-body strong { color: var(--color-primary-a2); font-size: 16px; font-weight: 700; line-height: 1.1; }
+      .notifier-body p { margin: 0; color: var(--color-primary-a2); font-size: 14px; font-weight: 600; line-height: 1.6; }
+      .notifier-cta, .proxy-row { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 8px; padding: 0; border: 0; border-radius: 4px; color: var(--color-primary-a2); background: transparent; font: inherit; font-size: 14px; font-weight: 700; line-height: 1.6; text-align: left; cursor: pointer; }
+      .notifier-cta { width: fit-content; }
+      .cta-circle { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; }
+      .notifier-cta:hover .cta-circle, .proxy-row:hover .cta-circle { background: var(--color-secondary-b1); }
+      .notifier-cta:focus-visible, .proxy-row:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+      .proxy-list li { border-top: 1px solid var(--color-secondary-a4); }
+      .proxy-list li:first-child { border-top: 0; }
+      .proxy-row { min-height: 48px; }
+      #page-notifications { container-type: inline-size; }
+      @container (max-width: 820px) { .notif-content { grid-template-columns: minmax(0, 1fr); } .notif-title { font-size: 34px; } }
+
+      /* Only Get Care and Account Settings are interactive in the menu for now */
+      .nav-item[disabled] { color: var(--color-secondary-a3); cursor: default; background: transparent; }
+      .nav-item[disabled]:hover { background: transparent; }
+      .nav-item[disabled] svg { opacity: 0.55; }
+
+      /* Persona avatar in the global nav, replacing the Help button (50px circle, synthetic initials) */
+      .persona { display: grid; width: 50px; height: 50px; flex: 0 0 auto; place-items: center; border-radius: 100px; color: var(--color-primary-a3); background: var(--color-secondary-c1); box-shadow: inset 0 0 0 1px rgba(0, 126, 180, 0.25); font-size: 20px; font-weight: 700; }
+      .persona-button { border: 0; padding: 0; font-family: inherit; cursor: pointer; transition: box-shadow 150ms ease, background-color 150ms ease; }
+      .persona-button:hover { background: var(--color-secondary-b1); }
+      .persona-button:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
     </style>
   </head>
   <body>
@@ -772,9 +824,7 @@
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg>
         <span class="mail-badge" aria-hidden="true">6</span>
       </button>
-      <button class="ntg-circle ntg-circle--float" type="button" aria-label="Help">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.5M12 16.8h.01"></path></svg>
-      </button>
+      <button class="persona persona-button" type="button" data-toast="1" aria-label="Jane, account (demo)" title="Jane">J</button>
     </header>
 
     <div class="app" id="app">
@@ -783,13 +833,13 @@
       <nav class="sidebar" id="sidebar" aria-label="Main navigation">
         <ul class="nav-list">
           <li><button class="nav-item" type="button" data-page="home"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v6a4 4 0 0 0 8 0V3"></path><path d="M10 13v2a5 5 0 0 0 10 0v-1"></path><circle cx="20" cy="12" r="2"></circle></svg>Get Care</button></li>
-          <li><button class="nav-item" type="button" data-page="appointments"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg>Appointments</button></li>
-          <li><button class="nav-item" type="button" data-page="communications"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5h16v12H9l-5 3v-15Z"></path><path d="M8 10h8M8 13.5h5"></path></svg>Communications</button></li>
-          <li><button class="nav-item" type="button" data-page="billing"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg>Billing</button></li>
-          <li><button class="nav-item" type="button" data-page="results"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 4h8M9 4v5l-4.5 8A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-3L15 9V4"></path><path d="M7.5 15h9"></path></svg>Test Results</button></li>
-          <li><button class="nav-item" type="button" data-page="visits"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3.5h9l4 4v13H6z"></path><path d="M14.5 3.5v5h5M9 13h7M9 16.5h7"></path></svg>Visit Summaries</button></li>
+          <li><button class="nav-item" type="button" data-page="appointments" disabled><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M4 10h16"></path></svg>Appointments</button></li>
+          <li><button class="nav-item" type="button" data-page="communications" disabled><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5.5h16v12H9l-5 3v-15Z"></path><path d="M8 10h8M8 13.5h5"></path></svg>Communications</button></li>
+          <li><button class="nav-item" type="button" data-page="billing" disabled><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="5" width="17" height="14" rx="2"></rect><path d="M3.5 9h17M7 14h4"></path></svg>Billing</button></li>
+          <li><button class="nav-item" type="button" data-page="results" disabled><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 4h8M9 4v5l-4.5 8A2 2 0 0 0 6.2 20h11.6a2 2 0 0 0 1.7-3L15 9V4"></path><path d="M7.5 15h9"></path></svg>Test Results</button></li>
+          <li><button class="nav-item" type="button" data-page="visits" disabled><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3.5h9l4 4v13H6z"></path><path d="M14.5 3.5v5h5M9 13h7M9 16.5h7"></path></svg>Visit Summaries</button></li>
           <li>
-            <button class="nav-item" type="button" id="support-toggle" aria-expanded="false" aria-controls="support-subnav"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.5M12 16.8h.01"></path></svg>Feedback &amp; Support<svg class="nav-chevron" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <button class="nav-item" type="button" id="support-toggle" disabled aria-expanded="false" aria-controls="support-subnav"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.5M12 16.8h.01"></path></svg>Feedback &amp; Support<svg class="nav-chevron" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg></button>
             <ul class="subnav" id="support-subnav" hidden>
               <li><button class="nav-item" type="button" data-page="help">Help Topics</button></li>
               <li><button class="nav-item" type="button" data-page="contact">Contact Us</button></li>
@@ -797,7 +847,12 @@
               <li><button class="nav-item" type="button" data-page="feedback">Provide Feedback</button></li>
             </ul>
           </li>
-          <li><button class="nav-item" type="button" data-page="account"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3.2"></circle><path d="M12 3.5v2.3M12 18.2v2.3M3.5 12h2.3M18.2 12h2.3M6 6l1.6 1.6M16.4 16.4 18 18M18 6l-1.6 1.6M7.6 16.4 6 18"></path></svg>Account Settings</button></li>
+          <li>
+            <button class="nav-item" type="button" id="account-toggle" aria-expanded="false" aria-controls="account-subnav"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3.2"></circle><path d="M12 3.5v2.3M12 18.2v2.3M3.5 12h2.3M18.2 12h2.3M6 6l1.6 1.6M16.4 16.4 18 18M18 6l-1.6 1.6M7.6 16.4 6 18"></path></svg>Account Settings<svg class="nav-chevron" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <ul class="subnav" id="account-subnav" hidden>
+              <li><button class="nav-item" type="button" data-page="notifications">Notifications</button></li>
+            </ul>
+          </li>
         </ul>
       </nav>
 
@@ -1144,23 +1199,84 @@
           </form>
         </section>
 
-        <section class="page" id="page-account" data-title="Account Settings" tabindex="-1" hidden>
-          <h1>Account Settings</h1>
-          <p class="lede">Manage how the portal works for you.</p>
-          <article class="ntg-card">
-            <h2 style="font-size:18px">Notifications</h2>
-            <label class="check-row"><input type="checkbox" checked> Email me when new results are available</label>
-            <label class="check-row"><input type="checkbox"> Text me appointment reminders</label>
-          </article>
+        <!-- NOTIFICATIONS -->
+        <section class="page" id="page-notifications" data-title="Notifications" tabindex="-1" hidden>
+          <h1 class="notif-title">Notifications</h1>
+          <hr class="notif-divider">
+          <section class="notif-section" aria-labelledby="notif-medical">
+            <div class="notif-header">
+              <h2 id="notif-medical">Medical records</h2>
+              <p>Choose how you'd like to hear about new test results, visit summaries, and messages from your care team.</p>
+            </div>
+            <div class="notif-content">
+              <section class="notif-col" aria-labelledby="notif-general">
+                <h3 id="notif-general">General</h3>
+                <ul class="toggle-list">
+                  <li class="toggle-item">
+                    <svg class="toggle-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"></rect><path d="m4 7 8 6 8-6"></path></svg>
+                    <span class="toggle-text"><strong id="t-email">Email</strong><span id="t-email-sub">Sent to user@example.com (sample)</span></span>
+                    <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="t-email" aria-describedby="t-email-sub"></button>
+                  </li>
+                  <li class="toggle-item">
+                    <svg class="toggle-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"></path></svg>
+                    <span class="toggle-text"><strong id="t-text">Text message</strong><span id="t-text-sub">Sent to (555) 000-0000 (sample)</span></span>
+                    <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="t-text" aria-describedby="t-text-sub"></button>
+                  </li>
+                  <li class="notifier-wrap">
+                    <div class="notifier" role="note">
+                      <svg class="notifier-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5h.01"></path></svg>
+                      <div class="notifier-body">
+                        <strong>Confirm your mobile number</strong>
+                        <p>Text messages start after you confirm your number with a code.</p>
+                        <button class="notifier-cta" type="button" data-toast="1"><span>Confirm my number</span><span class="cta-circle"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></button>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="toggle-item">
+                    <svg class="toggle-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 3.5h3l1.5 4-2 1.3a11 11 0 0 0 6.7 6.7l1.3-2 4 1.5v3a2 2 0 0 1-2 2A15.5 15.5 0 0 1 4 5.5a2 2 0 0 1 2-2z"></path></svg>
+                    <span class="toggle-text"><strong id="t-call">Phone call</strong><span id="t-call-sub">Automated call to (555) 000-0000 (sample)</span></span>
+                    <button class="switch" type="button" role="switch" aria-checked="false" aria-labelledby="t-call" aria-describedby="t-call-sub"></button>
+                  </li>
+                  <li class="toggle-item">
+                    <svg class="toggle-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2"></rect><path d="M11 18h2"></path></svg>
+                    <span class="toggle-text"><strong id="t-app">Mobile app alerts</strong><span id="t-app-sub">Alerts on your phone from the app</span></span>
+                    <button class="switch" type="button" role="switch" aria-checked="true" aria-labelledby="t-app" aria-describedby="t-app-sub"></button>
+                  </li>
+                </ul>
+              </section>
+              <section class="notif-col" aria-labelledby="notif-proxy">
+                <h3 id="notif-proxy">Proxy communications</h3>
+                <p class="notif-sub">Notifications for people whose accounts you help manage (sample).</p>
+                <ul class="proxy-list">
+                  <li><button class="proxy-row" type="button" data-toast="1"><span>Sample Person A</span><span class="cta-circle"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                  <li><button class="proxy-row" type="button" data-toast="1"><span>Sample Person B</span><span class="cta-circle"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                  <li><button class="proxy-row" type="button" data-toast="1"><span>Sample Person C</span><span class="cta-circle"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></span></button></li>
+                </ul>
+              </section>
+            </div>
+          </section>
+          <p class="footnote">Prototype with fictional sample data. Changes here aren't saved. Components are provisional stand-ins for Nightingale.</p>
         </section>
       </main>
 
       <aside class="drawer" id="drawer" aria-labelledby="drawer-title" inert>
         <div class="drawer-inner">
           <header class="drawer-head">
-            <h2 id="drawer-title">Chat with Baylee</h2>
-            <span class="ntg-badge ntg-badge--dark ai-pill">AI assistant</span>
+            <h2 id="drawer-title">Baylee</h2>
+            <span class="ai-pill">AI assistant<span class="baylee-icon" aria-hidden="true"></span></span>
             <div class="controls">
+              <div class="context-actions">
+                <button class="icon-plain" id="context-menu-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="context-menu" aria-label="Chat settings" title="Chat settings">
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+                </button>
+                <div class="menu" id="context-menu" role="menu" aria-label="Chat settings" hidden>
+                  <button class="menu-item" role="menuitemradio" aria-checked="true" type="button" data-menu="follow">Read the page I'm on</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="choose">Choose what to read</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="stop">Stop reading</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="see">What Baylee can see</button>
+                  <button class="menu-item" role="menuitem" type="button" data-menu="new">Start a new chat</button>
+                </div>
+              </div>
               <button class="icon-plain" id="drawer-close" type="button" aria-label="Close chat. Your conversation is kept." title="Close (your conversation is kept)">
                 <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"></path></svg>
               </button>
@@ -1171,18 +1287,6 @@
             <div class="context-row">
               <span class="label" id="context-heading">Currently reading:</span>
               <strong id="context-name">Nothing selected yet</strong>
-              <div class="context-actions">
-                <button class="icon-plain icon-small" id="context-menu-button" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="context-menu" aria-label="Chat settings" title="Chat settings">
-                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
-                </button>
-                <div class="menu" id="context-menu" role="menu" aria-label="Chat settings" hidden>
-                  <button class="menu-item" role="menuitemradio" aria-checked="true" type="button" data-menu="follow">Read the page I'm on</button>
-                  <button class="menu-item" role="menuitem" type="button" data-menu="choose">Choose what to read</button>
-                  <button class="menu-item" role="menuitem" type="button" data-menu="stop">Stop reading</button>
-                  <button class="menu-item" role="menuitem" type="button" data-menu="see">What Baylee can see</button>
-                  <button class="menu-item" role="menuitem" type="button" data-menu="new">Start a new chat</button>
-                </div>
-              </div>
             </div>
             <fieldset class="ntg-radio-list" id="context-options" hidden>
               <legend class="visually-hidden">What would you like to talk about?</legend>
@@ -1288,7 +1392,7 @@
         contact: { title: "Contact Us", label: "Contact Us page", page: "contact", uses: "Baylee will look at: the contact options on the Contact Us page.", insight: ["Not sure who to contact?", "Billing support is best for bill questions. Your care team is best for health questions."], chips: [{ label: "I have a bill question", fill: "How do I reach billing support?" }, { label: "I have a health question", fill: "How do I reach my care team?" }] },
         resources: { title: "Find Local Resources", label: "Local resources page", page: "resources", uses: "Baylee will look at: the sample listings on this page.", insight: ["These are sample local resources near you.", "Want me to tell you what's listed?"], chips: [{ label: "What's listed here?", fill: "What's listed here?" }] },
         feedback: { title: "Provide Feedback", label: "Feedback page", page: "feedback", uses: "Baylee will look at: the headings and text on this page. It can't see what you type into the form.", insight: ["Thanks for sharing feedback.", "I can't see what you type, so it stays between you and the form."], chips: [{ label: "Where does my feedback go?", fill: "Where does my feedback go?" }] },
-        account: { title: "Account Settings", label: "Account Settings page", page: "account", uses: "Baylee will look at: the headings and text on the Account Settings page.", insight: ["Want to change how we reach you?", "Your notification choices are right here."], chips: [{ label: "Change my notifications", fill: "Change my notifications" }] },
+        notifications: { title: "Notifications", label: "Notifications page", page: "notifications", uses: "Baylee will look at: the notification options on this page. It can't change your settings.", insight: ["Notifications help most with things that shouldn't wait, like new results, replies from your care team, and visit reminders.", "Want help choosing how you hear about them?"], chips: [{ label: "Where are notifications helpful?", fill: "Where are notifications helpful?" }, { label: "Which ones should I turn on?", fill: "Which ones should I turn on?" }, { label: "Why confirm my number?", fill: "Why do I need to confirm my number?" }] },
         none: { title: "", label: "Nothing selected yet", page: null, target: null, back: "", uses: "Baylee can't see your portal pages, bill, results, or visit summaries unless you choose something.", insight: ["I'm not looking at anything right now. What would you like to ask?"], chips: [{ label: "Choose something to read", run: () => showContextOptions() }, { label: "Reach billing support", fill: "Reach billing support" }, { label: "Find my visit summaries", fill: "Find my visit summaries" }] }
       };
 
@@ -1304,6 +1408,12 @@
 
       /* ---------- Page navigation ---------- */
       const SUBPAGES = ["help", "contact", "resources", "feedback"];
+      const ACCOUNT_PAGES = ["notifications"];
+
+      function setAccountOpen(open) {
+        $("#account-toggle").setAttribute("aria-expanded", String(open));
+        $("#account-subnav").hidden = !open;
+      }
 
       function setSupportOpen(open) {
         $("#support-toggle").setAttribute("aria-expanded", String(open));
@@ -1319,6 +1429,7 @@
         currentPage = page;
         $$(".nav-item[data-page]").forEach((item) => (item.dataset.page === page ? item.setAttribute("aria-current", "page") : item.removeAttribute("aria-current")));
         if (SUBPAGES.includes(page)) setSupportOpen(true);
+        if (ACCOUNT_PAGES.includes(page)) setAccountOpen(true);
         document.title = `${target.dataset.title} | BSWHealth patient portal prototype`;
         dom.main.style.scrollBehavior = "auto";
         dom.main.scrollTop = scrollByPage[page] || 0;
@@ -1383,7 +1494,7 @@
           const button = make("button", `baylee-button${chip.quiet ? " baylee-button--quiet" : ""}`, chip.label);
           button.type = "button";
           button.addEventListener("click", () => {
-            if (chip.say) { dom.thread.append(make("div", "msg user", chip.label)); dom.thread.scrollTop = dom.thread.scrollHeight; }
+            if (chip.say) { addUser(chip.label); dom.thread.scrollTop = dom.thread.scrollHeight; }
             if (chip.run) chip.run(); else prefill(chip.fill, "Suggested question. Edit it or replace it, then press Send.");
           });
           row.append(button);
@@ -1470,6 +1581,12 @@
         dom.thread.append(message);
         dom.thread.scrollTop = dom.thread.scrollHeight;
         return message;
+      }
+
+      function addUser(text) {
+        const row = make("div", "msg user", text);
+        dom.thread.append(row);
+        return row;
       }
 
       const addDivider = (text) => dom.thread.append(make("div", "divider", text));
@@ -1739,7 +1856,12 @@
         if (ctx === "contact" && /care team|clinic|doctor/.test(t)) return { paras: ["You can message them from Communications, or call your clinic."], actions: [careTeam] };
         if (ctx === "contact" && /billing|phone|call|number|reach/.test(t)) return { paras: ["Billing support is (555) 000-0000.", "That's a fictional number for this prototype."] };
         if (ctx === "feedback") return { paras: ["Your note goes in the box on this page.", "Here it isn't actually sent, and I can't see what you type."] };
-        if (ctx === "account" && /notif|email|text|remind/.test(t)) return { paras: ["You can change those under Notifications on this page.", "I can't change settings for you."] };
+        if (ctx === "notifications" && /helpful|useful|why.*(notif|alert)|worth|benefit|when/.test(t)) return { paras: ["They're most useful for things that shouldn't wait: new test results, replies from your care team, and visit reminders.", "Less urgent things, like billing updates, are fine as an email you read later."] };
+        if (ctx === "notifications" && /which|turn on|recommend|should i|set up|choose|pick/.test(t)) return { paras: ["A common mix is a text for reminders and results, and email for the details.", "A phone call can help if you don't check your phone much. It's your choice, and you can change it any time."] };
+        if (ctx === "notifications" && /confirm|number|verif|code/.test(t)) return { paras: ["Texts only start once your mobile number is confirmed.", "You'd get a code to enter. In this demo, nothing is sent."] };
+        if (ctx === "notifications" && /proxy|family|child|manage/.test(t)) return { paras: ["Proxy communications cover people whose accounts you help manage.", "Choose a name to see their settings."] };
+        if (ctx === "notifications" && /differ|email|text|call|phone|app|which|best/.test(t)) return { paras: ["In this sample: email carries the details, texts are short alerts, and calls are automated reminders.", "You can switch each one on or off yourself."] };
+        if (ctx === "notifications") return { paras: ["I can only explain what's on this page.", "For anything else, Contact Us can connect you to a person."], actions: [go("Contact Us", "contact")] };
         return { paras: ["I can only help with what's on this page.", "For anything else, Contact Us can connect you to a person."], actions: [go("Contact Us", "contact")] };
       }
 
@@ -1811,7 +1933,7 @@
         const text = dom.input.value.trim();
         if (!text || state.pending) return;
         const ctx = state.context || "none";
-        dom.thread.append(make("div", "msg user", text));
+        addUser(text);
         setInput("");
         dom.hint.textContent = "";
         const typing = make("div", "msg bot");
@@ -1851,6 +1973,7 @@
         }
       });
 
+      $("#account-toggle").addEventListener("click", () => setAccountOpen($("#account-subnav").hidden));
       $("#support-toggle").addEventListener("click", () => setSupportOpen($("#support-toggle").getAttribute("aria-expanded") !== "true"));
 
       $("#results-search").addEventListener("input", (event) => {
@@ -2006,6 +2129,11 @@
         if (view !== "results") syncTodo();
       }
 
+      let toggleToasted = false;
+      $$(".switch").forEach((control) => control.addEventListener("click", () => {
+        control.setAttribute("aria-checked", String(control.getAttribute("aria-checked") !== "true"));
+        if (!toggleToasted) { toggleToasted = true; toast("Demo only: your changes aren't saved."); }
+      }));
       $$("[data-toast]").forEach((link) => link.addEventListener("click", () => toast("Demo only: this link doesn't go anywhere in the prototype.")));
       $("#care-back").addEventListener("click", () => showCare("landing"));
       $("#find-q").addEventListener("input", renderFind);
