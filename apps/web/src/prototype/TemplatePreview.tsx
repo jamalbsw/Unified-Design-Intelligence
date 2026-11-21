@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import type { TemplateOptions } from './templates'
 import styles from './preview.css?inline'
 
-const previewDocument = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Homepage template preview</title></head><body></body></html>'
+const previewDocument = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><title>Homepage template preview</title></head><body></body></html>'
 
 const tasks = [
   { id: 'plan', title: 'Plan your week', summary: 'Choose one priority for the week ahead.', action: 'Open weekly plan' },
@@ -97,7 +97,7 @@ function HomepageTemplate({ options }: { options: TemplateOptions }) {
           </>
         )}
       </main>
-      <footer>Reference-only preview. System fonts substitute for Sharp Sans; visual fidelity is not verified.</footer>
+      <footer>Reference-only preview. Requested fonts and wireframe colors are temporary approximations; visual fidelity is not verified.</footer>
     </>
   )
 }

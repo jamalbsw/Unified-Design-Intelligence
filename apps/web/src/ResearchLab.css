@@ -13,24 +13,17 @@
   border-radius: 16px;
   background: var(--fi-glass);
   box-shadow: var(--fi-glass-rim), var(--fi-glass-lift);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
 }
 
 .research-grid .research-card {
   margin-bottom: 0;
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .research-card {
-    background: var(--fi-glass-solid);
-  }
-}
-
 .research-card form label {
   display: block;
   margin: 14px 0 8px;
   color: var(--fi-white);
+  font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
   font-weight: 700;
 }
@@ -45,7 +38,7 @@
   min-height: 46px;
   padding: 10px 12px;
   flex: 1;
-  border: 1px dashed var(--fi-liquid-azure);
+  border: 1px dashed var(--udi-border-chip);
   border-radius: 8px;
   color: var(--fi-white);
   background: var(--fi-deep-ocean);
@@ -53,15 +46,15 @@
 }
 
 .search-row input::placeholder {
-  color: var(--fi-luminous-cyan);
+  color: var(--udi-text-muted);
   opacity: 1;
 }
 
 /* Disabled controls stay legible: a dashed outline signals the state, not low opacity. */
 .research-button,
 .filter-chip {
-  border: 1px dashed var(--fi-liquid-azure);
-  color: var(--fi-pearl-mist);
+  border: 1px dashed var(--udi-border-chip);
+  color: var(--udi-text-chip);
   background: transparent;
   cursor: not-allowed;
 }
@@ -87,7 +80,8 @@
 .filter-group legend {
   margin-bottom: 8px;
   padding: 0;
-  color: var(--fi-pearl-mist);
+  color: var(--udi-text-muted);
+  font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   font-weight: 600;
 }
@@ -100,7 +94,7 @@
 
 .research-disabled-reason {
   margin: 14px 0 0;
-  color: var(--fi-pearl-mist);
+  color: var(--udi-text-muted);
   font-size: 13px;
 }
 
@@ -112,7 +106,7 @@
 
 .insight-fields div {
   padding-left: 12px;
-  border-left: 2px solid var(--fi-luminous-cyan);
+  border-left: 2px solid var(--udi-blue-mid);
 }
 
 .insight-fields dt {
@@ -123,7 +117,7 @@
 
 .insight-fields dd {
   margin: 2px 0 0;
-  color: var(--fi-pearl-mist);
+  color: var(--udi-text-body);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -140,7 +134,7 @@
 
 .results-empty p {
   margin: 0;
-  color: var(--fi-pearl-mist);
+  color: var(--udi-text-body);
   font-size: 14px;
   line-height: 1.55;
 }
@@ -172,7 +166,7 @@
   display: grid;
   align-content: start;
   gap: 6px;
-  border: 1px solid var(--fi-liquid-azure);
+  border: 1px solid var(--udi-border-chip);
   border-radius: 10px;
   background: var(--fi-deep-ocean);
 }
@@ -185,7 +179,7 @@
 
 .flow-list li > span:last-child,
 .use-list li > span {
-  color: var(--fi-pearl-mist);
+  color: var(--udi-text-body);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -196,20 +190,20 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: var(--fi-midnight-navy);
-  background: var(--fi-luminous-cyan);
+  color: var(--udi-text-on-blue);
+  background: var(--udi-blue-light);
+  font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   font-weight: 700;
 }
 
-/* A caution, so it takes the warm tone. */
 .research-privacy {
   margin: 0 0 38px;
   padding: 12px 14px;
-  border: 1px solid var(--fi-warm-coral);
+  border: 1px solid var(--udi-accent-gold);
   border-radius: 10px;
   color: var(--fi-white);
-  background: var(--fi-deep-garnet);
+  background: var(--udi-bg-main);
   font-size: 13px;
   line-height: 1.55;
 }

@@ -7,11 +7,12 @@
 - Do not add dependencies, credentials, or environment-specific configuration without a clear need. Never commit secrets.
 - Run the smallest relevant validation available and report what was run and any blockers.
 
-## Two visual languages
+## Visual direction
 
-- **Platform entry points** (the front door in `apps/web` and the preview password prompt in `studio/template/src/gate/`) follow the Fluid Intelligence visual style guide: midnight navy, frosted glass panels with thin ice-cyan edges, and warm copper/coral only for focal points such as human review and cautions. Keep text fully opaque and meet WCAG 2.2 AA contrast.
-- **Everything the studio generates** is Nightingale (reference mode, per the rules below). Do not apply the Fluid Intelligence theme to generated prototypes, and do not use Nightingale components for the platform chrome.
-- The platform palette lives as `--fi-*` CSS variables in `apps/web/src/index.css`, and scoped to `.gate` in the template gate. It must not leak into prototype code.
+- The platform pages and preview password prompt use the palette in `apps/web/src/index.css`: `#0F1218` and `#171C24` surfaces, `#F2F1EC` headings, `#AEB7C4` body copy, blue highlights, and gold for focal callouts. Use Space Grotesk for headings, Inter for body text, and JetBrains Mono for labels.
+- Keep generated prototypes on the Nightingale path (reference mode until the package requirements below are resolved); do not apply platform chrome styles to prototype content.
+- The temporary prototype screen uses the wireframe palette in `studio/template/src/ui/tokens.css`. These are preview approximations, not official Nightingale tokens. Keep the platform palette and wireframe screen styles scoped to their respective surfaces.
+- Keep text fully opaque and meet WCAG 2.2 AA contrast.
 
 ## UI framework and component library
 

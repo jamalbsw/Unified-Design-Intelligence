@@ -9,6 +9,7 @@ body {
   padding: var(--ds-space-2) var(--ds-space-4);
   background: var(--ds-color-banner-bg);
   color: var(--ds-color-banner-text);
+  font-family: var(--ds-font-label);
   font-size: 0.875rem;
 }
 .page {
@@ -17,4 +18,9 @@ body {
   padding: var(--ds-space-6) var(--ds-space-4);
   display: grid;
   gap: var(--ds-space-4);
+}
+
+h1,
+h2 {
+  font-family: var(--ds-font-heading);
 }

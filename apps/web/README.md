@@ -6,6 +6,11 @@ research insights). It uses the public Nightingale Storybook as a design
 reference, linked from the "Nightingale Storybook" chip on Applied AI Design; it
 does not import or claim to render official Nightingale components.
 
+The platform uses the graphite, blue, and gold palette with Space Grotesk
+headings, Inter body text, and JetBrains Mono labels. The prototype screen uses
+the wireframe palette; neither set of temporary preview styles claims to be an
+official Nightingale implementation.
+
 **GitHub Pages:** [Open Unified Design Intelligence](https://jamalbsw.github.io/Unified-Design-Intelligence/)
 after the repository's Pages workflow completes successfully.
 
