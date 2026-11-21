@@ -33,6 +33,8 @@ npm test
 The browser tests build and serve the app with a randomly generated, test-only
 demo access value. They exercise template matching, interaction, viewport sizing,
 focus restoration, style isolation, and automated platform accessibility checks.
+They also verify optional voice transcription using a browser speech-recognition
+mock; this does not test a real microphone or external speech service.
 The preview's script-disabled iframe is excluded from axe: its sandbox prevents
 axe's asynchronous scan from completing. Preview keyboard navigation, activation,
 and visible/restored focus are tested directly without relaxing the sandbox.
@@ -44,7 +46,7 @@ If Playwright reports that Chromium is missing, run
 ## Template-based browser pilot
 
 After passing the existing demo access prompt, enter one of these requests and
-select **Build template preview**:
+select **Build**:
 
 - `Create a home page.`
 - `Create a task-focused home page.`
@@ -55,6 +57,11 @@ understanding**. It recognizes home, task, and communication/message keywords;
 all other instructions are ignored. Unsupported requests show an explicit error
 and leave any previous preview unchanged. Editing a request marks the old
 preview as out of date until it is rebuilt.
+
+On supported browsers, **Voice Command** can transcribe into the same request
+field. Browser speech recognition may process audio through an external
+browser/provider service; use fictional examples only. Typing remains available
+when voice recognition is unsupported or unavailable.
 
 The preview uses a small React renderer boundary in `src/prototype/`, isolated
 inside an iframe so the platform's Fluid Intelligence styles do not leak into

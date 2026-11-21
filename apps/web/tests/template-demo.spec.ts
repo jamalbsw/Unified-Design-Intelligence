@@ -59,6 +59,49 @@ test.describe('template browser demo', () => {
     await expect(page.locator('#research .cell')).toHaveCount(0)
   })
 
+  test('voice input appends speech to the request and can be stopped', async ({ page }) => {
+    await page.addInitScript(() => {
+      class FakeSpeechRecognition {
+        lang = ''
+        continuous = false
+        interimResults = false
+        maxAlternatives = 0
+        onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null = null
+        onerror: ((event: { error: string }) => void) | null = null
+        onend: (() => void) | null = null
+
+        start() {
+          this.onresult?.({ results: [[{ transcript: 'Create a home page.' }]] })
+        }
+
+        stop() {
+          this.onend?.()
+        }
+
+        abort() {
+          this.onend?.()
+        }
+      }
+
+      Object.defineProperty(window, 'SpeechRecognition', {
+        configurable: true,
+        value: FakeSpeechRecognition,
+      })
+    })
+    await page.reload()
+    await page.getByLabel('Pilot password', { exact: true }).fill(process.env.WEB_DEMO_TEST_PASSWORD!)
+    await page.getByRole('button', { name: 'Continue to pilot' }).click()
+
+    const request = page.getByLabel('What would you like to prototype?')
+    await request.fill('Start with this:')
+    await page.getByRole('button', { name: 'Voice Command' }).click()
+    await expect(request).toHaveValue('Start with this: Create a home page.')
+    await expect(page.getByRole('button', { name: 'Stop listening' })).toHaveAttribute('aria-pressed', 'true')
+    await expect(page.getByRole('status')).toContainText('Listening.')
+    await page.getByRole('button', { name: 'Stop listening' }).click()
+    await expect(page.getByRole('button', { name: 'Voice Command' })).toHaveAttribute('aria-pressed', 'false')
+  })
+
   test('step 2 links to the clickable portal prototype, which loads and opens its chat', async ({ page, context }) => {
     await expect(page.getByRole('link', { name: /Open the clickable prototype/ })).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Task-focused homepage' })).toHaveCount(0)

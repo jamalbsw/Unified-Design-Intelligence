@@ -393,6 +393,67 @@ h2 {
   font-weight: 700;
 }
 
+.request-label-row {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.request-label-row label {
+  margin-bottom: 0;
+}
+
+.voice-button {
+  min-height: 36px;
+  padding: 6px 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 7px;
+  border: 1px solid var(--udi-border-chip);
+  border-radius: 999px;
+  color: var(--udi-text-chip);
+  background: var(--udi-bg-card);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.voice-button:hover:not(:disabled) {
+  border-color: var(--udi-blue-light);
+  background: var(--udi-chat-glow);
+}
+
+.voice-button:disabled {
+  border-style: dashed;
+  color: var(--udi-text-muted);
+  cursor: not-allowed;
+}
+
+.voice-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.voice-status {
+  margin: 6px 0 0;
+  color: var(--udi-text-muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.voice-status.is-error {
+  color: var(--udi-accent-gold);
+}
+
 .request-card textarea {
   min-height: 132px;
   padding: 12px 13px;
@@ -955,6 +1016,10 @@ main:focus {
   .form-footer {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .request-label-row {
+    align-items: flex-start;
   }
 
   .generate-button {

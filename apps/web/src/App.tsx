@@ -4,6 +4,53 @@ import ResearchLab from './ResearchLab'
 import TemplatePreview from './prototype/TemplatePreview'
 import { matchTemplate, type TemplateOptions } from './prototype/templates'
 
+interface VoiceRecognitionResultEvent extends Event {
+  results: ArrayLike<ArrayLike<{ transcript: string }>>
+}
+
+interface VoiceRecognitionErrorEvent extends Event {
+  error: string
+}
+
+interface VoiceRecognition {
+  lang: string
+  continuous: boolean
+  interimResults: boolean
+  maxAlternatives: number
+  onresult: ((event: VoiceRecognitionResultEvent) => void) | null
+  onerror: ((event: VoiceRecognitionErrorEvent) => void) | null
+  onend: (() => void) | null
+  start(): void
+  stop(): void
+  abort(): void
+}
+
+type VoiceRecognitionConstructor = new () => VoiceRecognition
+
+function getVoiceRecognitionConstructor() {
+  const speechWindow = window as Window & {
+    SpeechRecognition?: VoiceRecognitionConstructor
+    webkitSpeechRecognition?: VoiceRecognitionConstructor
+  }
+  return speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition
+}
+
+function voiceRecognitionErrorMessage(error: string) {
+  switch (error) {
+    case 'not-allowed':
+    case 'service-not-allowed':
+      return 'Microphone access was blocked. Allow access in your browser settings, then try again.'
+    case 'audio-capture':
+      return 'No microphone was found. Connect a microphone or type your request instead.'
+    case 'no-speech':
+      return 'No speech was detected. Try again or type your request instead.'
+    case 'network':
+      return 'Voice input could not connect to the speech service. Try again or type your request instead.'
+    default:
+      return 'Voice input failed. Try again or type your request instead.'
+  }
+}
+
 const pilotPassword = import.meta.env.VITE_PILOT_PASSWORD
 
 type View = 'studio' | 'research'
@@ -25,10 +72,15 @@ function App() {
   const [password, setPassword] = useState('')
   const [accessError, setAccessError] = useState('')
   const [request, setRequest] = useState('')
+  const [voiceSupported] = useState(() => Boolean(getVoiceRecognitionConstructor()))
+  const [isListening, setIsListening] = useState(false)
+  const [voiceError, setVoiceError] = useState('')
   const [viewport, setViewport] = useState<'desktop' | 'mobile'>('desktop')
   const [view, setView] = useState<View>(viewFromHash)
   const [preview, setPreview] = useState<{ options: TemplateOptions; request: string; revision: number } | null>(null)
   const [requestError, setRequestError] = useState('')
+  const recognitionRef = useRef<VoiceRecognition | null>(null)
+  const voiceBaseRef = useRef('')
   // Choosing "Baylee entry points" activates Step 2 with the clickable portal prototype.
   const [prototypeActive, setPrototypeActive] = useState(false)
   const isFirstView = useRef(true)
@@ -37,6 +89,15 @@ function App() {
     const onHashChange = () => setView(viewFromHash())
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  useEffect(() => () => {
+    const recognition = recognitionRef.current
+    if (!recognition) return
+    recognition.onresult = null
+    recognition.onerror = null
+    recognition.onend = null
+    recognition.abort()
   }, [])
 
   // Announce a page change by moving focus to the new page and updating the title.
@@ -75,6 +136,69 @@ function App() {
     setPreview(previous => ({ options: result.options, request, revision: (previous?.revision ?? 0) + 1 }))
   }
 
+  function handleVoiceInput() {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop()
+      return
+    }
+
+    const Recognition = getVoiceRecognitionConstructor()
+    if (!Recognition) {
+      setVoiceError('Voice input is not supported in this browser. Type your request instead.')
+      return
+    }
+
+    const recognition = new Recognition()
+    recognition.lang = navigator.language || 'en-US'
+    recognition.continuous = true
+    recognition.interimResults = true
+    recognition.maxAlternatives = 1
+    voiceBaseRef.current = request.trimEnd()
+    recognition.onresult = event => {
+      const transcript = Array.from(event.results)
+        .map(result => result[0]?.transcript ?? '')
+        .join(' ')
+        .trim()
+      setRequest([voiceBaseRef.current, transcript].filter(Boolean).join(voiceBaseRef.current ? ' ' : '').slice(0, 1200))
+      setRequestError('')
+    }
+    recognition.onerror = event => {
+      if (recognitionRef.current !== recognition) return
+      recognitionRef.current = null
+      setVoiceError(voiceRecognitionErrorMessage(event.error))
+      setIsListening(false)
+    }
+    recognition.onend = () => {
+      if (recognitionRef.current !== recognition) return
+      recognitionRef.current = null
+      setIsListening(false)
+    }
+
+    recognitionRef.current = recognition
+    setVoiceError('')
+    setIsListening(true)
+    try {
+      recognition.start()
+    } catch (error) {
+      recognitionRef.current = null
+      setIsListening(false)
+      setVoiceError(error instanceof Error
+        ? `Could not start voice input: ${error.message}`
+        : 'Could not start voice input. Try again or type your request instead.')
+    }
+  }
+
+  function handleRequestChange(value: string) {
+    if (recognitionRef.current) {
+      recognitionRef.current.onresult = null
+      recognitionRef.current.stop()
+      recognitionRef.current = null
+      setIsListening(false)
+    }
+    setRequest(value)
+    setRequestError('')
+  }
+
   if (!isUnlocked) {
     return (
       <main className="access-gate">
@@ -103,7 +227,7 @@ function App() {
             Continue to pilot
           </button>
           <p className="access-warning" role="note">
-            Demo-only access: this browser-based password prompt can be bypassed.
+            A demo password is required to access this pilot.
             Do not enter patient or confidential information.
           </p>
         </form>
@@ -174,22 +298,54 @@ function App() {
               Choose a Baylee entry point to explore the clickable portal prototype.
             </p>
 
-            <label htmlFor="prototype-request">What would you like to prototype?</label>
+            <div className="request-label-row">
+              <label htmlFor="prototype-request">What would you like to prototype?</label>
+              <button
+                aria-pressed={isListening}
+                className="voice-button"
+                disabled={!voiceSupported}
+                onClick={handleVoiceInput}
+                title={voiceSupported
+                  ? 'Voice transcription may be processed by your browser speech service.'
+                  : 'Voice input is not supported in this browser.'}
+                type="button"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  {isListening ? (
+                    <rect x="7" y="7" width="10" height="10" rx="1" />
+                  ) : (
+                    <>
+                      <rect x="9" y="3" width="6" height="12" rx="3" />
+                      <path d="M5 11a7 7 0 0 0 14 0M12 18v3m-4 0h8" />
+                    </>
+                  )}
+                </svg>
+                {isListening ? 'Stop listening' : 'Voice Command'}
+              </button>
+            </div>
             <textarea
               id="prototype-request"
               value={request}
-              onChange={(event) => {
-                setRequest(event.target.value)
-                setRequestError('')
-              }}
-              aria-describedby={`request-help${requestError ? ' request-error' : ''}`}
+              onChange={(event) => handleRequestChange(event.target.value)}
+              aria-describedby={`request-help voice-status${requestError ? ' request-error' : ''}`}
               aria-invalid={!!requestError}
               placeholder="Create a home page."
               rows={6}
               maxLength={1200}
             />
+            <p
+              className={`voice-status${voiceError ? ' is-error' : ''}`}
+              id="voice-status"
+              role={voiceError ? 'alert' : isListening ? 'status' : undefined}
+            >
+              {voiceError || (isListening
+                ? 'Listening. Speak your request; your browser may process audio through its speech service.'
+                : voiceSupported
+                  ? 'Voice is transcribed into this field. Do not speak personal or confidential information.'
+                  : 'Voice input is not available in this browser; type your request instead.')}
+            </p>
             <div className="textarea-meta">
-              <span id="request-help">Requests are matched to local templates; no AI is used. Do not enter personal or confidential data.</span>
+              <span id="request-help">Requests are matched to local templates; no prototype-generation AI is used. Voice input may be processed by your browser&apos;s speech service. Use fictional examples only.</span>
               <span>{request.length}/1200</span>
             </div>
 
