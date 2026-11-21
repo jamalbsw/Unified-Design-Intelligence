@@ -2,7 +2,7 @@
 .access-card,
 .request-card,
 .preview-card,
-.reference-section {
+.intro-guidance-card {
   border: 1px solid var(--fi-glass-border);
   background: var(--fi-glass);
   box-shadow: var(--fi-glass-rim), var(--fi-glass-lift);
@@ -138,6 +138,12 @@
   color: var(--udi-wireframe-card);
   background: var(--udi-wireframe-button);
   cursor: not-allowed;
+}
+
+.generate-button.is-entrypoint-selected:disabled {
+  border-color: var(--udi-border-chip);
+  color: var(--udi-text-muted);
+  background: var(--udi-bg-card);
 }
 
 .access-error,
@@ -504,6 +510,13 @@ h2 {
   box-shadow: inset 0 0 0 1px var(--udi-blue-light);
 }
 
+.example-button.restart-button,
+.example-button.restart-button:hover {
+  border-color: var(--udi-accent-gold-dark);
+  color: var(--udi-accent-gold-dark);
+  background: var(--udi-bg-card);
+}
+
 .form-footer {
   margin-top: 22px;
   padding-top: 17px;
@@ -774,19 +787,33 @@ h2 {
   text-decoration-thickness: 2px;
 }
 
-.reference-section {
-  margin: 0 0 20px;
-  padding: 23px 24px;
-  display: grid;
-  grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.8fr);
-  align-items: center;
-  gap: 22px;
+.intro-guidance-card {
+  margin: 24px 0 16px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   border-radius: 16px;
 }
 
-.reference-section h2 {
-  margin: 8px 0 7px;
-  font-size: 17px;
+.intro-guidance-main h1 {
+  margin: 4px 0 0;
+  font-size: clamp(26px, 3vw, 36px);
+}
+
+.design-guidance-content {
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid var(--udi-border-card);
+}
+
+.design-guidance-content h2 {
+  margin: 0;
+  flex: 0 0 auto;
+  font-size: 16px;
 }
 
 .reference-title-link {
@@ -799,28 +826,21 @@ h2 {
   text-underline-offset: 3px;
 }
 
-.reference-section > div:first-child > p:last-child {
-  max-width: 300px;
-  margin-bottom: 0;
-  color: var(--udi-text-body);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
 .reference-links {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .reference-links a {
   min-width: 0;
-  padding: 11px 10px;
+  padding: 6px 8px;
   display: flex;
   align-items: center;
-  gap: 9px;
-  border: 1px solid var(--udi-border-chip);
-  border-radius: 10px;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
   color: inherit;
   text-decoration: none;
 }
@@ -831,15 +851,15 @@ h2 {
 }
 
 .reference-icon {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   display: grid;
   place-items: center;
   flex: 0 0 auto;
   border-radius: 50%;
   color: var(--udi-text-on-blue);
   background: var(--udi-blue-light);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 }
 
@@ -859,7 +879,7 @@ h2 {
 
 .reference-links strong {
   color: var(--udi-text-primary);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .reference-arrow {
@@ -914,7 +934,7 @@ main:focus {
   .access-card,
   .request-card,
   .preview-card,
-  .reference-section,
+  .intro-guidance-card,
   .topbar {
     border-color: CanvasText;
   }
@@ -944,12 +964,8 @@ main:focus {
     flex-wrap: wrap;
   }
 
-  .reference-section {
-    grid-template-columns: 1fr;
-  }
-
-  .reference-links {
-    grid-template-columns: 1fr;
+  .intro-guidance-card {
+    gap: 16px;
   }
 }
 
@@ -977,8 +993,24 @@ main:focus {
 
   .request-card,
   .preview-card,
-  .reference-section {
+  .intro-guidance-card {
     padding: 17px;
+  }
+
+  .intro-guidance-card {
+    margin-top: 20px;
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .design-guidance-content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .reference-links {
+    justify-content: flex-start;
   }
 
   .form-footer {

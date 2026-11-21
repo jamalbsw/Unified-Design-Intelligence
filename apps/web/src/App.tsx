@@ -62,7 +62,7 @@ const storybookUrl =
 const examples = [
   {
     label: 'Baylee entry points',
-    prompt: 'Create a home page.',
+    prompt: 'Baylee entry points',
     clickablePrototype: true,
   },
 ]
@@ -199,6 +199,21 @@ function App() {
     setRequestError('')
   }
 
+  function handleRestart() {
+    if (recognitionRef.current) {
+      recognitionRef.current.onresult = null
+      recognitionRef.current.stop()
+      recognitionRef.current = null
+    }
+    setIsListening(false)
+    setVoiceError('')
+    setRequest('')
+    setRequestError('')
+    setPreview(null)
+    setPrototypeActive(false)
+    setViewport('desktop')
+  }
+
   if (!isUnlocked) {
     return (
       <main className="access-gate">
@@ -254,55 +269,47 @@ function App() {
         <ResearchLab />
       ) : (
       <main id="home" tabIndex={-1}>
-        <section className="intro">
-          <div>
+        <section className="intro-guidance-card" aria-label="Introduction and Nightingale resources">
+          <div className="intro-guidance-main">
             <p className="eyebrow">IDEA TO INTERACTIVE PREVIEW</p>
             <h1>Make the next idea tangible.</h1>
-            <p className="intro-copy">
-              Describe the experience you want to explore. Your team can shape it
-              into a prototype, review it, and build on it together.
-            </p>
           </div>
-        </section>
-
-        <section className="reference-section" aria-labelledby="reference-title">
-          <div>
-            <p className="eyebrow">DESIGN GUIDANCE</p>
+          <div className="design-guidance-content">
             <h2 id="reference-title">
               <a className="reference-title-link" href={storybookUrl} target="_blank" rel="noreferrer">
                 Grounded in Nightingale
                 <span className="visually-hidden"> (opens in a new tab)</span>
               </a>
             </h2>
-          </div>
-          <div className="reference-links">
-            <a
-              href="https://storybook.bswsites.com/?path=/story/foundation-colors--page"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <span className="reference-icon color-icon" aria-hidden="true">Aa</span>
-              <span><strong>Foundations</strong></span>
-              <span className="reference-arrow" aria-hidden="true">↗</span>
-            </a>
-            <a
-              href="https://storybook.bswsites.com/?path=/story/core-button--page"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <span className="reference-icon button-icon" aria-hidden="true">●</span>
-              <span><strong>Components</strong></span>
-              <span className="reference-arrow" aria-hidden="true">↗</span>
-            </a>
-            <a
-              href="https://storybook.bswsites.com/?path=/docs/patterns-accessibility--page"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <span className="reference-icon access-icon" aria-hidden="true">✓</span>
-              <span><strong>Accessibility</strong></span>
-              <span className="reference-arrow" aria-hidden="true">↗</span>
-            </a>
+            <div className="reference-links">
+              <a
+                href="https://storybook.bswsites.com/?path=/story/foundation-colors--page"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <span className="reference-icon color-icon" aria-hidden="true">Aa</span>
+                <span><strong>Foundations</strong></span>
+                <span className="reference-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a
+                href="https://storybook.bswsites.com/?path=/story/core-button--page"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <span className="reference-icon button-icon" aria-hidden="true">●</span>
+                <span><strong>Components</strong></span>
+                <span className="reference-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a
+                href="https://storybook.bswsites.com/?path=/docs/patterns-accessibility--page"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <span className="reference-icon access-icon" aria-hidden="true">✓</span>
+                <span><strong>Accessibility</strong></span>
+                <span className="reference-arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
           </div>
         </section>
 
@@ -393,13 +400,18 @@ function App() {
                     {example.label}
                   </button>
                 ))}
+                {prototypeActive && (
+                  <button className="example-button restart-button" onClick={handleRestart} type="button">
+                    Restart
+                  </button>
+                )}
               </div>
             </div>
 
             <div className="form-footer">
               <button
-                className="generate-button"
-                disabled={!request.trim()}
+                className={`generate-button${prototypeActive ? ' is-entrypoint-selected' : ''}`}
+                disabled={!request.trim() || prototypeActive}
                 onClick={buildPreview}
                 type="button"
               >
