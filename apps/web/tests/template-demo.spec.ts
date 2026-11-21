@@ -67,6 +67,7 @@ test.describe('template browser demo', () => {
     const switcher = page.locator('.viewport-control')
     await expect(switcher).toHaveCSS('border-radius', '999px')
     await expect(switcher.getByRole('button', { name: 'Desktop' })).toHaveCSS('background-color', 'rgb(47, 111, 214)')
+    await expect(switcher.getByRole('button', { name: 'Mobile' })).toBeDisabled()
     await expect(page.getByText('Preview size')).toBeHidden()
     await expect(switcher).toHaveAccessibleName('Preview view')
     await expect(page.locator('.preview-caption, .pipeline')).toHaveCount(0)
@@ -77,6 +78,7 @@ test.describe('template browser demo', () => {
     await expect(entryButton).toHaveCSS('border-color', 'rgb(140, 200, 255)')
     await expect(page.getByLabel('What would you like to prototype?')).toHaveValue('Baylee entry points')
     const build = page.getByRole('button', { name: 'Build', exact: true })
+    const savePrototype = page.getByRole('button', { name: 'Save prototype', exact: true })
     const attachInsights = page.getByRole('button', { name: 'Attach insights' })
     const voiceCommand = page.getByRole('button', { name: 'Voice Command' })
     for (const property of ['min-height', 'padding', 'border-radius', 'font-size', 'font-weight']) {
@@ -102,6 +104,19 @@ test.describe('template browser demo', () => {
     expect(Math.abs(
       controlsBounds!.x + controlsBounds!.width
       - buildButtonBounds!.x - buildButtonBounds!.width,
+    )).toBeLessThan(1)
+    await expect(savePrototype).toBeDisabled()
+    for (const property of ['border-color', 'color', 'background-color', 'border-radius', 'min-height']) {
+      await expect(savePrototype).toHaveCSS(property, await build.evaluate(
+        (element, cssProperty) => getComputedStyle(element).getPropertyValue(cssProperty),
+        property,
+      ))
+    }
+    const saveButtonBounds = await savePrototype.boundingBox()
+    expect(saveButtonBounds).not.toBeNull()
+    expect(Math.abs(
+      buildButtonBounds!.y + buildButtonBounds!.height / 2
+      - saveButtonBounds!.y - saveButtonBounds!.height / 2,
     )).toBeLessThan(1)
     await expect(attachInsights).toHaveCSS('border-radius', '999px')
     await expect(voiceCommand).toHaveCSS('border-radius', '999px')
@@ -131,6 +146,8 @@ test.describe('template browser demo', () => {
 
   test('fits a larger desktop preview without cropping at Surface Pro viewport size', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 960 })
+    const defaultPreviewBounds = await page.locator('.preview-card').boundingBox()
+    const defaultCanvasBounds = await page.locator('.preview-canvas').boundingBox()
     await page.getByRole('button', { name: 'Baylee entry points', exact: true }).click()
 
     const requestBounds = await page.locator('.request-card').boundingBox()
@@ -141,6 +158,10 @@ test.describe('template browser demo', () => {
     expect(previewBounds).not.toBeNull()
     expect(canvasBounds).not.toBeNull()
     expect(imageBounds).not.toBeNull()
+    expect(defaultPreviewBounds).not.toBeNull()
+    expect(defaultCanvasBounds).not.toBeNull()
+    expect(Math.abs(defaultPreviewBounds!.height - previewBounds!.height)).toBeLessThan(1)
+    expect(Math.abs(defaultCanvasBounds!.height - canvasBounds!.height)).toBeLessThan(1)
     expect(previewBounds!.width).toBeGreaterThan(requestBounds!.width)
     expect(previewBounds!.y + previewBounds!.height).toBeLessThanOrEqual(960)
     expect(imageBounds!.x).toBeGreaterThanOrEqual(canvasBounds!.x)
@@ -251,8 +272,10 @@ test.describe('template browser demo', () => {
     await frame.getByRole('button', { name: 'Back to home' }).click()
     await expect(frame.getByText('Completed in this demo')).toBeVisible()
     await expect(frame.getByRole('button', { name: 'Open weekly plan' })).toBeFocused()
-    await page.locator('.preview-card').getByRole('button', { name: 'Mobile', exact: true }).click()
-    expect(await page.locator('iframe').evaluate(element => element.getBoundingClientRect().width)).toBeLessThanOrEqual(340)
+    const mobileView = page.locator('.preview-card').getByRole('button', { name: 'Mobile', exact: true })
+    await expect(mobileView).toBeDisabled()
+    await expect(page.locator('.preview-card').getByRole('button', { name: 'Desktop' })).toHaveAttribute('aria-pressed', 'true')
+    expect(await page.locator('iframe').evaluate(element => element.getBoundingClientRect().width)).toBeGreaterThan(340)
     const overflow = await frame.locator('html').evaluate(element => element.scrollWidth > element.clientWidth)
     expect(overflow).toBe(false)
     await expect(frame.getByText('Completed in this demo')).toBeVisible()

@@ -381,6 +381,12 @@ function App() {
                   ? 'Voice is transcribed into this field. Do not speak personal or confidential information.'
                   : 'Voice input is not available in this browser; type your request instead.')}
             </p>
+            {requestError && <p className="access-error" id="request-error" role="alert">{requestError}</p>}
+            {preview && preview.request !== request && (
+              <p className="preview-stale-status" role="status">
+                Preview is out of date. Build again to update it.
+              </p>
+            )}
             <div className="example-group">
               <p className="example-label">TEMPLATES</p>
               <div className="example-controls">
@@ -416,13 +422,6 @@ function App() {
                 </button>
               </div>
             </div>
-
-            {requestError && <p className="access-error" id="request-error" role="alert">{requestError}</p>}
-            {preview && preview.request !== request && (
-              <p className="preview-stale-status" role="status">
-                Preview is out of date. Build again to update it.
-              </p>
-            )}
           </section>
 
           <section
@@ -448,8 +447,9 @@ function App() {
                   <button
                     aria-pressed={viewport === 'mobile'}
                     className={viewport === 'mobile' ? 'selected' : ''}
-                    onClick={() => setViewport('mobile')}
+                    disabled
                     type="button"
+                    title="Mobile preview is temporarily unavailable."
                   >
                     Mobile
                   </button>
@@ -525,6 +525,11 @@ function App() {
                 </a>
               </div>
             )}
+            <div className="preview-actions">
+              <button className="generate-button is-entrypoint-selected" disabled type="button">
+                Save prototype
+              </button>
+            </div>
           </section>
         </section>
 

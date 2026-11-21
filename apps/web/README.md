@@ -71,8 +71,8 @@ the [Button pilot evidence](../../Nightingale/pilots/button.spec.json); system
 fonts and simplified focus/card styling are explicitly approximations.
 
 Open a sample task, mark it complete, and return home. The status survives screen
-navigation and desktop/mobile switching, but rebuilding, leaving Applied AI
-Design, or reloading resets the preview's interactive state. The communication
+navigation. Mobile preview switching is temporarily disabled; rebuilding, leaving
+Applied AI Design, or reloading resets the preview's interactive state. The communication
 variant opens a fictional update and returns to the summary. Nothing is sent,
 saved to browser storage, or shared; there are no AI, MCP, or backend calls.
 This tests the browser interaction loop, not whether an AI understands a query.
