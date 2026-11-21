@@ -32,6 +32,26 @@ test.describe('template browser demo', () => {
     await expect(page.getByRole('link', { name: 'Research Lab' })).toHaveCount(0)
   })
 
+  test('uses the requested button blue and keeps content bubbles out of the pages', async ({ page }) => {
+    await page.reload()
+    const passwordButton = page.getByRole('button', { name: 'Continue to pilot' })
+    expect(await passwordButton.evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgb(47, 111, 214)')
+    await page.getByLabel('Pilot password', { exact: true }).fill(process.env.WEB_DEMO_TEST_PASSWORD!)
+    await passwordButton.click()
+
+    const entryButton = page.getByRole('button', { name: 'Baylee entry points' })
+    expect(await entryButton.evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgb(47, 111, 214)')
+    expect(await page.locator('.topbar .logo-cell').count()).toBe(1)
+    await expect(page.locator('.app-shell main .cell')).toHaveCount(0)
+
+    const desktopSwitch = page.locator('.preview-card').getByRole('button', { name: 'Desktop' })
+    expect(await desktopSwitch.evaluate(element => getComputedStyle(element).borderRadius)).toBe('999px')
+    expect(await desktopSwitch.evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgb(47, 111, 214)')
+
+    await page.goto('/#research')
+    await expect(page.locator('#research .cell')).toHaveCount(0)
+  })
+
   test('step 2 links to the clickable portal prototype, which loads and opens its chat', async ({ page, context }) => {
     await expect(page.getByRole('link', { name: /Open the clickable prototype/ })).toHaveCount(0)
     await expect(page.getByRole('button', { name: 'Task-focused homepage' })).toHaveCount(0)

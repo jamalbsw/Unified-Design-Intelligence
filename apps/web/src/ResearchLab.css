@@ -139,10 +139,6 @@
   line-height: 1.55;
 }
 
-.cell-small {
-  --cell-size: 56px;
-}
-
 .flow-list,
 .use-list {
   margin: 16px 0 0;

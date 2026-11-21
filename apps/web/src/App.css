@@ -113,14 +113,16 @@
   width: 100%;
   min-height: 46px;
   margin-top: 16px;
-  border: 1px solid var(--udi-blue-light);
-  color: var(--udi-text-on-blue);
-  background: var(--udi-blue-light);
+  border: 1px solid var(--udi-wireframe-button);
+  color: var(--udi-wireframe-card);
+  background: var(--udi-wireframe-button);
   font-size: 15px;
   cursor: pointer;
 }
 
 .access-button:hover:not(:disabled) {
+  border-color: var(--udi-blue-mid);
+  color: var(--udi-text-on-blue);
   background: var(--udi-blue-mid);
 }
 
@@ -429,17 +431,18 @@ h2 {
 
 .example-button {
   padding: 8px 12px;
-  border: 1px solid var(--udi-border-chip);
+  border: 1px solid var(--udi-wireframe-button);
   border-radius: 999px;
-  color: var(--udi-text-chip);
-  background: transparent;
+  color: var(--udi-wireframe-card);
+  background: var(--udi-wireframe-button);
   font-size: 13px;
   cursor: pointer;
 }
 
 .example-button:hover {
-  border-color: var(--udi-blue-light);
-  background: var(--udi-chat-glow);
+  border-color: var(--udi-blue-mid);
+  color: var(--udi-text-on-blue);
+  background: var(--udi-blue-mid);
 }
 
 .form-footer {
@@ -477,7 +480,7 @@ h2 {
 .viewport-control button {
   padding: 8px 12px;
   border: 1px solid var(--udi-border-chip);
-  border-radius: 8px;
+  border-radius: 999px;
   color: var(--udi-text-chip);
   background: transparent;
   font-size: 13px;
@@ -485,9 +488,9 @@ h2 {
 }
 
 .viewport-control button.selected {
-  border-color: var(--udi-blue-light);
-  color: var(--udi-text-on-blue);
-  background: var(--udi-blue-light);
+  border-color: var(--udi-wireframe-button);
+  color: var(--udi-wireframe-card);
+  background: var(--udi-wireframe-button);
   font-weight: 700;
 }
 
@@ -499,14 +502,16 @@ h2 {
   justify-content: center;
   gap: 14px;
   font-size: 14px;
-  border: 1px solid var(--fi-luminous-cyan);
-  color: var(--fi-midnight-navy);
-  background: var(--fi-luminous-cyan);
+  border: 1px solid var(--udi-wireframe-button);
+  color: var(--udi-wireframe-card);
+  background: var(--udi-wireframe-button);
   cursor: pointer;
 }
 
 .generate-button:hover:not(:disabled) {
-  background: var(--fi-ice-glow);
+  border-color: var(--udi-blue-mid);
+  color: var(--udi-text-on-blue);
+  background: var(--udi-blue-mid);
 }
 
 .generate-button span {
@@ -898,9 +903,9 @@ h2 {
 }
 
 .main-nav a[aria-current='page'] {
-  border-color: var(--udi-blue-light);
-  color: var(--udi-text-on-blue);
-  background: var(--udi-blue-light);
+  border-color: var(--udi-wireframe-button);
+  color: var(--udi-wireframe-card);
+  background: var(--udi-wireframe-button);
   font-weight: 700;
 }
 

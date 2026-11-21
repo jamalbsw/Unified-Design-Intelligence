@@ -144,7 +144,6 @@ function App() {
             </p>
           </div>
           <div className="intro-aside">
-            <span className="cell" aria-hidden="true" />
             <a className="mode-badge" href={storybookUrl} target="_blank" rel="noreferrer">
               <span className="status-dot" aria-hidden="true" />
               Nightingale Storybook

@@ -38,7 +38,6 @@ function ResearchLab() {
           </p>
         </div>
         <div className="intro-aside">
-          <span className="cell" aria-hidden="true" />
           <span className="mode-badge">
             <span className="status-dot" aria-hidden="true" />
             Not connected
@@ -99,7 +98,6 @@ function ResearchLab() {
       </section>
 
       <section className="research-card results-empty" aria-labelledby="results-title">
-        <span className="cell cell-small" aria-hidden="true" />
         <div>
           <h2 id="results-title">No insights yet</h2>
           <p>
