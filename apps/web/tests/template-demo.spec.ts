@@ -96,10 +96,15 @@ test.describe('template browser demo', () => {
     const frameTheme = await frame.locator('html').evaluate(element => ({
       platformToken: getComputedStyle(element).getPropertyValue('--fi-midnight-navy'),
       text: getComputedStyle(element).color,
+      background: getComputedStyle(element).backgroundColor,
+      headingFont: getComputedStyle(element.ownerDocument.querySelector('h1')!).fontFamily,
     }))
     expect(frameTheme.platformToken).toBe('')
-    expect(frameTheme.text).toBe('rgb(54, 66, 72)')
+    expect(frameTheme.text).toBe('rgb(27, 36, 48)')
+    expect(frameTheme.background).toBe('rgb(233, 237, 242)')
+    expect(frameTheme.headingFont).toContain('Space Grotesk')
     const action = frame.getByRole('button', { name: 'Open preferences' })
+    expect(await action.evaluate(element => getComputedStyle(element).backgroundColor)).toBe('rgb(47, 111, 214)')
     await frame.getByRole('button', { name: 'Home', exact: true }).focus()
     for (let presses = 0; presses < 8; presses++) {
       await page.keyboard.press('Tab')

@@ -352,7 +352,7 @@ function App() {
             </p>
             <p className="preview-caption">
               Nightingale-inspired approximations, not official components.
-              System fonts are substituted; visual fidelity is not verified.
+              Requested fonts and wireframe colors are temporary; visual fidelity is not verified.
             </p>
             <div className="pipeline" aria-label="Prototype workflow status">
               <div className="pipeline-item complete">
